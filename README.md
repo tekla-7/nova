@@ -5,7 +5,7 @@ A full-stack e-commerce web application built with React and Express.
 ## Tech Stack
 
 **Frontend**
-- React 18 + TypeScript
+- React 19 + TypeScript
 - React Router v6 (client-side routing)
 - TailwindCSS (styling)
 - Context API (cart, wishlist, auth state)
