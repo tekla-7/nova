@@ -30,7 +30,7 @@ export default function ShoppingAddressItem({address, isSelected, onClick}: Prop
         </div>
         {address.isDefault && <div className='w-fit text-[9px] font-semibold inline-block uppercase bg-[#fcfcfb] border border-[#0b0b0b]/10 text-[#898781
 ] py-[1px] px-1.5 rounded-[20px] tracking-wider mb-1.5'>default</div>}
-        <p className='text-[11px] text-left text-[#52514e] leading-normal'>{address.streetAddress} <br/> {address.city} {address.zipCode} <br/>{address.country}</p>
+        <p className='text-[11px] text-left text-[#52514e] leading-normal'>{address.streetAddress} <br/> {address.city.name} {address.zipCode} <br/>{address.country.name}</p>
 
     </button>
 }

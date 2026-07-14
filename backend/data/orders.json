@@ -1,25 +1,147 @@
 [
   {
-    "id": "order-1",
-    "userId": "user-1",
+    "id": "a07c3d78-9a53-4900-8ad5-23bce3a72265",
+    "userId": "7333efa8-7b56-4be2-bb46-9807508411d8",
+    "email": "test@example.com",
+    "phone": "+995555555555",
+    "orderNumber": "NV-7089",
+    "paid": 30.3928,
+    "payment": {
+      "id": 1234,
+      "number": "1234567891012131",
+      "expiryData": "8/28",
+      "cvv": 123,
+      "name": "test testidze",
+      "isDefault": false
+    },
+    "paymentMethod": "Card",
+    "deliveryMethod": {
+      "id": 2,
+      "title": "Express shipping",
+      "price": 12,
+      "description": "1–2 business days"
+    },
     "items": [
       {
-        "productId": "101",
-        "color": "#1A1A1A",
-        "size": "M",
+        "id": "ba219cd1-a938-43dd-a42a-47286112130f",
+        "product": {
+          "productId": 3,
+          "title": "Powder Canister",
+          "price": 14.99,
+          "brand": "Velvet Touch",
+          "image": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
+        },
         "quantity": 2,
-        "price": 60
+        "size": "xs",
+        "color": "#1A1A1A"
       },
       {
-        "productId": "205",
-        "color": "#FFFFFF",
-        "size": "L",
+        "id": "6fe16f3b-3edd-474b-a1b5-be53b1e0a312",
+        "product": {
+          "productId": 176,
+          "title": "Women Handbag Black",
+          "price": 59.99,
+          "brand": "Elegance Collection",
+          "image": "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/1.webp"
+        },
         "quantity": 1,
-        "price": 45
+        "size": "xs",
+        "color": "#1A1A1A"
+      },
+      {
+        "id": "f8eee7d8-02c4-4ada-9f2f-c5c1490fe9a4",
+        "product": {
+          "productId": 1,
+          "title": "Essence Mascara Lash Princess",
+          "price": 9.99,
+          "brand": "Essence",
+          "image": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
+        },
+        "quantity": 2,
+        "size": "xs",
+        "color": "#1A1A1A"
+      },
+      {
+        "id": "bfdb9a41-b7a7-40ae-87a2-d6c2adb43599",
+        "product": {
+          "productId": 84,
+          "title": "Gigabyte Aorus Men Tshirt",
+          "price": 24.99,
+          "brand": "Gigabyte",
+          "image": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/1.webp"
+        },
+        "quantity": 2,
+        "size": "xs",
+        "color": "#1A1A1A"
+      },
+      {
+        "id": "182d0007-0343-4865-83ad-214e48bd65a1",
+        "product": {
+          "productId": 156,
+          "title": "Green and Black Glasses",
+          "price": 34.99,
+          "brand": "Fashion Shades",
+          "image": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/1.webp"
+        },
+        "quantity": 2,
+        "size": "xs",
+        "color": "#1A1A1A"
       }
     ],
-    "total": 165,
-    "status": "pending",
-    "createdAt": "2026-07-04T12:30:00Z"
+    "createdAt": "Tue Jul 14 2026 14:30:45 GMT+0400 (Georgia Standard Time)",
+    "address": {
+      "id": "1784025019390",
+      "isDefault": true,
+      "name": "test",
+      "lastName": "test",
+      "city": {
+        "code": "",
+        "name": "Dalar"
+      },
+      "zipCode": "1234",
+      "country": {
+        "code": "AM",
+        "name": "Armenia"
+      },
+      "streetAddress": "street ",
+      "state": {
+        "code": "AR",
+        "name": "Ararat Province"
+      }
+    },
+    "tracking": {
+      "orderConfirm": {
+        "date": [
+          "2026-07-14T10:30:45.979Z"
+        ],
+        "isConfirmed": true
+      },
+      "processing": {
+        "date": [
+          "2026-07-14T11:00:45.979Z"
+        ],
+        "isConfirmed": false
+      },
+      "dispatched": {
+        "date": [
+          "2026-07-14T10:30:45.979Z"
+        ],
+        "isConfirmed": false
+      },
+      "outForDelivery": {
+        "date": [
+          "2026-07-15T10:30:45.979Z",
+          "2026-07-16T10:30:45.979Z"
+        ],
+        "isConfirmed": false
+      },
+      "delivered": {
+        "date": [
+          "2026-07-15T10:30:45.979Z",
+          "2026-07-16T10:30:45.979Z"
+        ],
+        "isConfirmed": false
+      }
+    }
   }
 ]

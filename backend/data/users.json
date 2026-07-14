@@ -55,37 +55,30 @@
         "isDefault": true,
         "name": "Work",
         "lastName": "office",
-        "city": "New york",
+        "city": {
+          "name":"New york",
+          "code": "ny"
+        },
         "zipCode": "10001",
-        "country": "United state",
+        "country": {
+          "name": "United state",
+          "code": "us"
+        },
         "streetAddress": "123 Main Street, Apt 4B"
       },
       {
-        "id": "124",
-        "isDefault": false,
-        "name": "Work",
-        "lastName": "office",
-        "city": "New york",
-        "zipCode": "10001",
-        "country": "United state",
-        "streetAddress": "123 Main Street, Apt 4B"
-      },{
-        "id": "125",
-        "isDefault": false,
-        "name": "Work",
-        "lastName": "office",
-        "city": "New york",
-        "zipCode": "10001",
-        "country": "United state",
-        "streetAddress": "123 Main Street, Apt 4B"
-      },{
         "id": "126",
         "isDefault": false,
         "name": "Work",
         "lastName": "office",
-        "city": "New york",
-        "zipCode": "10001",
-        "country": "United state",
+        "city": {
+          "name":"New york",
+          "code": "ny"
+        },        "zipCode": "10001",
+        "country": {
+          "name": "United state",
+          "code": "us"
+        },
         "streetAddress": "123 Main Street, Apt 4B"
       }
     ],
@@ -188,7 +181,7 @@
     ],
     "card": [
       {
-        "id":123,
+        "id": 123,
         "number": "1234567891012131",
         "expiryData": "8/28",
         "cvv": 123,
@@ -196,7 +189,7 @@
         "isDefault": true
       },
       {
-        "id":1234,
+        "id": 1234,
         "number": "1234567891012131",
         "expiryData": "8/28",
         "cvv": 123,

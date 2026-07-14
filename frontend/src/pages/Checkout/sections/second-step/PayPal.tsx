@@ -1,7 +1,7 @@
 import BaseButton from "../../../../components/ui/BaseButton.tsx";
 import {ArrowRight} from "lucide-react";
 import FailedModal from "./FailedModal.tsx";
-import { useRef} from "react";
+import {useRef} from "react";
 
 export default function PayPal() {
     const dialogRef = useRef<HTMLDialogElement>(null);

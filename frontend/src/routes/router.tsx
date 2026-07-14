@@ -18,7 +18,8 @@ import {QueryClient} from "@tanstack/react-query";
 import ShoppingBag from "../pages/ShoppingBag/ShoppingBag.tsx";
 import Wishlist from "../pages/Wishlist/Wishlist.tsx";
 import Checkout from "../pages/Checkout/Checkout.tsx";
-
+import Order from "../pages/Order/Order.tsx";
+import {loader as orderLoader} from '../pages/Order/order.loader.ts'
 const router = createBrowserRouter([
     {
         path: '/',
@@ -64,6 +65,11 @@ const router = createBrowserRouter([
             }, {
                 path: 'checkout',
                 element: <ProtectedRoute><Checkout/></ProtectedRoute>
+            },
+            {
+                path: 'order/:orderId',
+                element: <ProtectedRoute><Order/></ProtectedRoute>,
+                loader:orderLoader ,
             }
 
             // { path: "men", element: <MenPage /> },

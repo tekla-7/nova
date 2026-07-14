@@ -3,7 +3,8 @@ import type {Step} from "../../types/checkout.ts";
 import Steps from "./sections/Steps.tsx";
 import ShippingStep from "./sections/first-step/ShippingStep.tsx";
 import PaymentStep from "./sections/second-step/PaymentStep.tsx";
-import ConfirmStep from "./sections/ConfirmStep.tsx";
+import ConfirmStep from "./sections/third-step/ConfirmStep.tsx";
+import SideInfo from "./sections/SideInfo.tsx";
 
 export default function Checkout() {
     const [steps, setSteps] = useState<Step[]>([
@@ -42,11 +43,9 @@ export default function Checkout() {
             <div className='p-5 border-r border-r-[#E5E0D8]'>
                 {activeStep.id === 1 && <ShippingStep onStepCompleted={()=>onStepCompleted(1)}/>}
                 {activeStep.id === 2 && <PaymentStep onStepCompleted={()=>onStepCompleted(2)}/>}
-                {activeStep.id === 3 && <ConfirmStep/>}
+                {activeStep.id === 3 && <ConfirmStep onStepCompleted={(id:number)=>onStepChange(id)}/>}
             </div>
-            <div className='p-5 bg-[#fcfcfb]'>
-
-            </div>
+            <SideInfo activeStep={steps.find(el=>el.isActive)!.id}/>
         </div>
     </>
 }

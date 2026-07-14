@@ -1,1 +1,42 @@
-[{"id":"1","name":"test","lastName":"test","email":"text@example.com","phoneNumber":"+1 (555) 012-3456","password":"hashed_password","notificationPreferences":{"orderUpdates":true,"promotions":true,"wishlist":true,"newsletter":true},"addresses":[{"name":"work office","street":"350 Fifth Avenue","town":"New York, NY 10001","country":"United states","isDefault":true}],"cart":[{"product":{"id":"1","title":"title","price":"price","brand":"-"},"quantity":1,"size":"xs","color":""}],"wishlist":["101","205"]},{"id":"79f40844-72b0-4db6-b1a6-08c2863f5604","name":"name","lastName":"lastName","email":"test@email.ge","password":"$2b$10$c.4q2DtMG98pGWVKT/kK1OKnNujtfZgh8kf9Ahl6CNeHC4zNRz.xW","notificationPreferences":{"orderUpdates":true,"promotions":true,"wishlist":true,"newsletter":true},"addresses":[],"cart":[],"wishlist":[]}]
+[
+  {
+    "id": "1",
+    "name": "test",
+    "lastName": "test",
+    "email": "text@example.com",
+    "phoneNumber": "+1 (555) 012-3456",
+    "password": "hashed_password",
+    "notificationPreferences": {
+      "orderUpdates": true,
+      "promotions": true,
+      "wishlist": true,
+      "newsletter": true
+    },
+    "addresses": [
+      {
+        "name": "work office",
+        "street": "350 Fifth Avenue",
+        "town": "New York, NY 10001",
+        "country": "United states",
+        "isDefault": true
+      }
+    ],
+    "cart": [
+      {
+        "product": {
+          "id": "1",
+          "title": "title",
+          "price": "price",
+          "brand": "-"
+        },
+        "quantity": 1,
+        "size": "xs",
+        "color": ""
+      }
+    ],
+    "wishlist": [
+      "101",
+      "205"
+    ]
+  }
+]

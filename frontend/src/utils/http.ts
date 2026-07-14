@@ -7,6 +7,7 @@ import {getAuthToken, isAuthenticated, removeAuthToken} from "./auth.ts";
 import type {CartItem, User, Wishlist} from "../types/user.ts";
 import {queryClient} from "../routes/router.tsx";
 import type {ShoppingMethod} from "../types/checkout.ts";
+import type {CreateOrder, Order} from "../types/Order.ts";
 
 async function fetchCategories(): Promise<Category[]> {
     const response = await fetch(`${PRODUCTS_API_URL}/categories`);
@@ -346,12 +347,7 @@ export async function removeProductFromWishlist(id: number) {
     return await response.json()
 }
 
-
-
-
-
-
-export const fetchCountries=async ()=>{
+export const fetchCountries = async () => {
     const response = await fetch(`${BACKEND_API_URL}reference-data/countries`)
     if (!response.ok) {
         return []
@@ -359,18 +355,85 @@ export const fetchCountries=async ()=>{
 
     return await response.json()
 }
-export const fetchState=async (code:string)=>{
+export const fetchState = async (code: string) => {
     const response = await fetch(`${BACKEND_API_URL}reference-data/states/${code}`)
     if (!response.ok) {
         return []
     }
     return await response.json()
 }
-export const fetchCity=async (cCode:string ,sCode:string)=>{
+export const fetchCity = async (cCode: string, sCode: string) => {
     const response = await fetch(`${BACKEND_API_URL}reference-data/city/${cCode}/${sCode}`)
     if (!response.ok) {
         return []
     }
     return await response.json()
 }
+export const addOrder = async (order: CreateOrder): Promise<{
+    ok: boolean;
+    status: number;
+    data: { id: string | null, message: string };
+}> => {
+    if (!isAuthenticated()) {
+        return {
+            ok: false,
+            status: 401,
+            data: {id: null, message: "user is not authenticated."},
+        }
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}order`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(order),
+        },
+    );
+    if (!response.ok) {
+        return {
+            ok: false,
+            status: response.status,
+            data: {id: null, message: "Failed to add product to order."},
+        }
+
+    }
+    const id = await response.json();
+
+    return {
+        ok: true,
+        status: response.status,
+        data: {id, message: 'add order successfully.'},
+    };
+}
+
+export async function fetchOrder(orderId: string): Promise<Order> {
+    if (!isAuthenticated()) {
+        throw new Response("User is not authenticated.", {
+            status: 401,
+        });
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}order/${orderId}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+        },
+    );
+    // TODO
+    if (!response.ok) {
+        throw new Response("Failed to fetch order.", {
+            status: response.status,
+        });
+    }
+    return await response.json()
+}
+
 export {fetchCategories, fetchProducts, addToCart};

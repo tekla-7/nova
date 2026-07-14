@@ -75,17 +75,24 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
         const saveAddress = formData.has('saveAddress');
         const address = {...selectedInfo.address};
         let addressForm = null
+        const getValue = (name: string) => {
+            const value = formData.get(`${name}`) ?? "";
+            return typeof value === "string"
+                ? JSON.parse(value)
+                : null;
+        }
         if (selectedInfo.addressFormIsActive) {
+
             addressForm = {
                 id: Date.now().toString(),
                 isDefault: formData.has("defaultAddress"),
                 name: String(formData.get("name") ?? ""),
                 lastName: String(formData.get("lastName") ?? ""),
-                city: String(formData.get("city") ?? ""),
+                city: getValue("city"),
                 zipCode: String(formData.get("ZIP") ?? ""),
-                country: String(formData.get("country") ?? ""),
+                country: getValue("country"),
                 streetAddress: String(formData.get("streetAddress") ?? ""),
-                state: String(formData.get("state") ?? ""),
+                state: getValue("state"),
             }
         }
 

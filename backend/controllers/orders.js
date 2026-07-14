@@ -1,12 +1,11 @@
 ///@desc get   user orders
 ///@route GET /api/order/me
+import {addNewOrder, getUserOrder, getUserOrders} from "../data/orders.js";
 
-import {addNewOrder, getUserOrder} from "../data/orders.js";
-
-export const getOrder = async (req, res, next) => {
+export const getOrders = async (req, res, next) => {
     const userId = req.user.id;
     try {
-        const orders = await getUserOrder(userId);
+        const orders = await getUserOrders(userId);
         return res.json({orders});
 
     } catch (error) {
@@ -24,9 +23,26 @@ export const addOrder = async (req, res, next) => {
         error.status = 400;
         return next(error);
     }
+
     try {
-        await addNewOrder(userId ,req.body);
-        return res.status(200).json({message: 'Order added'});
+        const id = await addNewOrder(userId, req.body);
+        return res.status(200).json(id);
+
+    } catch (error) {
+        error.status = 404;
+        return next(error);
+    }
+
+}
+////@desc get order by id
+////@router get api/order
+export const getOrder = async (req, res, next) => {
+    const userId = req.user.id;
+    const orderId = req.params.orderId;
+    try {
+        const order =await getUserOrder(userId, orderId);
+
+        return res.status(200).json(order);
 
     } catch (error) {
         error.status = 404;
