@@ -1,5 +1,10 @@
 import {createPortal} from "react-dom";
-import  {type RefObject, useEffect, useState} from "react";
+import {type RefObject, useEffect, useState} from "react";
+import type {CreateOrder} from "../../../../types/Order.ts";
+import {useSelector} from "react-redux";
+import type {RootState} from "../../../../store";
+import {useOrderMutation} from "../../../../hooks/useOrderMutation.ts";
+import {useUserCartData} from "../../../../hooks/useUserData.ts";
 
 type Props = {
     ref: RefObject<HTMLDialogElement | null>;
@@ -9,6 +14,33 @@ type Props = {
 
 export default function ApplePayModal({ref, onClose, isOpen}: Props) {
     const [paymentState, setPaymentState] = useState('start')
+    const checkout = useSelector((state: RootState) => state.checkout);
+    const {createOrderHandler} = useOrderMutation()
+    const {data: shoppingBag = []} = useUserCartData();
+
+    function createOrder() {
+        if (!checkout.shoppingStep || !shoppingBag.length) return null;
+        const shoppingStep = checkout.shoppingStep
+        const address = shoppingStep.addressFormIsActive ? shoppingStep.addressForm : shoppingStep.address
+        if (!address) return null;
+        const shipping = checkout.shoppingStep.shippingMethod.price;
+        const subtotal = shoppingBag.reduce((prev, cur) => prev + cur.quantity * cur.product.price, 0)
+        const total = (shipping + subtotal) * 108 / 100;
+        const order: CreateOrder = {
+            paid: total,
+            email: shoppingStep.email,
+            phone: shoppingStep.phone,
+            payment: null,
+            paymentMethod: 'Apple Pay',
+            deliveryMethod: shoppingStep.shippingMethod,
+            items: shoppingBag,
+            address: address,
+
+        }
+        createOrderHandler(order)
+
+    }
+
     useEffect(() => {
         if (!isOpen) return;
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -19,6 +51,7 @@ export default function ApplePayModal({ref, onClose, isOpen}: Props) {
 
             successTimeout = setTimeout(() => {
                 setPaymentState("success");
+                createOrder();
             }, 2000);
 
         }, 1000);

@@ -1,8 +1,16 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const initialState: { notification: { status: string, title: string, message: string } | null } = {
-    notification: null
+const initialState: {
+    notification:
+        | { status: 'error' | 'success' | 'warning' | 'info', title: string, message: string }
+        | null,
+    isLoading: boolean
+} = {
+    notification: null,
+    isLoading: false
+
 }
+
 const uiSlice = createSlice({
     name: 'ui',
     initialState: initialState,
@@ -13,7 +21,13 @@ const uiSlice = createSlice({
                 title: action.payload.title,
                 message: action.payload.message,
             }
-        }
+        },
+        clearNotification: (state) => {
+            state.notification = null;
+        },
+        setLoading: (state, action) => {
+            state.isLoading = action.payload;
+        },
     }
 })
 export const notificationAction = uiSlice.actions;

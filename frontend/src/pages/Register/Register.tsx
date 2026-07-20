@@ -9,7 +9,7 @@ export default function Register() {
     const data = useActionData<ActionData>()
     const navigation = useNavigation();
     const isSubmitting = navigation.state === 'submitting';
-    return <Form className='flex flex-col gap-3 ' method='post'>
+    return <Form className='flex flex-col gap-3 w-full ' method='post'>
         <div className='grid grid-cols-2 gap-2.5'>
             <div>
                 <label className='text-[13px] font-medium mb-1' htmlFor='name'>First name</label>

@@ -8,7 +8,7 @@ function LoginPage() {
     const data = useActionData<ActionData>()
     const navigation = useNavigation();
     const isSubmitting = navigation.state === 'submitting';
-    return <Form className='flex flex-col gap-3 ' method='post'>
+    return <Form className='flex flex-col gap-3 w-full ' method='post'>
         <div>
             <label className='text-[13px] font-medium mb-1' htmlFor='email'>Email</label>
             <input

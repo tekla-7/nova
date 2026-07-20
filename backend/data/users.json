@@ -1,21 +1,5 @@
 [
   {
-    "id": "f0ebd23e-499b-47f9-9217-34d96771f578",
-    "name": "name",
-    "lastName": "lastName",
-    "email": "test@email.ge",
-    "password": "$2b$10$WXM9X6KqHfpDvX1Xk5Ga8O4QZnoQ84xE9WVC2C4UdhcTbRXGT4.Mu",
-    "notificationPreferences": {
-      "orderUpdates": true,
-      "promotions": true,
-      "wishlist": true,
-      "newsletter": true
-    },
-    "addresses": [],
-    "cart": [],
-    "wishlist": []
-  },
-  {
     "id": "879edbaf-9c10-4836-b75e-e3eaade3e0c6",
     "name": "update-test-2",
     "lastName": "lastName",
@@ -38,11 +22,11 @@
   },
   {
     "id": "7333efa8-7b56-4be2-bb46-9807508411d8",
-    "name": "tes",
+    "name": "first name",
     "lastName": "tes",
     "email": "test@example.com",
     "phoneNumber": "+995555555555",
-    "password": "$2b$10$scX8nOnHMhFKKLdehtr6.ed2FcAjA9JZr.PsLZczAxqcqSJ.rx5X6",
+    "password": "$2b$10$CAwNz6HzqI0u6lhpNYtVH.Cwy9INggkYqQ9qaESiRsLqjf/7ck8RC",
     "notificationPreferences": {
       "orderUpdates": true,
       "promotions": true,
@@ -56,7 +40,7 @@
         "name": "Work",
         "lastName": "office",
         "city": {
-          "name":"New york",
+          "name": "New york",
           "code": "ny"
         },
         "zipCode": "10001",
@@ -72,9 +56,10 @@
         "name": "Work",
         "lastName": "office",
         "city": {
-          "name":"New york",
+          "name": "New york",
           "code": "ny"
-        },        "zipCode": "10001",
+        },
+        "zipCode": "10001",
         "country": {
           "name": "United state",
           "code": "us"
@@ -84,46 +69,7 @@
     ],
     "cart": [
       {
-        "id": "ba219cd1-a938-43dd-a42a-47286112130f",
-        "product": {
-          "productId": 3,
-          "title": "Powder Canister",
-          "price": 14.99,
-          "brand": "Velvet Touch",
-          "image": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
-        },
-        "quantity": 2,
-        "size": "xs",
-        "color": "#1A1A1A"
-      },
-      {
-        "id": "6fe16f3b-3edd-474b-a1b5-be53b1e0a312",
-        "product": {
-          "productId": 176,
-          "title": "Women Handbag Black",
-          "price": 59.99,
-          "brand": "Elegance Collection",
-          "image": "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/1.webp"
-        },
-        "quantity": 1,
-        "size": "xs",
-        "color": "#1A1A1A"
-      },
-      {
-        "id": "f8eee7d8-02c4-4ada-9f2f-c5c1490fe9a4",
-        "product": {
-          "productId": 1,
-          "title": "Essence Mascara Lash Princess",
-          "price": 9.99,
-          "brand": "Essence",
-          "image": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-        },
-        "quantity": 2,
-        "size": "xs",
-        "color": "#1A1A1A"
-      },
-      {
-        "id": "bfdb9a41-b7a7-40ae-87a2-d6c2adb43599",
+        "id": "42c8d4ac-03a8-4ec3-b4b5-43edd5a48c8e",
         "product": {
           "productId": 84,
           "title": "Gigabyte Aorus Men Tshirt",
@@ -131,20 +77,33 @@
           "brand": "Gigabyte",
           "image": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/1.webp"
         },
-        "quantity": 2,
+        "quantity": 1,
         "size": "xs",
         "color": "#1A1A1A"
       },
       {
-        "id": "182d0007-0343-4865-83ad-214e48bd65a1",
+        "id": "4ea7eb83-6aee-4746-ba59-5fade96dd74e",
         "product": {
-          "productId": 156,
-          "title": "Green and Black Glasses",
-          "price": 34.99,
-          "brand": "Fashion Shades",
-          "image": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/1.webp"
+          "productId": 1,
+          "title": "Essence Mascara Lash Princess",
+          "price": 9.99,
+          "brand": "Essence",
+          "image": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
         },
-        "quantity": 2,
+        "quantity": 1,
+        "size": "xs",
+        "color": "#1A1A1A"
+      },
+      {
+        "id": "842c205f-dd6a-4546-b397-bd4c4ad3c960",
+        "product": {
+          "productId": 3,
+          "title": "Powder Canister",
+          "price": 14.99,
+          "brand": "Velvet Touch",
+          "image": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
+        },
+        "quantity": 1,
         "size": "xs",
         "color": "#1A1A1A"
       }
@@ -196,6 +155,7 @@
         "name": "test testidze",
         "isDefault": false
       }
-    ]
+    ],
+    "lastPasswordChangeAt": "2026-07-20T16:29:01.691Z"
   }
 ]

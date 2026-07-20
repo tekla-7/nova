@@ -1,7 +1,7 @@
 import {NavLink} from "react-router-dom";
 import { House} from 'lucide-react';
 import {Search} from 'lucide-react'
-import UserDropdown from "./    UserDropdown.tsx";
+import UserDropdown from "./UserDropdown.tsx";
 import BagDropdown from "./BagDropdown.tsx";
 import WishlistDropdown from "./WishlistDropdown.tsx";
 

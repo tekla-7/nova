@@ -5,7 +5,7 @@ import {
     addUserWishlist, deleteUserAddresses, deleteUserCart, deleteUserWishlist, getCart,
     getUser, getWishlist, updateUserCart,
     updateUserDetails,
-    updateUserNotificationPreferences
+    updateUserNotificationPreferences, updateUserPassword
 } from "../controllers/user.js";
 import {addCart} from "../data/users.js";
 const router = express.Router();
@@ -15,6 +15,7 @@ router.get('/cart', getCart);
 router.get('/wishlist', getWishlist);
 
 router.patch('/',updateUserDetails)
+router.patch('/password',updateUserPassword)
 router.post('/wishlist', addUserWishlist)
 router.post('/cart', addUserCart)
 router.post('/addresses', addUserAddresses)

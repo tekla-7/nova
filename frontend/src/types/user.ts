@@ -15,7 +15,9 @@ export interface User {
     "addresses": Addresses[],
     "cart": CartItem[],
     "wishlist": Wishlist[]
-    "card": Card[]
+    "card": Card[],
+    lastPasswordChangeAt:string,
+    lastUpdatedAt:string,
 }
 
 export interface Addresses {
@@ -27,7 +29,7 @@ export interface Addresses {
     zipCode: number,
     country: { name: string, code: string },
     streetAddress: string,
-    state?: { name: string, code: string },
+    state: { name: string, code: string },
 }
 
 export interface Wishlist {
@@ -54,4 +56,18 @@ export interface Card {
     cvv: number,
     name: string,
     isDefault?: boolean,
+}
+
+export interface UpdateUserInfoReq{
+
+    "name"?: string,
+    "lastName"?: string,
+    "email"?: string,
+    "phoneNumber"?: string,
+    password?: string,
+}
+export type NewPassword = {
+    confirmPassword: string;
+    currentPassword: string;
+    newPassword: string;
 }

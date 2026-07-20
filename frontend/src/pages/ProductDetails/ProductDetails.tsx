@@ -7,7 +7,7 @@ export default function ProductDetails() {
     const location = useLocation();
     const pagePath = location.pathname.split("/");
 
-    return <>
+    return <section className='flex flex-col w-full'>
         <div className='flex items-center gap-1 border-b border-[#E5E0D8] py-3 px-6'>
             <NavLink className='text-xs text-[#9A9A9A] cursor-pointer' to='/'>Home</NavLink>
             <p className='text-xs text-[#E5E0D8]'>/</p>
@@ -19,6 +19,6 @@ export default function ProductDetails() {
             <Gallery images={productDetails.images}/>
             <Info/>
         </div>
-    </>
+    </section>
 }
 

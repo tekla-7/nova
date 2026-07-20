@@ -1,6 +1,7 @@
 ///@desc get   user orders
 ///@route GET /api/order/me
 import {addNewOrder, getUserOrder, getUserOrders} from "../data/orders.js";
+import {getUserById} from "../data/users.js";
 
 export const getOrders = async (req, res, next) => {
     const userId = req.user.id;
@@ -23,9 +24,14 @@ export const addOrder = async (req, res, next) => {
         error.status = 400;
         return next(error);
     }
-
+    let userName = '';
     try {
-        const id = await addNewOrder(userId, req.body);
+        const user = await getUserById(userId);
+        userName = user.name + ' ' + user.lastName
+    } catch (error) {
+    }
+    try {
+        const id = await addNewOrder(userId, req.body, userName);
         return res.status(200).json(id);
 
     } catch (error) {
@@ -40,7 +46,7 @@ export const getOrder = async (req, res, next) => {
     const userId = req.user.id;
     const orderId = req.params.orderId;
     try {
-        const order =await getUserOrder(userId, orderId);
+        const order = await getUserOrder(userId, orderId);
 
         return res.status(200).json(order);
 

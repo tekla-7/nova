@@ -61,11 +61,11 @@ export default function UserDropdown() {
                         <p className='text-[#9A9A9A] text-[11px]'>'{user?.email}'</p>
                     </div>
                 </div>
-                <button
+                <Link to='profile'
                     className=' text-[13px] w-full text-[#4A4A4A] cursor-pointer flex items-center gap-2.5 px-4 py-2.5'>
                     <User size={13}/>
                     <p>My profile</p>
-                </button>
+                </Link>
                 <button
                     className='border-b w-full border-[#F0EDE8]  text-[13px] text-[#4A4A4A] cursor-pointer flex items-center gap-2.5 px-4 pt-1.5 pb-2.5'>
                     <Package size={13}/>

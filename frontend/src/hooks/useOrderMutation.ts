@@ -14,6 +14,7 @@ export const useOrderMutation = () => {
         mutationFn: addOrder,
         onSuccess: (response: Resp) => {
             console.log(response);
+            // TODO clear bag
             navigate(`/order/${response.data?.id}` , {state:'success'});
         }
 

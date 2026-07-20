@@ -15,7 +15,7 @@ export async function getUserOrder(userId, orderId) {
     if (!orders || orders.length === 0) {
         return new Error('Could not find any orders');
     }
-    const order = orders.find((ev) => ev.userId === userId && orderId === orderId);
+    const order = orders.find((ev) => ev.userId === userId && ev.id === orderId);
     if (!order) {
         return new Error('Could not find any order');
     }
@@ -52,7 +52,7 @@ export async function getUserOrder(userId, orderId) {
     };
 }
 
-export async function addNewOrder(userId, order) {
+export async function addNewOrder(userId, order ,userName) {
     const orders = await readOrdersData();
     if (!orders) {
         return new Error('Cannot add order ,try again');
@@ -65,6 +65,7 @@ export async function addNewOrder(userId, order) {
     const newProduct = {
         id: uuidv4(),
         userId: userId,
+        userName:userName,
         email: order.email,
         phone: order.phone,
         orderNumber: `NV-` + Math.floor(1000 + Math.random() * 9000),
@@ -125,7 +126,7 @@ function trackingHandler(shippingType) {
         },
 
         dispatched: {
-            date: [now.toISOString()],
+            date: [addMinutes(shippingType === 24 ? 60 : 360)],
             isConfirmed: false,
         },
 
@@ -144,10 +145,16 @@ function trackingHandler(shippingType) {
 }
 
 function getStatus(date) {
-    const startDate = new Date(date[0]).getTime();
-    const today = new Date().getTime()
-    if (date.length === 0) return startDate < today;
-    const endDate = new Date(date[1]).getTime();
-    return endDate < today
+
+        const today = Date.now();
+
+        if (date.length === 1) {
+            const startDate = new Date(date[0]).getTime();
+            return startDate < today;
+        }
+
+        const endDate = new Date(date[1]).getTime();
+        return endDate < today;
+
 
 }

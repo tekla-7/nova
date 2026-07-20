@@ -1,7 +1,7 @@
 import {fetchUser} from "../../utils/http.ts";
 import {isAuthenticated} from "../../utils/auth.ts";
 
-export default async function loader() {
+export  async function loader() {
 
     if (!isAuthenticated()) return {user: null};
     try {

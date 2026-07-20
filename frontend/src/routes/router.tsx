@@ -20,6 +20,14 @@ import Wishlist from "../pages/Wishlist/Wishlist.tsx";
 import Checkout from "../pages/Checkout/Checkout.tsx";
 import Order from "../pages/Order/Order.tsx";
 import {loader as orderLoader} from '../pages/Order/order.loader.ts'
+import Profile from "../pages/Profile/Profile.tsx";
+import {loader as profileLoader} from '../pages/Profile/Profile.ts'
+import ProfileInfo from "../pages/Profile/pages/ProfileInfo.tsx";
+import Addresses from "../pages/Profile/pages/Addresses.tsx";
+import Notifications from "../pages/Profile/pages/Notifications.tsx";
+import Orders from "../pages/Profile/pages/Orders.tsx";
+import EditPersonalInformation from "../pages/Profile/pages/EditPersonalInformation.tsx";
+import EditPassword from "../pages/Profile/pages/EtitPassword.tsx";
 const router = createBrowserRouter([
     {
         path: '/',
@@ -70,6 +78,39 @@ const router = createBrowserRouter([
                 path: 'order/:orderId',
                 element: <ProtectedRoute><Order/></ProtectedRoute>,
                 loader:orderLoader ,
+            },
+            {  id: "profile",
+                path: "profile",
+                element: <Profile />,
+                loader: profileLoader,
+                children: [
+                    {
+                        index: true,
+                        element: <ProfileInfo />,
+                    },
+                    {
+                        path:'edit',
+                        element:<EditPersonalInformation/>
+                    },
+                    {
+                        path:'password/edit',
+                        element:<EditPassword />
+                    },
+                    {
+                        path: "addresses",
+                        element: <Addresses />,
+                    },
+
+
+                    {
+                        path: "notifications",
+                        element: <Notifications />,
+                    },
+                    {
+                        path: "orders",
+                        element: <Orders />,
+                    },
+                ],
             }
 
             // { path: "men", element: <MenPage /> },

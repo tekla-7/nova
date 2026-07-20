@@ -4,7 +4,7 @@ import type {ProductsResponse} from "../types/product.ts";
 import type {Cart} from "../types/cart.ts";
 import {PRODUCTS_API_URL, BACKEND_API_URL} from '../config.ts'
 import {getAuthToken, isAuthenticated, removeAuthToken} from "./auth.ts";
-import type {CartItem, User, Wishlist} from "../types/user.ts";
+import type {CartItem, NewPassword, UpdateUserInfoReq, User, Wishlist} from "../types/user.ts";
 import {queryClient} from "../routes/router.tsx";
 import type {ShoppingMethod} from "../types/checkout.ts";
 import type {CreateOrder, Order} from "../types/Order.ts";
@@ -434,6 +434,62 @@ export async function fetchOrder(orderId: string): Promise<Order> {
         });
     }
     return await response.json()
+}
+
+export async function updateUserInfo(data: UpdateUserInfoReq) {
+    if (!isAuthenticated()) {
+        throw new Response("User is not authenticated.", {
+            status: 401,
+        });
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data),
+
+        },
+    );
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update user");
+    }
+
+    return response.json();
+}
+
+export async function updatePassword(data: NewPassword) {
+    if (!isAuthenticated()) {
+        throw new Response("User is not authenticated.", {
+            status: 401,
+        });
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me/password`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data),
+
+        },
+    );
+    // Tesr@123
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update password");
+    }
+
+    return response.json();
 }
 
 export {fetchCategories, fetchProducts, addToCart};

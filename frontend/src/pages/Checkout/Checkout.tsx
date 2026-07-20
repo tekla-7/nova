@@ -36,7 +36,7 @@ export default function Checkout() {
         })
     }
     const activeStep: Step = steps.find(step => step.isActive)!
-    return <>
+    return <section className='flex flex-col w-full'>
 
         <Steps steps={steps} onStepChange={(id: number) => onStepChange(id)}/>
         <div className='grid grid-cols-[1fr_0.7fr] min-h-[70vh]'>
@@ -47,5 +47,5 @@ export default function Checkout() {
             </div>
             <SideInfo activeStep={steps.find(el=>el.isActive)!.id}/>
         </div>
-    </>
+    </section>
 }

@@ -4,7 +4,7 @@ import {
     addWishlist, changeCartProductQuantity, deleteAddressesItem, deleteCartItem,
     deleteWishlistItem,
     getUserById,
-    updateNotification,
+    updateNotification, updatePassword,
     updateUser
 } from "../data/users.js";
 
@@ -24,24 +24,24 @@ export const getUser = async (req, res, next) => {
 }
 ///@desc get   user cart
 ///@route GET /api/user/me/cart
-export const getCart=async (req, res, next) => {
+export const getCart = async (req, res, next) => {
     const userId = req.user.id;
     try {
         const response = await getUserById(userId);
         return res.json(response.cart);
-    }catch (error) {
+    } catch (error) {
         error.status = 404;
         return next(error);
     }
 }
 ///@desc get   user wishlist
 ///@route GET /api/user/me/wishlist
-export const getWishlist=async (req, res, next) => {
+export const getWishlist = async (req, res, next) => {
     const userId = req.user.id;
     try {
         const response = await getUserById(userId);
         return res.json(response.wishlist);
-    }catch (error) {
+    } catch (error) {
         error.status = 404;
         return next(error);
     }
@@ -56,16 +56,48 @@ export const updateUserDetails = async (req, res, next) => {
         error.status = 400;
         return next(error);
     }
-    const allowedFields = ["name", "lastName", "phoneNumber", "email"];
+    const allowedFields = ["name", "lastName", "phoneNumber", "email", 'password'];
     const data = {};
     allowedFields.forEach(field => {
         if (req.body[field]) {
             data[field] = req.body[field];
         }
     });
+
     try {
         const updatedUserData = await updateUser(userId, data);
-        return res.status(200).json({user: updatedUserData});
+        return res.status(200).json({
+            message: "User updated successfully"
+        });
+    } catch (error) {
+        error.status = 404;
+        return next(error);
+    }
+}
+
+///@desc update   user password
+///@route PATCH /api/user/me/password
+export const updateUserPassword = async (req, res, next) => {
+    const userId = req.user.id;
+    if (!Object.keys(req.body).length) {
+        const error = new Error('User details is required.');
+        error.status = 400;
+        return next(error);
+    }
+    if (!req.body.currentPassword) {
+        const error = new Error('Current password is required.');
+        error.status = 400;
+        return next(error);
+    }
+    if(req.body.currentPassword === req.body.newPassword) {
+        const error = new Error('New password need to be different.');
+        error.status = 400;
+        return next(error);
+    }
+    try {
+      await updatePassword(userId, req.body);
+
+        return res.status(200).json({message: "Password updated successfully"});
     } catch (error) {
         error.status = 404;
         return next(error);
@@ -81,7 +113,7 @@ export const addUserWishlist = async (req, res, next) => {
         return next(error);
     }
     try {
-         await addWishlist(userId ,req.body);
+        await addWishlist(userId, req.body);
         return res.status(200).json({message: 'Wishlist added'});
 
     } catch (error) {
@@ -93,15 +125,15 @@ export const addUserWishlist = async (req, res, next) => {
 ///@desc add   user cart
 ///@route POST /api/user/me/cart
 export const addUserCart = async (req, res, next) => {
-      const userId = req.user.id;
-      console.log(req.body)
+    const userId = req.user.id;
+    console.log(req.body)
     if (!Object.keys(req.body).length) {
         const error = new Error('Product is required.');
         error.status = 400;
         return next(error);
     }
     try {
-        await addCart(userId ,req.body);
+        await addCart(userId, req.body);
         return res.status(200).json({message: 'ShoppingBag added'});
 
     } catch (error) {
@@ -119,7 +151,7 @@ export const addUserAddresses = async (req, res, next) => {
         return next(error);
     }
     try {
-        await addAddresses(userId ,req.body);
+        await addAddresses(userId, req.body);
         return res.status(200).json({message: 'Address added'});
 
     } catch (error) {
@@ -158,7 +190,7 @@ export const deleteUserWishlist = async (req, res, next) => {
         return next(error);
     }
     try {
-        await deleteWishlistItem(userId ,productId);
+        await deleteWishlistItem(userId, productId);
         return res.status(200).json({message: 'Wishlist deleted'});
 
     } catch (error) {
@@ -178,7 +210,7 @@ export const deleteUserCart = async (req, res, next) => {
         return next(error);
     }
     try {
-        await deleteCartItem(userId ,cartId);
+        await deleteCartItem(userId, cartId);
         return res.status(200).json({message: 'ShoppingBag deleted'});
 
     } catch (error) {
@@ -198,7 +230,7 @@ export const deleteUserAddresses = async (req, res, next) => {
         return next(error);
     }
     try {
-        await deleteAddressesItem(userId ,addressesId);
+        await deleteAddressesItem(userId, addressesId);
         return res.status(200).json({message: 'Addresses deleted'});
 
     } catch (error) {
@@ -213,7 +245,7 @@ export const deleteUserAddresses = async (req, res, next) => {
 export const updateUserCart = async (req, res, next) => {
     const userId = req.user.id;
     const cartId = req.params.cartId;
-    const quantity=Number(req.body.quantity)
+    const quantity = Number(req.body.quantity)
 
     if (!cartId) {
         const error = new Error('Product id required.');
@@ -232,7 +264,7 @@ export const updateUserCart = async (req, res, next) => {
         return next(error);
     }
     try {
-        await changeCartProductQuantity(userId ,cartId ,quantity);
+        await changeCartProductQuantity(userId, cartId, quantity);
         return res.status(200).json({message: 'ShoppingBag quantity update'});
 
     } catch (error) {

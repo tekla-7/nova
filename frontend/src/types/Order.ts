@@ -1,15 +1,15 @@
-import type {Addresses, Card} from "./user.ts";
+import type {Addresses, Card, CartItem} from "./user.ts";
 import type {ShoppingMethod} from "./checkout.ts";
-import type {Cart} from "./cart.ts";
 
 export interface Order {
     id: string;
+    userName:string,
     orderNumber: string;
     paid:number,
     payment:Card,
     paymentMethod:'Card'|'Apple Pay',
     deliveryMethod:ShoppingMethod,
-    items:Cart[],
+    items:CartItem[],
     createdAt:string,
     address: Addresses,
     email:string,
@@ -30,7 +30,7 @@ export interface CreateOrder {
     phone:string,
     paymentMethod:'Card'|'Apple Pay',
     deliveryMethod:ShoppingMethod,
-    items:Cart[],
+    items:CartItem[],
     createdAt?:string,
     address: Addresses
 }

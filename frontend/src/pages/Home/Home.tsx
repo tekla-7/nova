@@ -7,7 +7,7 @@ import Reviews from "./sections/Reviews.tsx";
 import Subscribe from "./sections/Subscribe.tsx";
 
 function HomePage() {
-    return <>
+    return <section className='flex flex-col w-full'>
         <HeroSection/>
         <div className='px-6 py-5'>
             <PromoBanner />
@@ -17,7 +17,7 @@ function HomePage() {
             <Reviews/>
             <Subscribe />
         </div>
-    </>;
+    </section>;
 }
 
 export default HomePage;

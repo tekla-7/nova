@@ -17,7 +17,7 @@ export default function SideInfo({activeStep}: Prop) {
     const shipping = checkout.shoppingStep?.shippingMethod?.price ?? 0
     const tax = useMemo(() => {
         const value = shipping + subtotal;
-        return value + (value * 8) / 100
+        return (value * 8) / 100
     }, [shipping, subtotal])
     const total = useMemo(() => {
         return subtotal + shipping + tax

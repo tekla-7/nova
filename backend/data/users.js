@@ -2,6 +2,7 @@ import {readUserData, writeUserData} from "../utils/util.js";
 import {NotFoundError} from "../utils/errors.js";
 import {v4 as uuidv4} from 'uuid';
 import {hash} from "bcryptjs";
+import {isValidEmail, isValidPassword} from "../utils/validation.js";
 
 export async function getUser(email) {
     const storedData = await readUserData();
@@ -23,6 +24,7 @@ export async function addUser(data) {
     } catch (err) {
         throw new Error("Password hashing failed");
     }
+    const createdAt = new Date().toISOString();
     const newUser = {
         id: uuidv4(),
         name: data.name,
@@ -38,8 +40,11 @@ export async function addUser(data) {
         },
         addresses: [...(data?.addresses || [])],
         cart: [...(data?.cart || [])],
-        card:[...(data?.card || [])],
+        card: [...(data?.card || [])],
         wishlist: [...(data?.wishlist || [])],
+        lastPasswordChangeAt: createdAt,
+        lastUpdatedAt: createdAt,
+        createdAt: createdAt,
     }
     storedData.push(newUser);
     try {
@@ -74,10 +79,20 @@ export async function updateUser(userId, data) {
         throw new Error('User not found');
     }
 
+    if (data.email && storedData[userIndex].email !== data?.email) {
+        if (!isValidEmail(data?.email)) throw new Error('Invalid email format.');
+        if (!data.password) throw new Error('Password is necessary');
+        const pwIsValid = await isValidPassword(data.password, storedData[userIndex].password);
+        if (!pwIsValid) {
+            throw new Error('Invalid password.')
+        }
+    }
+    const { password, ...dataWithoutPassword } = data;
     try {
         storedData[userIndex] = {
             ...storedData[userIndex],
-            ...data
+            ...dataWithoutPassword,
+            lastUpdatedAt: new Date().toISOString(),
         };
 
         await writeUserData(storedData);
@@ -88,7 +103,40 @@ export async function updateUser(userId, data) {
     }
 
 }
+export async function updatePassword(userId,data){
+    const storedData = await readUserData();
+    const userIndex = storedData.findIndex(ev => ev.id === userId);
+    if (userIndex === -1) {
+        throw new Error('User not found');
+    }
+    if (data.currentPassword) {
+        const pwIsValid = await isValidPassword(data.currentPassword, storedData[userIndex].password);
+        if (!pwIsValid) {
+            throw new Error('Current password is not correct')
+        }
+    }
+    let hashedPassword='';
+    try {
+        hashedPassword = await hash(data.newPassword, 10);
+    } catch (err) {
+        throw new Error("Password hashing failed");
+    }
+    try {
+        storedData[userIndex] = {
+            ...storedData[userIndex],
+            password: hashedPassword,
+            lastPasswordChangeAt: new Date().toISOString(),
+        };
 
+        await writeUserData(storedData);
+        return storedData[userIndex];
+
+    } catch (error) {
+        throw new Error(error?.message || 'Could not update user password');
+    }
+
+
+}
 export async function addWishlist(userId, product) {
     const storedData = await readUserData();
     const userIndex = storedData.findIndex(ev => ev.id === userId);
