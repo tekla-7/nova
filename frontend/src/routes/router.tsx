@@ -21,13 +21,15 @@ import Checkout from "../pages/Checkout/Checkout.tsx";
 import Order from "../pages/Order/Order.tsx";
 import {loader as orderLoader} from '../pages/Order/order.loader.ts'
 import Profile from "../pages/Profile/Profile.tsx";
-import {loader as profileLoader} from '../pages/Profile/Profile.ts'
+import {loader as profileLoader} from '../pages/Profile/action/Profile.ts'
+import {loader as ordersLoader} from '../pages/Profile/action/orders.ts'
 import ProfileInfo from "../pages/Profile/pages/ProfileInfo.tsx";
 import Addresses from "../pages/Profile/pages/Addresses.tsx";
 import Notifications from "../pages/Profile/pages/Notifications.tsx";
 import Orders from "../pages/Profile/pages/Orders.tsx";
 import EditPersonalInformation from "../pages/Profile/pages/EditPersonalInformation.tsx";
 import EditPassword from "../pages/Profile/pages/EtitPassword.tsx";
+import Cards from "../pages/Profile/pages/Cards.tsx";
 const router = createBrowserRouter([
     {
         path: '/',
@@ -81,7 +83,7 @@ const router = createBrowserRouter([
             },
             {  id: "profile",
                 path: "profile",
-                element: <Profile />,
+                element:<ProtectedRoute> <Profile /></ProtectedRoute>,
                 loader: profileLoader,
                 children: [
                     {
@@ -100,7 +102,10 @@ const router = createBrowserRouter([
                         path: "addresses",
                         element: <Addresses />,
                     },
-
+                    {
+                        path: "cards",
+                        element: <Cards />,
+                    },
 
                     {
                         path: "notifications",
@@ -108,6 +113,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "orders",
+                        loader:ordersLoader,
                         element: <Orders />,
                     },
                 ],

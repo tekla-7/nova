@@ -106,7 +106,7 @@ export default function CountryCitySelect({address}: { address: Addresses | null
     };
     return <>
         <div className='flex flex-col gap-1 mb-2'>
-            <label htmlFor='city' className='text-[11px] font-medium'>City
+            <label htmlFor='country' className='text-[11px] font-medium'>Country
             </label>
             <select
                 value={selected.country ? JSON.stringify(selected.country) : ""}

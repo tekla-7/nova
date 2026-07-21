@@ -7,7 +7,12 @@ export async function getUserOrders(userId) {
         return [];
     }
 
-    return orders.filter(order => order?.userId === userId);
+    return orders
+        .filter(order => order.userId === userId)
+        .map(order => ({
+            ...order,
+            tracking: getTracking(order.tracking)
+        }));
 }
 
 export async function getUserOrder(userId, orderId) {
@@ -21,34 +26,8 @@ export async function getUserOrder(userId, orderId) {
     }
 
     return {
-        ...order, tracking: {
-            orderConfirm: {
-                date: order.tracking.orderConfirm.date,
-                isConfirmed: true,
-            },
-
-            processing: {
-                date: order.tracking.processing.date,
-                isConfirmed: getStatus(order.tracking.processing.date),
-            },
-
-            dispatched: {
-                date: order.tracking.dispatched.date,
-                isConfirmed: getStatus(order.tracking.dispatched.date),
-            },
-
-            outForDelivery: {
-                date: order.tracking.outForDelivery.date,
-                isConfirmed: getStatus(order.tracking.outForDelivery.date),
-            },
-
-            delivered: {
-                date: order.tracking.delivered.date,
-                isConfirmed: getStatus(order.tracking.delivered.date),
-            },
-
-
-        }
+        ...order,
+        tracking: getTracking(order.tracking)
     };
 }
 
@@ -89,7 +68,33 @@ export async function addNewOrder(userId, order ,userName) {
 
     }
 }
+function getTracking(tracking) {
+   return  {
+        orderConfirm: {
+            date: tracking.orderConfirm.date,
+                isConfirmed: true,
+        },
 
+        processing: {
+            date: tracking.processing.date,
+                isConfirmed: getStatus(tracking.processing.date),
+        },
+
+        dispatched: {
+            date:tracking.dispatched.date,
+                isConfirmed: getStatus(tracking.dispatched.date),
+        },
+
+        outForDelivery: {
+            date: tracking.outForDelivery.date,
+                isConfirmed: getStatus(tracking.outForDelivery.date),
+        },
+
+        delivered: {
+            date: tracking.delivered.date,
+                isConfirmed: getStatus(tracking.delivered.date),
+        },}
+}
 function trackingHandler(shippingType) {
     const now = new Date();
 

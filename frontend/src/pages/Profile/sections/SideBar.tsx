@@ -1,6 +1,6 @@
 import {NavLink, useLoaderData} from "react-router-dom";
 import type {User} from "../../../types/user.ts";
-import {User as UserIcon ,MapPinHouse ,Package ,Bell } from 'lucide-react';
+import {User as UserIcon ,MapPinHouse ,Package ,Bell ,WalletCards  } from 'lucide-react';
 
 export default function SideBar() {
     const user = useLoaderData<User>();
@@ -21,6 +21,10 @@ export default function SideBar() {
                 className={({isActive}) => isActive ? ' font-medium bg-[#fcfcfb] gap-2 flex items-center' : ' flex gap-2 items-center text-[#52514e]'}
                 to='addresses'> <MapPinHouse size={12}/>
                 Addresses</NavLink></li>
+            <li className='py-2 px-2.5 cursor-pointer  text-xs '><NavLink
+                className={({isActive}) => isActive ? ' font-medium bg-[#fcfcfb] gap-2 flex items-center' : ' flex gap-2 items-center text-[#52514e]'}
+                to='cards'> <WalletCards  size={12}/>
+                Cards</NavLink></li>
             <li className='py-2 px-2.5 cursor-pointer  text-xs '><NavLink
                 className={({isActive}) => isActive ? ' font-medium bg-[#fcfcfb] gap-2 flex items-center' : ' flex gap-2 items-center text-[#52514e]'}
                 to='orders'> <Package size={12}/>

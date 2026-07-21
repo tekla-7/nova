@@ -1,5 +1,5 @@
-import {fetchUser} from "../../utils/http.ts";
-import {isAuthenticated} from "../../utils/auth.ts";
+import {fetchUser} from "../../../utils/http.ts";
+import {isAuthenticated} from "../../../utils/auth.ts";
 
 export  async function loader() {
 

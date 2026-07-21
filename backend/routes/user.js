@@ -1,9 +1,9 @@
 import express from 'express';
 import {
-    addUserAddresses,
+    addUserAddresses, addUserCard,
     addUserCart,
-    addUserWishlist, deleteUserAddresses, deleteUserCart, deleteUserWishlist, getCart,
-    getUser, getWishlist, updateUserCart,
+    addUserWishlist, deleteUserAddresses, deleteUserCard, deleteUserCart, deleteUserWishlist, getCart,
+    getUser, getWishlist, updateUserAddresses, updateUserCart,
     updateUserDetails,
     updateUserNotificationPreferences, updateUserPassword
 } from "../controllers/user.js";
@@ -19,6 +19,8 @@ router.patch('/password',updateUserPassword)
 router.post('/wishlist', addUserWishlist)
 router.post('/cart', addUserCart)
 router.post('/addresses', addUserAddresses)
+router.post('/card', addUserCard)
+router.patch('/addresses/:addressesId', updateUserAddresses)
 router.patch('/notifications',updateUserNotificationPreferences)
 router.patch('/cart/:cartId', updateUserCart)
 // DELETE /api/users/me/wishlist/:productId
@@ -27,6 +29,7 @@ router.patch('/cart/:cartId', updateUserCart)
 router.delete('/wishlist/:productId',deleteUserWishlist)
 router.delete('/cart/:cartId',deleteUserCart)
 router.delete('/addresses/:addressesId',deleteUserAddresses)
+router.delete('/card/:cardId', deleteUserCard)
 
 
 export default router;

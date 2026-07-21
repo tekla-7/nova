@@ -1,9 +1,9 @@
 import {
-    addAddresses,
+    addAddresses, addCard,
     addCart,
-    addWishlist, changeCartProductQuantity, deleteAddressesItem, deleteCartItem,
+    addWishlist, changeCartProductQuantity, deleteAddressesItem, deleteCard, deleteCartItem,
     deleteWishlistItem,
-    getUserById,
+    getUserById, updateAddresses,
     updateNotification, updatePassword,
     updateUser
 } from "../data/users.js";
@@ -146,7 +146,7 @@ export const addUserCart = async (req, res, next) => {
 export const addUserAddresses = async (req, res, next) => {
     const userId = req.user.id;
     if (!Object.keys(req.body).length) {
-        const error = new Error('Product is required.');
+        const error = new Error('Data is required.');
         error.status = 400;
         return next(error);
     }
@@ -154,6 +154,48 @@ export const addUserAddresses = async (req, res, next) => {
         await addAddresses(userId, req.body);
         return res.status(200).json({message: 'Address added'});
 
+    } catch (error) {
+        error.status = 404;
+        return next(error);
+    }
+}
+
+///@desc add   user card
+///@route POST /api/user/me/card
+export const  addUserCard = async (req, res, next) => {
+    const userId = req.user.id;
+    if (!Object.keys(req.body).length) {
+        const error = new Error('Card is required.');
+        error.status = 400;
+        return next(error);
+    }
+    try {
+        await addCard(userId, req.body);
+        return res.status(200).json({message: 'Card added'});
+
+    } catch (error) {
+        error.status = 404;
+        return next(error);
+    }
+}
+///@desc update   user addresses
+///@route PATCH /api/user/me/addresses
+export const updateUserAddresses = async (req, res, next) => {
+    const userId = req.user.id;
+    if (!Object.keys(req.body).length) {
+        const error = new Error('Product is required.');
+        error.status = 400;
+        return next(error);
+    }
+    const addressesId = req.params.addressesId;
+    if (!addressesId) {
+        const error = new Error('Id is required.');
+        error.status = 400;
+        return next(error);
+    }
+    try {
+        await updateAddresses(userId,addressesId, req.body);
+        return res.status(200).json({message: 'Update address'});
     } catch (error) {
         error.status = 404;
         return next(error);
@@ -239,7 +281,26 @@ export const deleteUserAddresses = async (req, res, next) => {
     }
 
 }
+///@desc delete   user card
+///@route DELETE /api/user/me/card/:cardId
+export const deleteUserCard = async (req, res, next) => {
+    const userId = req.user.id;
+    const cardId = req.params.cardId;
+    if (!cardId) {
+        const error = new Error('Card id required.');
+        error.status = 400;
+        return next(error);
+    }
+    try {
+        await deleteCard(userId, cardId);
+        return res.status(200).json({message: 'card deleted'});
 
+    } catch (error) {
+        error.status = 404;
+        return next(error);
+    }
+
+}
 ///@desc change  cart item quantity
 ///@route PATCH /api/user/me/cart/:productId
 export const updateUserCart = async (req, res, next) => {

@@ -23,7 +23,7 @@ const navigate=useNavigate()
             return data
         }
         try {
-            await updatePassword(data)
+            await updatePassword({newPassword:data.newPassword ,currentPassword:data.currentPassword})
             dispatch(notificationAction.showNotification({
                 status: 'success',
                 title: 'Success',

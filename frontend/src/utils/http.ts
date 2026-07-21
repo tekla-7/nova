@@ -4,7 +4,16 @@ import type {ProductsResponse} from "../types/product.ts";
 import type {Cart} from "../types/cart.ts";
 import {PRODUCTS_API_URL, BACKEND_API_URL} from '../config.ts'
 import {getAuthToken, isAuthenticated, removeAuthToken} from "./auth.ts";
-import type {CartItem, NewPassword, UpdateUserInfoReq, User, Wishlist} from "../types/user.ts";
+import type {
+    Addresses,
+    Card,
+    CartItem,
+    NewPasswordReq,
+    NotificationPreferences,
+    UpdateUserInfoReq,
+    User,
+    Wishlist
+} from "../types/user.ts";
 import {queryClient} from "../routes/router.tsx";
 import type {ShoppingMethod} from "../types/checkout.ts";
 import type {CreateOrder, Order} from "../types/Order.ts";
@@ -435,6 +444,31 @@ export async function fetchOrder(orderId: string): Promise<Order> {
     }
     return await response.json()
 }
+export async function fetchOrders(): Promise<Order[]> {
+    if (!isAuthenticated()) {
+        throw new Response("User is not authenticated.", {
+            status: 401,
+        });
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}order/me`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+        },
+    );
+    // TODO
+    if (!response.ok) {
+        throw new Response("Failed to fetch order.", {
+            status: response.status,
+        });
+    }
+    return await response.json()
+}
 
 export async function updateUserInfo(data: UpdateUserInfoReq) {
     if (!isAuthenticated()) {
@@ -464,7 +498,7 @@ export async function updateUserInfo(data: UpdateUserInfoReq) {
     return response.json();
 }
 
-export async function updatePassword(data: NewPassword) {
+export async function updatePassword(data: NewPasswordReq) {
     if (!isAuthenticated()) {
         throw new Response("User is not authenticated.", {
             status: 401,
@@ -483,13 +517,189 @@ export async function updatePassword(data: NewPassword) {
 
         },
     );
-    // Tesr@123
+    // Test@123
+    const respJson = await response.json();
+
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to update password");
+        throw new Error(respJson.message || "Failed to update password");
     }
 
-    return response.json();
+    return respJson
+}
+
+export async function addAddresses(addresses: Addresses) {
+    if (!isAuthenticated()) {
+        return {
+            ok: false,
+            status: 401,
+            data: {id: null, message: "user is not authenticated."},
+        }
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me/addresses`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(addresses),
+        },
+    );
+    const respJson = await response.json();
+
+    if (!response.ok) {
+
+        throw new Error(respJson.message || "Failed to add address");
+    }
+    return respJson
+}
+
+export async function deleteAddress(id: string) {
+    if (!isAuthenticated()) {
+        return {
+            ok: false,
+            status: 401,
+            data: {id: null, message: "user is not authenticated."},
+        }
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me/addresses/${id}`,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        },
+    );
+    const respJson = await response.json();
+
+    if (!response.ok) {
+
+        throw new Error(respJson.message || "Failed to delete address");
+    }
+    return respJson
+}
+
+export async function editAddresses({id, addresses,}: { id: string, addresses: Addresses }) {
+    if (!isAuthenticated()) {
+        return {
+            ok: false,
+            status: 401,
+            data: {id: null, message: "user is not authenticated."},
+        }
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me/addresses/${id}`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(addresses),
+        },
+    );
+    const respJson = await response.json();
+
+    if (!response.ok) {
+        throw new Error(respJson.message || "Failed to edit address");
+    }
+    return respJson
+}
+
+export async function editNotification(notification:NotificationPreferences) {
+    if (!isAuthenticated()) {
+        return {
+            ok: false,
+            status: 401,
+            data: {id: null, message: "user is not authenticated."},
+        }
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me/notifications`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(notification),
+        },
+    );
+    const respJson = await response.json();
+
+    if (!response.ok) {
+        throw new Error(respJson.message || "Failed to edit notification");
+    }
+    return respJson
+}
+
+
+
+
+
+
+/////card
+export async function addCard(card: Card) {
+    if (!isAuthenticated()) {
+        return {
+            ok: false,
+            status: 401,
+            data: {id: null, message: "user is not authenticated."},
+        }
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me/card`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(card),
+        },
+    );
+    const respJson = await response.json();
+
+    if (!response.ok) {
+
+        throw new Error(respJson.message || "Failed to add card");
+    }
+    return respJson
+}
+export async function deleteCard(id: string) {
+    if (!isAuthenticated()) {
+        return {
+            ok: false,
+            status: 401,
+            data: {id: null, message: "user is not authenticated."},
+        }
+
+    }
+    const token = getAuthToken()
+    const response = await fetch(`${BACKEND_API_URL}users/me/card/${id}`,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        },
+    );
+    const respJson = await response.json();
+
+    if (!response.ok) {
+
+        throw new Error(respJson.message || "Failed to delete card");
+    }
+    return respJson
 }
 
 export {fetchCategories, fetchProducts, addToCart};

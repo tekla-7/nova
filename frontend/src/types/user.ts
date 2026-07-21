@@ -6,22 +6,23 @@ export interface User {
     "lastName": string,
     "email": string,
     "phoneNumber": string,
-    "notificationPreferences": {
-        "orderUpdates": boolean,
-        "promotions": boolean,
-        "wishlist": boolean,
-        "newsletter": boolean
-    },
+    "notificationPreferences": NotificationPreferences,
     "addresses": Addresses[],
     "cart": CartItem[],
     "wishlist": Wishlist[]
     "card": Card[],
-    lastPasswordChangeAt:string,
-    lastUpdatedAt:string,
+    lastPasswordChangeAt: string,
+    lastUpdatedAt: string,
+}
+export interface NotificationPreferences{
+    "orderUpdates": boolean,
+    "promotions": boolean,
+    "wishlist": boolean,
+    "newsletter": boolean
 }
 
 export interface Addresses {
-    id: string,
+    id?: string,
     isDefault: boolean,
     name: string,
     lastName: string,
@@ -50,7 +51,7 @@ export interface CartItem {
 }
 
 export interface Card {
-    id:number,
+    id?: string,
     number: string,
     expiryData: string,
     cvv: number,
@@ -58,7 +59,7 @@ export interface Card {
     isDefault?: boolean,
 }
 
-export interface UpdateUserInfoReq{
+export interface UpdateUserInfoReq {
 
     "name"?: string,
     "lastName"?: string,
@@ -66,8 +67,11 @@ export interface UpdateUserInfoReq{
     "phoneNumber"?: string,
     password?: string,
 }
-export type NewPassword = {
+
+export type NewPassword = NewPasswordReq & {
     confirmPassword: string;
-    currentPassword: string;
+};
+export type NewPasswordReq = {
     newPassword: string;
+    currentPassword: string;
 }

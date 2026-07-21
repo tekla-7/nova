@@ -55,7 +55,11 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
     useEffect(() => {
         if (!initializedRef.current) {
             if (!shoppingStep && user?.addresses.length) {
-                setUserForm(user.addresses[0], user.email, user.phoneNumber);
+                setUserForm( user.email, user.phoneNumber,user.addresses[0],);
+                initializedRef.current = true;
+            }
+            if(!shoppingStep &&user&& !user?.addresses.length){
+                setUserForm(user.email, user.phoneNumber);
                 initializedRef.current = true;
             }
         }
@@ -68,12 +72,13 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
 
     function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
+
         const formData = new FormData(event.currentTarget);
         const email = formData.get('email');
         const phone = formData.get('phone');
         const shippingMethod = selectedInfo.method;
         const saveAddress = formData.has('saveAddress');
-        const address = {...selectedInfo.address};
+        const address =selectedInfo.address
         let addressForm = null
         const getValue = (name: string) => {
             const value = formData.get(`${name}`) ?? "";
@@ -97,7 +102,6 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
         }
 
         if (!addressForm && !address) return
-
         dispatch(checkoutAction.addFirstStep({
             email,
             phone,
@@ -123,13 +127,13 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
     }
 
     function setUserForm(
-        address: Addresses,
         email: string,
-        phone: string,
+        phone: string, address?: Addresses,
+
     ) {
         setSelectedInfo((old) => {
             return {
-                ...old, address: address, defaultEmail: email,
+                ...old, ...(address&&address), defaultEmail: email,
                 defaultPhone: phone,
             }
         })
@@ -180,6 +184,7 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
         <AddressForm onClick={setStatus} address={selectedInfo.addressForm}
                      saveAddressDefault={selectedInfo.saveAddress} showForm={selectedInfo.addressFormIsActive}/>
         <button
+
             className='w-full mt-4 flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-[14px] bg-transparent outline-none border border-[#0b0b0b]/20 cursor-pointer '
             type='submit'>
             <span> Continue to payment</span>

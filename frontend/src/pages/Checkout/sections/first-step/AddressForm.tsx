@@ -5,16 +5,25 @@ import type {Addresses} from "../../../../types/user.ts";
 import CountryCitySelect from "./CountryCitySelect.tsx";
 
 type Props = {
-    onClick: (value:boolean) => void;
+    onClick: (value: boolean) => void;
     address: Addresses | null;
     saveAddressDefault: boolean;
     showForm: boolean;
+    showAddAddress?: boolean;
+    showAddButton?: boolean;
 }
-export default function AddressForm({onClick, address, saveAddressDefault,showForm}: Props) {
+export default function AddressForm({
+                                        onClick,
+                                        address,
+                                        saveAddressDefault,
+                                        showForm,
+                                        showAddAddress = true,
+                                        showAddButton,
+
+                                    }: Props) {
     function onChange() {
         onClick(!showForm)
     }
-
 
 
     return <>
@@ -62,7 +71,7 @@ export default function AddressForm({onClick, address, saveAddressDefault,showFo
                             required={showForm}/>
                     </div>
 
-                    {showForm&&<CountryCitySelect address={address} />}
+                    {showForm && <CountryCitySelect address={address}/>}
                     <div className='flex flex-col gap-1 mb-2 '>
                         <label htmlFor='ZIP' className='text-[11px] font-medium'>ZIP code
                         </label>
@@ -72,24 +81,27 @@ export default function AddressForm({onClick, address, saveAddressDefault,showFo
                     </div>
 
 
-
                 </div>
-                <div className='flex items-center gap-2.5 mt-1 '>
+                {showAddAddress && <div className='flex items-center gap-2.5 mt-1 '>
                     <Checkbox name='saveAddress' id='saveAddress' key={address?.id}
                               defaultChecked={saveAddressDefault ?? false}
                     />
                     <label className='cursor-pointer text-[#52514e] text-xs' htmlFor='saveAddress'>Save this address to
                         my account</label>
-                </div>
+                </div>}
                 <div className='flex items-center gap-2.5 mt-1 '>
-                    <Checkbox name='defaultAddress' id='defaultAddress'   key={address?.id}
+                    <Checkbox name='defaultAddress' id='defaultAddress' key={address?.id}
                               defaultChecked={address?.isDefault ?? false}
 
                     />
                     <label className='cursor-pointer text-[#52514e] text-xs' htmlFor='defaultAddress'>Set as default
                         address</label>
                 </div>
+                {showAddButton &&<div className=' flex justify-end w-full mt-2'> <button
+                    className='px-4 py-1.5 w-max  bg-white text-sm bg-transparent border border-[#0b0b0b]/20 cursor-pointer rounded-lg'
+                   type='submit'>Save</button></div>}
             </div>
+
         </div>
 
     </>

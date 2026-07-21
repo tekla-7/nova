@@ -87,7 +87,7 @@ export async function updateUser(userId, data) {
             throw new Error('Invalid password.')
         }
     }
-    const { password, ...dataWithoutPassword } = data;
+    const {password, ...dataWithoutPassword} = data;
     try {
         storedData[userIndex] = {
             ...storedData[userIndex],
@@ -103,7 +103,8 @@ export async function updateUser(userId, data) {
     }
 
 }
-export async function updatePassword(userId,data){
+
+export async function updatePassword(userId, data) {
     const storedData = await readUserData();
     const userIndex = storedData.findIndex(ev => ev.id === userId);
     if (userIndex === -1) {
@@ -115,7 +116,7 @@ export async function updatePassword(userId,data){
             throw new Error('Current password is not correct')
         }
     }
-    let hashedPassword='';
+    let hashedPassword = '';
     try {
         hashedPassword = await hash(data.newPassword, 10);
     } catch (err) {
@@ -137,6 +138,7 @@ export async function updatePassword(userId,data){
 
 
 }
+
 export async function addWishlist(userId, product) {
     const storedData = await readUserData();
     const userIndex = storedData.findIndex(ev => ev.id === userId);
@@ -213,18 +215,79 @@ export async function addAddresses(userId, addresses) {
     if (userIndex === -1) {
         throw new Error('User not found');
     }
+    const exitingAddress = storedData[userIndex].addresses.findIndex(ev => ev.name === addresses.name && ev.lastName === addresses.lastName);
+    if (exitingAddress !== -1) {
+        throw new Error('Address name must be unique');
+    }
     try {
         const newAddress = {
             id: uuidv4(),
             ...addresses
         };
-
+        if (addresses.isDefault) {
+            storedData[userIndex].addresses.forEach((address) => {
+                address.isDefault = false;
+            });
+        }
         storedData[userIndex].addresses.push(newAddress)
+        storedData[userIndex].addresses.sort((a, b) => Number(b.isDefault) - Number(a.isDefault))
         await writeUserData(storedData);
         return storedData[userIndex];
     } catch (error) {
         throw new Error(error)
     }
+}
+
+export async function addCard(userId, card) {
+    const storedData = await readUserData();
+    const userIndex = storedData.findIndex(ev => ev.id === userId);
+    if (userIndex === -1) {
+        throw new Error('User not found');
+    }
+
+    try {
+        const newCard = {
+            id: uuidv4(),
+            ...card
+        };
+        if (card.isDefault) {
+            storedData[userIndex].card.forEach((card) => {
+                card.isDefault = false;
+            });
+        }
+        storedData[userIndex].card.push(newCard)
+        storedData[userIndex].card.sort((a, b) => Number(b.isDefault) - Number(a.isDefault))
+        await writeUserData(storedData);
+        return storedData[userIndex];
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export async function updateAddresses(userId, addressId, addresses) {
+    const storedData = await readUserData();
+    const userIndex = storedData.findIndex(ev => ev.id === userId);
+    if (userIndex === -1) {
+        throw new Error('User not found');
+    }
+    const exitingAddress = storedData[userIndex].addresses.findIndex(ev => addressId === ev.id);
+    if (exitingAddress === -1) {
+        throw new Error('Cannot find address');
+    }
+    if (addresses.isDefault) {
+        storedData[userIndex].addresses.forEach((address) => {
+            address.isDefault = false;
+        });
+    }
+    try {
+        storedData[userIndex].addresses[exitingAddress] = {...storedData[userIndex].addresses[exitingAddress], ...addresses};
+        storedData[userIndex].addresses.sort((a, b) => Number(b.isDefault) - Number(a.isDefault))
+        await writeUserData(storedData);
+        return storedData[userIndex];
+    } catch (error) {
+        throw new Error(error)
+    }
+
 }
 
 export async function updateNotification(userId, notification) {
@@ -294,6 +357,21 @@ export async function deleteAddressesItem(userId, id) {
     }
     try {
         storedData[userIndex].addresses = storedData[userIndex].addresses.filter(item => item?.id !== id);
+        await writeUserData(storedData);
+        return storedData[userIndex];
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+export async function deleteCard(userId, id) {
+    const storedData = await readUserData();
+    const userIndex = storedData.findIndex(ev => ev.id === userId);
+    if (userIndex === -1) {
+        throw new Error('User not found');
+    }
+    try {
+        storedData[userIndex].card = storedData[userIndex].card.filter(item => item?.id !== id);
+        console.log(id, storedData[userIndex].card)
         await writeUserData(storedData);
         return storedData[userIndex];
     } catch (error) {

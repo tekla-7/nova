@@ -10,7 +10,6 @@ import Summary from "./sections/Summary.tsx";
 
 export default function Order() {
     const order = useLoaderData<Order>();
-    console.log(order)
 
     return <section className='flex flex-col w-full'>
         <div className='flex items-center gap-1 border-b border-[#E5E0D8] py-3 px-6'>
@@ -18,7 +17,7 @@ export default function Order() {
             <p className='text-xs text-[#E5E0D8]'>/</p>
             <NavLink className='text-xs text-[#9A9A9A] cursor-pointer' to='/profile'>Profile</NavLink>
             <p className='text-xs text-[#E5E0D8]'>/</p>
-            <NavLink className='text-xs text-[#9A9A9A] cursor-pointer' to='/orders'>Orders</NavLink>
+            <NavLink className='text-xs text-[#9A9A9A] cursor-pointer' to='/profile/orders'>Orders</NavLink>
             <p className='text-xs text-[#E5E0D8]'>/</p>
 
             <p className='text-xs text-[#0D0D0D]'>#{order.orderNumber}</p>

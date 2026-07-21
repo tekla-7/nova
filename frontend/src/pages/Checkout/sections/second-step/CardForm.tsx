@@ -8,8 +8,10 @@ type Props = {
     showForm: boolean;
     card: Card | null;
     saveCard: boolean;
+    showAddCard?: boolean;
+    showAddButton?: boolean;
 }
-export default function CardForm({onClick, showForm, card, saveCard}: Props) {
+export default function CardForm({onClick, showForm, card, saveCard,showAddCard=true ,showAddButton}: Props) {
 
 
     function onChange() {
@@ -23,7 +25,7 @@ export default function CardForm({onClick, showForm, card, saveCard}: Props) {
             type='button'
             className='w-full cursor-pointer font-medium rounded-lg px-3 py-[11px] flex items-center justify-center gap-1.5 text-xs text-[#898781] border border-dashed border-[#0b0b0b]/10 hover:bg-[#fcfcfb]'>
             {!showForm && <><Plus size={18}/>
-                Use a different address</>}
+                Use a different card</>}
             {showForm && <><X size={18}/>
                 Cancel</>}
         </button>
@@ -45,7 +47,8 @@ export default function CardForm({onClick, showForm, card, saveCard}: Props) {
                             defaultValue={card?.number}
                             className='text-base border  mt-1  border-[#0b0b0b]/10 rounded-md outline-none transition-all w-full h-9 px-3 py-2 bg-[#ffffff]'
                             name='number' id='number' type='number' placeholder='number'
-                            required={showForm} min={16} max={16}/>
+                            required={showForm} minLength={16}
+                            maxLength={16}/>
                     </div>
                     <div className='flex flex-col gep-1 mb-2 '>
                         <label htmlFor='expiryData' className='text-[11px] font-medium'>Expiry
@@ -53,7 +56,7 @@ export default function CardForm({onClick, showForm, card, saveCard}: Props) {
                         <input defaultValue={card?.expiryData}
                                className='text-base border  mt-1  border-[#0b0b0b]/10 rounded-md outline-none transition-all w-full h-9 px-3 py-2 bg-[#ffffff]'
                                name='expiryData' id='expiryData' type='text' placeholder='MM/YY' required={showForm}
-                               min={5}/>
+                               minLength={5}/>
                     </div>
                     <div className='flex flex-col gep-1 mb-2'>
                         <label htmlFor='cvv' className='text-[11px] font-medium'>CVV
@@ -61,7 +64,7 @@ export default function CardForm({onClick, showForm, card, saveCard}: Props) {
                         <input
                             defaultValue={card?.cvv}
                             className='text-base border  mt-1  border-[#0b0b0b]/10 rounded-md outline-none transition-all w-full h-9 px-3 py-2 bg-[#ffffff]'
-                            name='cvv' id='cvv' type='number' placeholder='cvv' required={showForm} max={3} min={3}/>
+                            name='cvv' id='cvv' type='number' placeholder='cvv' required={showForm} minLength={3} maxLength={3}/>
                     </div>
 
                     <div className='flex flex-col gep-1 mb-2 col-span-2'>
@@ -74,14 +77,27 @@ export default function CardForm({onClick, showForm, card, saveCard}: Props) {
                     </div>
 
                 </div>
-                <div className='flex items-center gep-2.5 mt-1 '>
+                {showAddCard && <div className='flex items-center gep-2.5 mt-1 '>
                     <Checkbox name='save' id='save' key={card?.id}
                               defaultChecked={saveCard ?? false}
                     />
                     <label className='cursor-pointer text-[#52514e] text-xs' htmlFor='save'>Save card for future
                         purchases
                     </label>
+                </div>}
+                {showAddButton && <>
+                    <div className='flex items-center gep-2.5 mt-1 '>
+                    <Checkbox name='default' id='default' key={card?.id}
+                              defaultChecked={saveCard ?? false}
+                    />
+                    <label className='cursor-pointer text-[#52514e] text-xs' htmlFor='default'>Set as default
+                        card
+                    </label>
                 </div>
+                <div className=' flex justify-end w-full mt-2'> <button
+                    className='px-4 py-1.5 w-max  bg-white text-sm bg-transparent border border-[#0b0b0b]/20 cursor-pointer rounded-lg'
+                    type='submit'>Save</button></div>
+                </>}
             </div>
         </div>
 

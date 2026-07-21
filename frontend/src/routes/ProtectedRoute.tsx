@@ -3,7 +3,6 @@ import type {ReactNode} from "react";
 import {isAuthenticated} from "../utils/auth.ts";
 
 export default function ProtectedRoute({children}: { children:ReactNode }) {
-   console.log(isAuthenticated())
     return isAuthenticated()? children:<Navigate to="/authentication"/>
 }
 

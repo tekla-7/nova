@@ -28,72 +28,13 @@
     "phoneNumber": "+995555555555",
     "password": "$2b$10$CAwNz6HzqI0u6lhpNYtVH.Cwy9INggkYqQ9qaESiRsLqjf/7ck8RC",
     "notificationPreferences": {
-      "orderUpdates": true,
+      "orderUpdates": false,
       "promotions": true,
       "wishlist": true,
       "newsletter": true
     },
-    "addresses": [
-      {
-        "id": "123",
-        "isDefault": true,
-        "name": "Work",
-        "lastName": "office",
-        "city": {
-          "name": "New york",
-          "code": "ny"
-        },
-        "zipCode": "10001",
-        "country": {
-          "name": "United state",
-          "code": "us"
-        },
-        "streetAddress": "123 Main Street, Apt 4B"
-      },
-      {
-        "id": "126",
-        "isDefault": false,
-        "name": "Work",
-        "lastName": "office",
-        "city": {
-          "name": "New york",
-          "code": "ny"
-        },
-        "zipCode": "10001",
-        "country": {
-          "name": "United state",
-          "code": "us"
-        },
-        "streetAddress": "123 Main Street, Apt 4B"
-      }
-    ],
+    "addresses": [],
     "cart": [
-      {
-        "id": "42c8d4ac-03a8-4ec3-b4b5-43edd5a48c8e",
-        "product": {
-          "productId": 84,
-          "title": "Gigabyte Aorus Men Tshirt",
-          "price": 24.99,
-          "brand": "Gigabyte",
-          "image": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/1.webp"
-        },
-        "quantity": 1,
-        "size": "xs",
-        "color": "#1A1A1A"
-      },
-      {
-        "id": "4ea7eb83-6aee-4746-ba59-5fade96dd74e",
-        "product": {
-          "productId": 1,
-          "title": "Essence Mascara Lash Princess",
-          "price": 9.99,
-          "brand": "Essence",
-          "image": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-        },
-        "quantity": 1,
-        "size": "xs",
-        "color": "#1A1A1A"
-      },
       {
         "id": "842c205f-dd6a-4546-b397-bd4c4ad3c960",
         "product": {
@@ -138,24 +79,7 @@
         "image": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/1.webp"
       }
     ],
-    "card": [
-      {
-        "id": 123,
-        "number": "1234567891012131",
-        "expiryData": "8/28",
-        "cvv": 123,
-        "name": "test testidze",
-        "isDefault": true
-      },
-      {
-        "id": 1234,
-        "number": "1234567891012131",
-        "expiryData": "8/28",
-        "cvv": 123,
-        "name": "test testidze",
-        "isDefault": false
-      }
-    ],
+    "card": [],
     "lastPasswordChangeAt": "2026-07-20T16:29:01.691Z"
   }
 ]

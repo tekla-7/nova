@@ -57,7 +57,6 @@ export default function EditPersonalInformation() {
                 return [key, newValue];
             })
         );
-        console.log(useNewInfo);
         if ("email" in useNewInfo && !useNewInfo.password) {
             dispatch(notificationAction.showNotification({
                 status: 'warning',
