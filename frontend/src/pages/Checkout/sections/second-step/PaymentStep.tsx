@@ -43,18 +43,35 @@ export default function PaymentStep({onStepCompleted}: { onStepCompleted: () => 
 
     const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (selectedInfo.paymentMethodId!==1) return;
-        if (!selectedInfo.card && !selectedInfo.saveCard) return
+        const formData = new FormData(event.target);
+        if (selectedInfo.paymentMethodId !== 1) return;
+        const card = selectedInfo.card;
+        let cardForm = null;
+        let saveCard = false;
+
+        if (selectedInfo.cardFormIsActive) {
+            saveCard=formData.has('save')
+            cardForm = {
+                isDefault: formData.has("default"),
+                name: String(formData.get("name") ?? ""),
+                number: String(formData.get("number") ?? ''),
+                expiryData: String(formData.get("expiryData")),
+                cvv: Number(formData.get("cvv")),
+            }
+
+        }
+        if (!card&& !cardForm) return
 
         dispatch(checkoutAction.addLastStep({
             paymentMethodId: selectedInfo.paymentMethodId,
-            card:selectedInfo.card,
-            saveCard:selectedInfo.saveCard,
-            cardForm:selectedInfo.cardForm,
-            cardFormIsActive:selectedInfo.cardFormIsActive,
+            card: card,
+            saveCard: saveCard,
+            cardForm: cardForm,
+            cardFormIsActive: selectedInfo.cardFormIsActive,
 
         }))
-        onStepCompleted()    }
+        onStepCompleted()
+    }
     const initializedRef = useRef(!!paymentStep);
 
     function setCard(card: Card) {

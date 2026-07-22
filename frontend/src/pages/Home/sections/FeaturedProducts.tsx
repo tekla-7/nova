@@ -2,6 +2,7 @@ import {useProducts} from "../../../hooks/useProducts.ts";
 import ErrorBlock from "../../../components/ui/ErrorBlock.tsx";
 import {allowedCategories} from "../../../constants/allowedCategories.ts";
 import FeaturedProductItem from "./FeaturedProductItem.tsx";
+import {Link} from "react-router-dom";
 
 export default function FeaturedProducts() {
     const {
@@ -41,8 +42,8 @@ export default function FeaturedProducts() {
     return <div className='pt-1 mb-8'>
         <div className='flex items-center justify-between mb-5'>
             <p className='text-[20px] tracking-tight'>Featured this week</p>
-            <a href='/' className='text-xs text-[#9A9A9A] cursor-pointer tracking-widest border-b border-[9A9A9A]'>View
-                all</a>
+            <Link to='/new-in' className='text-xs text-[#9A9A9A] cursor-pointer tracking-widest border-b border-[9A9A9A]'>View
+                all</Link>
         </div>
         <div className='grid grid-cols-3 gap-2.5'>{content}</div>
     </div>

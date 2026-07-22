@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../store";
 import {useEffect} from "react";
-import {notificationAction} from "../../store/ui-slice.tsx";
+import {uiAction as notificationAction} from "../../store/ui-slice.tsx";
 import clsx from "clsx";
 import {X} from "lucide-react";
 

@@ -64,7 +64,8 @@ export default function CardForm({onClick, showForm, card, saveCard,showAddCard=
                         <input
                             defaultValue={card?.cvv}
                             className='text-base border  mt-1  border-[#0b0b0b]/10 rounded-md outline-none transition-all w-full h-9 px-3 py-2 bg-[#ffffff]'
-                            name='cvv' id='cvv' type='number' placeholder='cvv' required={showForm} minLength={3} maxLength={3}/>
+                            name='cvv' id='cvv' type='number' placeholder='cvv' required={showForm} minLength={3}
+                            maxLength={3}/>
                     </div>
 
                     <div className='flex flex-col gep-1 mb-2 col-span-2'>
@@ -85,8 +86,7 @@ export default function CardForm({onClick, showForm, card, saveCard,showAddCard=
                         purchases
                     </label>
                 </div>}
-                {showAddButton && <>
-                    <div className='flex items-center gep-2.5 mt-1 '>
+                <div className='flex items-center gep-2.5 mt-1 '>
                     <Checkbox name='default' id='default' key={card?.id}
                               defaultChecked={saveCard ?? false}
                     />
@@ -94,9 +94,13 @@ export default function CardForm({onClick, showForm, card, saveCard,showAddCard=
                         card
                     </label>
                 </div>
-                <div className=' flex justify-end w-full mt-2'> <button
-                    className='px-4 py-1.5 w-max  bg-white text-sm bg-transparent border border-[#0b0b0b]/20 cursor-pointer rounded-lg'
-                    type='submit'>Save</button></div>
+                {showAddButton && <>
+                    <div className=' flex justify-end w-full mt-2'>
+                        <button
+                            className='px-4 py-1.5 w-max  bg-white text-sm bg-transparent border border-[#0b0b0b]/20 cursor-pointer rounded-lg'
+                            type='submit'>Save
+                        </button>
+                    </div>
                 </>}
             </div>
         </div>

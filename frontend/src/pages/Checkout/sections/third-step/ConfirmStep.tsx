@@ -19,22 +19,25 @@ export default function ConfirmStep({onStepCompleted}: { onStepCompleted: (id: n
         return (shipping + subtotal) * 108 / 100;
     }, [shoppingBag, checkout])
     const {createOrderHandler, isPending} = useOrderMutation()
+    console.log(checkout)
 
     function createOrder() {
         if (!checkout.paymentStep || !checkout.shoppingStep || !shoppingBag.length) return null;
         const paymentStep = checkout.paymentStep
         const shoppingStep = checkout.shoppingStep
-        const address= shoppingStep.addressFormIsActive ? shoppingStep.addressForm : shoppingStep.address
-        if(!address) return null;
+        const address = shoppingStep.addressFormIsActive ? shoppingStep.addressForm : shoppingStep.address
+        if (!address) return null;
         const order: CreateOrder = {
             paid: total,
-            email:shoppingStep.email,
-            phone:shoppingStep.phone,
+            email: shoppingStep.email,
+            phone: shoppingStep.phone,
             payment: paymentStep.cardFormIsActive ? paymentStep.cardForm : paymentStep.card,
             paymentMethod: 'Card',
             deliveryMethod: shoppingStep.shippingMethod,
             items: shoppingBag,
             address: address,
+            saveAddress: !!shoppingStep.saveAddress,
+            saveCard: !!paymentStep.saveCard,
         }
         createOrderHandler(order)
     }
@@ -154,7 +157,7 @@ export default function ConfirmStep({onStepCompleted}: { onStepCompleted: (id: n
         <button
             onClick={createOrder} title='button'
             className='px-4 py-2 font-semibold flex items-center justify-center text-sm bg-transparent border border-[#0b0b0b] rounded-lg cursor-pointer'>
-            {isPending&&'Loading ....'} {!isPending&&<><LockKeyhole size={14} className='mr-1'/>
+            {isPending && 'Loading ....'} {!isPending && <><LockKeyhole size={14} className='mr-1'/>
             Place order · ${total.toFixed(2)}</>}
         </button>
     </div>

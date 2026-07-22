@@ -1,22 +1,29 @@
 import {Handbag, Heart} from 'lucide-react';
 import {Link} from "react-router-dom";
-import {useState} from "react";
+import {type Ref} from "react";
 import {useUserWishlist} from "../../../hooks/useUserData.ts";
 import WishlistItem from "./WishlistItem.tsx";
 import {useCartMutation} from "../../../hooks/useCartMutation.ts";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../../store";
+import {uiAction} from "../../../store/ui-slice.tsx";
 
-export default function WishlistDropdown() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function WishlistDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
+    const isOpen = useSelector(
+        (state: RootState) => state.ui.isWishlistOpen
+    );
     const {
         data = [],
     } = useUserWishlist();
+    const dispatch = useDispatch();
+
     const {addToCartHandler, isPending} = useCartMutation()
     const cartItems = data.slice(0, 3);
     const itemCount = data.length;
     const subTotal = data.reduce((prev, cur) => cur.price + prev, 0);
 
     function toggleOpen() {
-        setIsOpen(v => !v)
+        dispatch(uiAction.toggle('isWishlistOpen'))
     }
 
     function onAddToBag(id: number) {
@@ -37,7 +44,7 @@ export default function WishlistDropdown() {
     }
 
 
-    return <div className='relative'>
+    return <div className='relative' ref={ref}>
         <div className='relative'>
             <Heart onClick={toggleOpen} size={18} className='cursor-pointer'/>
             {itemCount > 0 &&
@@ -78,7 +85,7 @@ export default function WishlistDropdown() {
                         <span>${subTotal.toFixed(2)}</span>
                     </div>
 
-                    <Link to="/wishlist"
+                    <Link to="/wishlist"  onClick={toggleOpen}
                           className='text-sm font-medium px-4 flex items-center justify-center text-center py-2 bg-transparent text-[#0b0b0b] border w-full border-[#0b0b0b33] rounded-lg cursor-pointer mb-2'>
                         <Heart size={14} className='mr-1'/> View all wishlist
                     </Link>

@@ -33,53 +33,54 @@
       "wishlist": true,
       "newsletter": true
     },
-    "addresses": [],
+    "addresses": [
+      {
+        "id": "1784716541955",
+        "isDefault": true,
+        "name": "aa",
+        "lastName": "tes",
+        "city": {
+          "code": "",
+          "name": "Rangamati"
+        },
+        "zipCode": "123",
+        "country": {
+          "code": "BD",
+          "name": "Bangladesh"
+        },
+        "streetAddress": "123 Main Street, Apt 4B",
+        "state": {
+          "code": "B",
+          "name": "Chittagong Division"
+        }
+      }
+    ],
     "cart": [
       {
-        "id": "842c205f-dd6a-4546-b397-bd4c4ad3c960",
+        "id": "6582234f-1b65-47e3-80a9-ae910b440283",
         "product": {
-          "productId": 3,
-          "title": "Powder Canister",
-          "price": 14.99,
-          "brand": "Velvet Touch",
-          "image": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
+          "productId": 156,
+          "title": "Green and Black Glasses",
+          "price": 34.99,
+          "brand": "Fashion Shades",
+          "image": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/1.webp"
         },
-        "quantity": 1,
+        "quantity": 2,
         "size": "xs",
         "color": "#1A1A1A"
       }
     ],
-    "wishlist": [
+    "wishlist": [],
+    "card": [
       {
-        "productId": 84,
-        "title": "Gigabyte Aorus Men Tshirt",
-        "price": 24.99,
-        "brand": "Gigabyte",
-        "image": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/1.webp"
-      },
-      {
-        "productId": 1,
-        "title": "Essence Mascara Lash Princess",
-        "price": 9.99,
-        "brand": "Essence",
-        "image": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-      },
-      {
-        "productId": 3,
-        "title": "Powder Canister",
-        "price": 14.99,
-        "brand": "Velvet Touch",
-        "image": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
-      },
-      {
-        "productId": 156,
-        "title": "Green and Black Glasses",
-        "price": 34.99,
-        "brand": "Fashion Shades",
-        "image": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/1.webp"
+        "id": "c1c034a6-cdd2-41fa-9ed3-4762e21ea185",
+        "isDefault": true,
+        "name": "first name",
+        "number": "1234567890123456",
+        "expiryData": "2/2022",
+        "cvv": 123
       }
     ],
-    "card": [],
     "lastPasswordChangeAt": "2026-07-20T16:29:01.691Z"
   }
 ]

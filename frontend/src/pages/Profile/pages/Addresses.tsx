@@ -5,7 +5,7 @@ import AddressForm from "../../Checkout/sections/first-step/AddressForm.tsx";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
 import {addAddresses, deleteAddress, editAddresses} from "../../../utils/http.ts";
-import {notificationAction} from "../../../store/ui-slice.tsx";
+import {uiAction as notificationAction } from "../../../store/ui-slice.tsx";
 
 type State = {
     address: Addresses | null,

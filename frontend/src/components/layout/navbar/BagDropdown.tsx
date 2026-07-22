@@ -1,4 +1,3 @@
-import {useState} from "react";
 import {Handbag, LockKeyhole} from "lucide-react";
 import {Link} from "react-router-dom";
 import {useUserCartData} from "../../../hooks/useUserData.ts";
@@ -6,18 +5,25 @@ import ProductCartItem from "./ProductCartItem.tsx";
 import {useMutation} from "@tanstack/react-query";
 import {deleteCartItem} from "../../../utils/http.ts";
 import {queryClient} from "../../../routes/router.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../../store";
+import {uiAction} from "../../../store/ui-slice.tsx";
+import type {Ref} from "react";
 
-export default function BagDropdown() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function BagDropdown({ref}:{ref:Ref<HTMLDivElement>}) {
+    const isOpen = useSelector(
+        (state: RootState) => state.ui.isCartOpen
+    );
     const {
         data = [],
     } = useUserCartData();
+    const dispatch = useDispatch();
     const cartItems = (data ?? []).slice(0, 3);
     const itemCount = (data ?? []).reduce((prev, cur) => prev + cur.quantity, 0);
     const subTotal = (data ?? []).reduce((prev, cur) => cur.product.price + prev, 0)
 
     function toggleOpen() {
-        setIsOpen(v => !v)
+        dispatch(uiAction.toggle('isCartOpen'))
     }
 
     const {mutate} = useMutation({
@@ -36,12 +42,11 @@ export default function BagDropdown() {
                 console.log("error", err);
             },
             onSettled: () => {
-                console.log("++++++++++settled");
             },
         })
     }
 
-    return <div className='relative'>
+    return <div className='relative' ref={ref}>
         <div className='relative'>
             <Handbag onClick={toggleOpen} size={18} className='cursor-pointer'/>
             {itemCount > 0 &&
@@ -82,13 +87,13 @@ export default function BagDropdown() {
                         <span>${subTotal.toFixed(2)}</span>
                     </div>
 
-                    <Link to="/checkout"
+                    <Link to="/checkout"  onClick={toggleOpen}
                           className='text-sm font-medium px-4 flex items-center  justify-center text-center py-2 bg-transparent text-[#0b0b0b] border w-full border-[#0b0b0b33] rounded-lg cursor-pointer mb-2'>
-                     <LockKeyhole size={14} className='mr-1'/>   Checkout
+                        <LockKeyhole size={14} className='mr-1'/> Checkout
                     </Link>
-                    <Link to="/shopping-bag"
+                    <Link to="/shopping-bag"  onClick={toggleOpen}
                           className='text-sm font-medium px-4 flex items-center text-center justify-center py-2 bg-transparent text-[#0b0b0b] border w-full border-[#0b0b0b33] rounded-lg cursor-pointer mb-1.5'>
-                      <Handbag size={14} className='mr-1'/>  View bag
+                        <Handbag size={14} className='mr-1'/> View bag
                     </Link>
                 </div>
             </div>

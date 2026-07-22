@@ -1,6 +1,7 @@
 import type {Product} from "../../../types/product.ts";
 import Price from "../../../components/ui/Price.tsx";
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 
 export default function BestSellersItem({event}: { event: Product }) {
@@ -14,7 +15,7 @@ export default function BestSellersItem({event}: { event: Product }) {
         />
 
         <div className="">
-            <h3 className="text-xs cursor-pointer pb-1 text-[#ffffffcc] font-medium">{event.title}</h3>
+            <Link to={`${event.id}`} className="text-xs cursor-pointer pb-1 text-[#ffffffcc] font-medium">{event.title}</Link>
             <Price price={event.price} discountPercentage={event.discountPercentage} type='light'/>
             <div className="h-[3px] bg-[#ffffff26] rounded-sm mt-1.5 relative">
                 <div className='absolute left-0 top-0 bg-[#C8A97E] rounded-sm h-[3px]' style={{ width: `${amount}%` }}></div>

@@ -5,7 +5,7 @@ import clsx from "clsx";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
 import {editNotification} from "../../../utils/http.ts";
-import {notificationAction} from "../../../store/ui-slice.tsx";
+import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 
 export default function Notifications() {
     const user = useRouteLoaderData("profile") as User;

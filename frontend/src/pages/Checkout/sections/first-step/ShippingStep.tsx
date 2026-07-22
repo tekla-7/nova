@@ -55,10 +55,10 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
     useEffect(() => {
         if (!initializedRef.current) {
             if (!shoppingStep && user?.addresses.length) {
-                setUserForm( user.email, user.phoneNumber,user.addresses[0],);
+                setUserForm(user.email, user.phoneNumber, user.addresses[0],);
                 initializedRef.current = true;
             }
-            if(!shoppingStep &&user&& !user?.addresses.length){
+            if (!shoppingStep && user && !user?.addresses.length) {
                 setUserForm(user.email, user.phoneNumber);
                 initializedRef.current = true;
             }
@@ -77,8 +77,8 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
         const email = formData.get('email');
         const phone = formData.get('phone');
         const shippingMethod = selectedInfo.method;
-        const saveAddress = formData.has('saveAddress');
-        const address =selectedInfo.address
+        let saveAddress = false;
+        const address = selectedInfo.address
         let addressForm = null
         const getValue = (name: string) => {
             const value = formData.get(`${name}`) ?? "";
@@ -87,7 +87,7 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
                 : null;
         }
         if (selectedInfo.addressFormIsActive) {
-
+            saveAddress = formData.has('saveAddress')
             addressForm = {
                 id: Date.now().toString(),
                 isDefault: formData.has("defaultAddress"),
@@ -129,11 +129,10 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
     function setUserForm(
         email: string,
         phone: string, address?: Addresses,
-
     ) {
         setSelectedInfo((old) => {
             return {
-                ...old, ...(address&&address), defaultEmail: email,
+                ...old, ...(address && address), defaultEmail: email,
                 defaultPhone: phone,
             }
         })

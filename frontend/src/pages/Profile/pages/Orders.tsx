@@ -6,7 +6,6 @@ import Status from "../sections/Status.tsx";
 
 export default function Orders() {
     const {orders} = useLoaderData();
-    console.log("Orders loaded", orders);
     const totalSpent = orders.reduce((prev: number, curr: Order) => prev + curr.paid, 0)
     const totalItems = orders.reduce(
         (sum: number, order: Order) =>

@@ -45,6 +45,7 @@ const router = createBrowserRouter([
             {path: 'women', element: <CollectionPage/>},
             {path: 'men', element: <CollectionPage/>},
             {path: 'new-in', element: <CollectionPage/>},
+            {path: 'sale' ,element: <CollectionPage/>},
             {
                 path: "women/:productId",
                 element: <ProductDetails/>,
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "new-in/:productId",
+                element: <ProductDetails/>,
+                loader: productDetailsLoader,
+            },
+            {
+                path: "/:productId",
                 element: <ProductDetails/>,
                 loader: productDetailsLoader,
             },

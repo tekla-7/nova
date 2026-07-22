@@ -171,6 +171,7 @@ export const  addUserCard = async (req, res, next) => {
     }
     try {
         await addCard(userId, req.body);
+
         return res.status(200).json({message: 'Card added'});
 
     } catch (error) {

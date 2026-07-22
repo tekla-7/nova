@@ -2,7 +2,7 @@ import PasswordInput from "../../../components/ui/PasswordInput.tsx";
 import {Link, useNavigate} from "react-router-dom";
 import {isEqualsToOtherValue} from "../../../utils/validation.ts";
 import {useDispatch} from "react-redux";
-import {notificationAction} from "../../../store/ui-slice.tsx";
+import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 import {useActionState} from "react";
 import type {NewPassword} from "../../../types/user.ts";
 import {updatePassword} from "../../../utils/http.ts";

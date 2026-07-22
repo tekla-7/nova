@@ -5,7 +5,6 @@ import ProgressBar from "./ProgressBar.tsx";
 
 function RootLayout() {
     // const navigation = useNavigation();
-
     return (
         <div className="min-h-screen flex flex-col">
             <ProgressBar/>

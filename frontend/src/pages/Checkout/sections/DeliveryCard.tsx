@@ -5,7 +5,6 @@ import {Van} from "lucide-react";
 export default function DeliveryCard() {
     const shoppingStep = useSelector((state: RootState) => state.checkout.shoppingStep);
     if (!shoppingStep) return null;
-    console.log(shoppingStep);
     const start = new Date();
     start.setDate(start.getDate() + 3);
     const end = new Date();

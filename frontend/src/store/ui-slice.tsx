@@ -1,13 +1,20 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
+type ToggleKey = "isWishlistOpen" | "isCartOpen" | "isUserOpen";
 
 const initialState: {
     notification:
         | { status: 'error' | 'success' | 'warning' | 'info', title: string, message: string }
         | null,
-    isLoading: boolean
+    isLoading: boolean,
+    isWishlistOpen: boolean,
+    isCartOpen: boolean,
+    isUserOpen: boolean,
 } = {
     notification: null,
-    isLoading: false
+    isLoading: false,
+    isWishlistOpen: false,
+    isCartOpen: false,
+    isUserOpen: false,
 
 }
 
@@ -28,7 +35,20 @@ const uiSlice = createSlice({
         setLoading: (state, action) => {
             state.isLoading = action.payload;
         },
+        toggle(state,action:PayloadAction<ToggleKey>) {
+            const key = action.payload;
+            const currentValue = state[key];
+            state.isWishlistOpen = false;
+            state.isCartOpen = false;
+            state.isUserOpen = false;
+            state[key] = !currentValue;
+        },
+        modalClose(state) {
+           if(state.isCartOpen) state.isCartOpen = false;
+           if(state.isUserOpen) state.isUserOpen = false;
+           if(state.isWishlistOpen) state.isWishlistOpen = false;
+        }
     }
 })
-export const notificationAction = uiSlice.actions;
+export const uiAction = uiSlice.actions;
 export default uiSlice.reducer

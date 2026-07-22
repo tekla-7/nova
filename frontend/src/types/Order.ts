@@ -32,5 +32,7 @@ export interface CreateOrder {
     deliveryMethod:ShoppingMethod,
     items:CartItem[],
     createdAt?:string,
-    address: Addresses
+    address: Addresses,
+    saveAddress:boolean,
+    saveCard:boolean,
 }

@@ -1,46 +1,48 @@
 import {User} from 'lucide-react';
-import {useState} from "react";
+import {type Ref} from "react";
 import {LogOut} from 'lucide-react';
 import {Package} from 'lucide-react';
 import {Link} from "react-router-dom";
 import {useUserData} from "../../../hooks/useUserData.ts";
 import {isAuthenticated} from "../../../utils/auth.ts";
 import {queryClient} from "../../../routes/router.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../../store";
+import {uiAction} from "../../../store/ui-slice.tsx";
 
-export default function UserDropdown() {
-    const [isOpen, setIsOpen] = useState(false);
-    const {data:user} = useUserData();
+export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
+    const isOpen = useSelector(
+        (state: RootState) => state.ui.isUserOpen
+    );
+    const {data: user} = useUserData();
     const isUserLogin: boolean = isAuthenticated();
-    const userName = isUserLogin&&user ? user?.name + ' ' + user?.lastName : ''
+    const userName = isUserLogin && user ? user?.name + ' ' + user?.lastName : ''
+    const dispatch = useDispatch();
 
 
     function toggleOpen() {
-        setIsOpen(v => !v)
+        dispatch(uiAction.toggle('isUserOpen'))
     }
 
-   async function signOut() {
+    async function signOut() {
         localStorage.removeItem('access_token');
-       // queryClient.clear();
-       // queryClient.setQueryData(['userCartData'], []);
-       // queryClient.setQueryData(['userWishlist'], []);
-       // queryClient.setQueryData(['userData'], null);
-       await queryClient.invalidateQueries({
-           queryKey: ["userCartData"],
-           refetchType: "all",
-       });
+        await queryClient.invalidateQueries({
+            queryKey: ["userCartData"],
+            refetchType: "all",
+        });
 
-       await queryClient.invalidateQueries({
-           queryKey: ["userWishlist"],
-           refetchType: "all",
-       });
-       await queryClient.invalidateQueries({
-           queryKey: ["userData"],
-           refetchType: "all",
-       });
-       toggleOpen()
+        await queryClient.invalidateQueries({
+            queryKey: ["userWishlist"],
+            refetchType: "all",
+        });
+        await queryClient.invalidateQueries({
+            queryKey: ["userData"],
+            refetchType: "all",
+        });
+        toggleOpen()
     }
 
-    return <div className='relative'>
+    return <div className='relative' ref={ref}>
         <User onClick={toggleOpen} size={18} className='cursor-pointer'/>
         <div
             className={`absolute top-12 -right-2 w-[240px] rounded-[10px] border border-[#E5E0D8] bg-white
@@ -62,15 +64,17 @@ export default function UserDropdown() {
                     </div>
                 </div>
                 <Link to='profile'
-                    className=' text-[13px] w-full text-[#4A4A4A] cursor-pointer flex items-center gap-2.5 px-4 py-2.5'>
+                      onClick={toggleOpen}
+                      className=' text-[13px] w-full text-[#4A4A4A] cursor-pointer flex items-center gap-2.5 px-4 py-2.5'>
                     <User size={13}/>
                     <p>My profile</p>
                 </Link>
-                <button
-                    className='border-b w-full border-[#F0EDE8]  text-[13px] text-[#4A4A4A] cursor-pointer flex items-center gap-2.5 px-4 pt-1.5 pb-2.5'>
+                <Link to='profile/order'
+                      onClick={toggleOpen}
+                      className='border-b w-full border-[#F0EDE8]  text-[13px] text-[#4A4A4A] cursor-pointer flex items-center gap-2.5 px-4 pt-1.5 pb-2.5'>
                     <Package size={13}/>
                     <p>My orders</p>
-                </button>
+                </Link>
                 <button onClick={signOut}
                         className='text-[13px] text-[#D63B3B] cursor-pointer flex items-center gap-2.5 px-4 py-2.5'>
                     <LogOut size={13}/>

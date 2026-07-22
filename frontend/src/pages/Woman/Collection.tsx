@@ -2,8 +2,6 @@ import {NavLink, useLocation} from "react-router-dom";
 import CategoryFilter from "./sections/CategoryFilter.tsx";
 import PriceRangeFilter from "./sections/PriceRangeFilter.tsx";
 import RatingFilter from "./sections/RatingFilter.tsx";
-import {LayoutGrid} from 'lucide-react';
-import {StretchHorizontal} from 'lucide-react';
 import SortFilter from "./sections/SortFilter.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../store";
@@ -38,9 +36,6 @@ export default function CollectionPage() {
 
             case "/sale":
                 products = products.filter(product => allowedCategories.includes(product.category))
-                    .filter(product =>
-                        product.discountPercentage > 0
-                    );
                 break;
 
             case "/new-in":
@@ -117,16 +112,16 @@ export default function CollectionPage() {
                     <p className='text-[13px] text-[#4A4A4A]'><span
                         className='text-[#0D0D0D] font-semibold'>{filteredProducts.length}</span> products</p>
                     <div className='flex items-center gap-2.5'>
-                        <div className='flex items-center gap-1'>
-                            <button
-                                className='w-7 h-7 border border-[#E5E0D8] rounded cursor-pointer flex items-center justify-center'>
-                                <LayoutGrid size={14} className='text-[#9A9A9A]'/></button>
-                            <button
-                                className='w-7 h-7 border border-[#0D0D0D] rounded cursor-pointer flex items-center justify-center'>
-                                <StretchHorizontal size={12} className='text-[#0D0D0D]'/></button>
+                        {/*<div className='flex items-center gap-1'>*/}
+                        {/*    <button*/}
+                        {/*        className='w-7 h-7 border border-[#E5E0D8] rounded cursor-pointer flex items-center justify-center'>*/}
+                        {/*        <LayoutGrid size={14} className='text-[#9A9A9A]'/></button>*/}
+                        {/*    <button*/}
+                        {/*        className='w-7 h-7 border border-[#0D0D0D] rounded cursor-pointer flex items-center justify-center'>*/}
+                        {/*        <StretchHorizontal size={12} className='text-[#0D0D0D]'/></button>*/}
 
 
-                        </div>
+                        {/*</div>*/}
                         <SortFilter/>
                     </div>
 

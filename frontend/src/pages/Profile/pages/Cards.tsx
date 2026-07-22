@@ -6,7 +6,7 @@ import {type SubmitEvent, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
 import {addCard, deleteCard} from "../../../utils/http.ts";
-import {notificationAction} from "../../../store/ui-slice.tsx";
+import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 
 export default function Cards() {
     const user = useRouteLoaderData("profile") as User;

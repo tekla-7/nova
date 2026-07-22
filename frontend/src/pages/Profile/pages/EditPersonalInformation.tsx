@@ -2,7 +2,7 @@ import {Link, useRevalidator, useRouteLoaderData} from "react-router-dom";
 import type {User} from "../../../types/user.ts";
 import type {SubmitEvent} from "react";
 import {LockKeyhole} from "lucide-react";
-import {notificationAction} from "../../../store/ui-slice.tsx";
+import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
 import {updateUserInfo} from "../../../utils/http.ts";
