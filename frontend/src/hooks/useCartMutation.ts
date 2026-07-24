@@ -15,8 +15,6 @@ export const useCartMutation = () => {
         })
     })
     const addToCartHandler = (products: Wishlist[]) => {
-
-
         const newProducts = products.map(product => ({
             product: {
                 productId: product.productId,
