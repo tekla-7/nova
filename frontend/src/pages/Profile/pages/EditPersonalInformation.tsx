@@ -5,7 +5,8 @@ import {LockKeyhole} from "lucide-react";
 import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {updateUserInfo} from "../../../utils/http.ts";
+import {updateUserInfo} from "../../../services/user.api.ts";
+import {FormatPhone} from "../../../components/ui/FormatPhone.tsx";
 
 export default function EditPersonalInformation() {
     const user = useRouteLoaderData("profile") as User;
@@ -14,8 +15,8 @@ export default function EditPersonalInformation() {
 
     const {mutate} = useMutation({
         mutationFn: updateUserInfo,
-        onSuccess: () => {
-            revalidate().then(() => console.log('Successfully updated'));
+        onSuccess: async () => {
+            await revalidate().then(() => console.log('Successfully updated'));
             dispatch(notificationAction.showNotification({
                 status: 'success',
                 title: 'Success',
@@ -106,10 +107,7 @@ export default function EditPersonalInformation() {
                     className='w-full h-9 px-3 py-2 text-base border border-[#0b0b0b]/10 rounded-[6px] outline-none'/>
             </div>
             <div className='flex flex-col gap-1 col-span-2'>
-                <label className='block text-[11px] font-medium ' htmlFor='phoneNumber'>Phone number</label>
-                <input
-                    required defaultValue={user.phoneNumber} name='phoneNumber' id='phoneNumber' type='text' placeholder='+(995) 555 55 55 55'
-                    className='w-full h-9 px-3 py-2 text-base border border-[#0b0b0b]/10 rounded-[6px] outline-none'/>
+                <FormatPhone name='phoneNumber' defaultValue={user.phoneNumber}/>
             </div>
             <div
                 className='flex items-center gap-1.5 px-2.5 py-2 bg-[#fcfcfb] rounded-[6px] mb-2.5 text-[11px] col-span-2 text-[#52514e] border border-[#0b0b0b]/10'>

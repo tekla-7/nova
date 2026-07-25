@@ -5,10 +5,10 @@ import {Package} from 'lucide-react';
 import {Link} from "react-router-dom";
 import {useUserData} from "../../../hooks/useUserData.ts";
 import {isAuthenticated} from "../../../utils/auth.ts";
-import {queryClient} from "../../../routes/router.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../store";
 import {uiAction} from "../../../store/ui-slice.tsx";
+import {signOut} from "../../../services/auth.service.ts";
 
 export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
     const isOpen = useSelector(
@@ -24,21 +24,8 @@ export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
         dispatch(uiAction.toggle('isUserOpen'))
     }
 
-    async function signOut() {
-        localStorage.removeItem('access_token');
-        await queryClient.invalidateQueries({
-            queryKey: ["userCartData"],
-            refetchType: "all",
-        });
-
-        await queryClient.invalidateQueries({
-            queryKey: ["userWishlist"],
-            refetchType: "all",
-        });
-        await queryClient.invalidateQueries({
-            queryKey: ["userData"],
-            refetchType: "all",
-        });
+    async function onSignOut() {
+       await signOut()
         toggleOpen()
     }
 
@@ -75,7 +62,7 @@ export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
                     <Package size={13}/>
                     <p>My orders</p>
                 </Link>
-                <button onClick={signOut}
+                <button onClick={onSignOut}
                         className='text-[13px] text-[#D63B3B] cursor-pointer flex items-center gap-2.5 px-4 py-2.5'>
                     <LogOut size={13}/>
                     <p>Sign out</p>

@@ -3,12 +3,12 @@ import {Link} from "react-router-dom";
 import {useUserCartData} from "../../../hooks/useUserData.ts";
 import ProductCartItem from "./ProductCartItem.tsx";
 import {useMutation} from "@tanstack/react-query";
-import {deleteCartItem} from "../../../utils/http.ts";
 import {queryClient} from "../../../routes/router.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../store";
-import {uiAction} from "../../../store/ui-slice.tsx";
+import {uiAction as notificationAction, uiAction} from "../../../store/ui-slice.tsx";
 import type {Ref} from "react";
+import {deleteCartItem} from "../../../services/cart.api.ts";
 
 export default function BagDropdown({ref}:{ref:Ref<HTMLDivElement>}) {
     const isOpen = useSelector(
@@ -34,12 +34,22 @@ export default function BagDropdown({ref}:{ref:Ref<HTMLDivElement>}) {
     function onDeleteCart(id: string) {
         mutate(id, {
             onSuccess: () => {
+                dispatch(notificationAction.showNotification({
+                    status: 'success',
+                    title: 'Success',
+                    message: 'Product removed successfully',
+                }))
                 queryClient.invalidateQueries({queryKey: ['userCartData']})
                     .then(() => console.log("invalidation completed"))
                     .catch(err => console.log("invalidation error:", err));
             },
             onError: (err) => {
-                console.log("error", err);
+                dispatch(notificationAction.showNotification({
+                    status: 'error',
+                    title: 'Error',
+                    message: err?.message??'Product remove failed',
+                }))
+
             },
             onSettled: () => {
             },

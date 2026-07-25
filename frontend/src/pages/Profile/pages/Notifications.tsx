@@ -4,11 +4,11 @@ import {useState} from "react";
 import clsx from "clsx";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {editNotification} from "../../../utils/http.ts";
 import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
+import {editNotification} from "../../../services/user.api.ts";
 
 export default function Notifications() {
-    const user = useRouteLoaderData("profile") as User;
+    const {user} = useRouteLoaderData("profile") as { user:User };
     const [notifications, setNotifications] = useState<NotificationPreferences>(user.notificationPreferences);
     const dispatch = useDispatch();
     const {revalidate} = useRevalidator();

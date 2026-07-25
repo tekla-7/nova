@@ -1,10 +1,23 @@
 import {NavLink, useLoaderData, useLocation} from "react-router-dom";
 import Gallery from "./sections/Gallery.tsx";
 import Info from "./sections/Info.tsx";
+import ErrorMessage from "../../components/ui/ErrorMessage.tsx";
+import type {Product} from "../../types/product.ts";
 
 export default function ProductDetails() {
-    const productDetails = useLoaderData();
     const location = useLocation();
+    const { product:productDetails, error } = useLoaderData() as {
+        product: Product | null;
+        error: { message: string } | null;
+    };
+    if (error) {
+        return <ErrorMessage message={error.message} />;
+    }
+
+    if (!productDetails) {
+        return null;
+    }
+
     const pagePath = location.pathname.split("/");
     return <section className='flex flex-col w-full'>
         <div className='flex items-center gap-1 border-b border-[#E5E0D8] py-3 px-6'>
@@ -18,7 +31,7 @@ export default function ProductDetails() {
         </div>
         <div className='grid grid-cols-2 gap-5 p-5'>
             <Gallery images={productDetails.images}/>
-            <Info/>
+            <Info productDetails={productDetails}/>
         </div>
     </section>
 }

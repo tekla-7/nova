@@ -1,5 +1,7 @@
 import {Form, useActionData, useNavigation} from "react-router-dom";
 import BaseButton from "../../components/ui/BaseButton.tsx";
+import PasswordInput from "../../components/ui/PasswordInput.tsx";
+import {FormatPhone} from "../../components/ui/FormatPhone.tsx";
 
 type ActionData = {
     message?: string;
@@ -34,19 +36,10 @@ export default function Register() {
                 id='email' type='email' placeholder='your@example.com' required/>
         </div>
         <div>
-            <label className='text-[13px] font-medium mb-1' htmlFor='number'>Phone number</label>
-            <input
-                name='phoneNumber' autoComplete='phoneNumber'
-                className='w-full border border-[#E5E0D8] rounded px-3.5 py-2.5 text-[13px] bg-white text-[#0D0D0D]'
-                id='number' type='text' placeholder='+(995) 555 55 55 55' required/>
+       <FormatPhone name="phoneNumber" />
         </div>
         <div>
-            <label className='text-[13px] font-medium mb-1' htmlFor='password'>Password</label>
-            <input name='password' autoComplete="current-password"
-
-                   className='w-full border border-[#E5E0D8] rounded px-3.5 py-2.5 text-[13px] bg-white text-[#0D0D0D]'
-                   id='password' type='password' required placeholder='min 6 characters'/>
-
+            <PasswordInput inputSize='large' label={'Password'} id={'password'} type='password' required name='password' placeholder='enter your password'/>
         </div>
         <div>
             <label className='text-[13px] font-medium mb-1' htmlFor='confirmPassword'>Confirm password</label>
@@ -73,6 +66,7 @@ export default function Register() {
                 Service </span>and <span className='text-[#0b0b0b
 ] underline-offset-2 underline'>Privacy Policy</span></label>
         </div>
+        {data && data.message && <p className='text-xs'>{data.message}</p>}
         {data && data.errors && (
             <ul className='text-[10px] text-red-700'>
                 {Object.values(data.errors).map((err, index) =>
@@ -80,7 +74,7 @@ export default function Register() {
                 )}
             </ul>
         )}
-        {data && data.message && <p>{data.message}</p>}
+
         <BaseButton type='submit' size='large'>{isSubmitting ? 'submitting' : 'Sign in'}</BaseButton>
     </Form>
 }

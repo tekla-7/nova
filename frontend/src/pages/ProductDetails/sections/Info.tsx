@@ -1,4 +1,3 @@
-import {useLoaderData} from "react-router-dom";
 import {Dot} from 'lucide-react';
 import Rating from "../../../components/ui/Rating.tsx";
 import Price from "../../../components/ui/Price.tsx";
@@ -8,14 +7,16 @@ import Size from "../../../components/ui/Size.tsx";
 import Quantity from "../../../components/ui/Quantity.tsx";
 import BaseButton from "../../../components/ui/BaseButton.tsx";
 import {useMutation} from "@tanstack/react-query";
-import {addToCart, addToWishlist} from "../../../utils/http.ts";
 import type {Product} from "../../../types/product.ts";
 import {queryClient} from "../../../routes/router";
 import {useUserWishlist} from "../../../hooks/useUserData.ts";
+import {addToCart} from "../../../services/cart.api.ts";
+import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
+import {useDispatch} from "react-redux";
+import {addToWishlist} from "../../../services/wishlist.api.ts";
 
 
-export default function Info() {
-    const productDetails = useLoaderData() as Product;
+export default function Info({productDetails}:{productDetails:Product}) {
     const [selectedOptions, setSelectedOptions] = useState({
             color: '#1A1A1A',
             size: 'xs',
@@ -24,6 +25,7 @@ export default function Info() {
     );
     const {data: wishlist = []} = useUserWishlist();
     const isInWishlist = wishlist.some(el => el.productId === productDetails.id)
+    const dispatch = useDispatch()
 
     function onSelectedOptions(type: string, value: string | number) {
         setSelectedOptions(old => ({
@@ -38,6 +40,13 @@ export default function Info() {
 
     const wishlistMutation = useMutation({
         mutationFn: addToWishlist,
+        onError(err) {
+            dispatch(notificationAction.showNotification({
+                status: 'error',
+                title: 'Error',
+                message: err?.message || 'An error occurred',
+            }))
+        }
     });
 
     function handleAddToCart() {
@@ -54,18 +63,26 @@ export default function Info() {
                 color: selectedOptions.color,
             }],
             {
-                onSuccess: (data) => {
-                    console.log("success", data);
-                    queryClient.invalidateQueries({queryKey: ['userCartData'], refetchType: "all"})
+                onSuccess: async () => {
+
+                    await queryClient.invalidateQueries({queryKey: ['userCartData'], refetchType: "all"})
                         .then(() => console.log("invalidation completed"))
                         .catch(err => console.log("invalidation error:", err));
+                    dispatch(notificationAction.showNotification({
+                        status: 'success',
+                        title: 'Success',
+                        message: 'Add successfully',
+                    }))
                 },
                 onError: (err) => {
+                    dispatch(notificationAction.showNotification({
+                        status: 'error',
+                        title: 'Error',
+                        message: err?.message || 'Can not add product',
+                    }))
                     console.log("error", err);
                 },
-                onSettled: () => {
-                    console.log("++++++++++settled");
-                },
+
             })
 
     }
@@ -78,8 +95,16 @@ export default function Info() {
             brand: productDetails.brand || '-',
             image: productDetails.images[0],
         }, {
-            onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['userWishlist'] ,refetchType: "all"}).then(() => console.log("invalidation completed"))
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
+                    queryKey: ['userWishlist'],
+                    refetchType: "all"
+                }).then(() => console.log("invalidation completed"));
+                dispatch(notificationAction.showNotification({
+                    status: 'success',
+                    title: 'Success',
+                    message: 'Add successfully',
+                }))
             }
         })
     }

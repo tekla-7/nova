@@ -4,15 +4,15 @@ import {type SubmitEvent, useRef, useState} from "react";
 import AddressForm from "../../Checkout/sections/first-step/AddressForm.tsx";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {addAddresses, deleteAddress, editAddresses} from "../../../utils/http.ts";
 import {uiAction as notificationAction } from "../../../store/ui-slice.tsx";
+import {addAddresses, deleteAddress, editAddresses} from "../../../services/user.api.ts";
 
 type State = {
     address: Addresses | null,
     showForm: boolean
 }
 export default function Addresses() {
-    const user = useRouteLoaderData("profile") as User;
+    const {user} = useRouteLoaderData("profile") as { user:User };
     const [selectedAddress, setSelectedAddress] = useState<State>({address: null, showForm: false});
     const dispatch = useDispatch();
     const {revalidate} = useRevalidator();

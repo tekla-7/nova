@@ -25,7 +25,7 @@
     "name": "first name",
     "lastName": "tes",
     "email": "test@example.com",
-    "phoneNumber": "+995555555555",
+    "phoneNumber": "+(995) 555 55 55 58",
     "password": "$2b$10$CAwNz6HzqI0u6lhpNYtVH.Cwy9INggkYqQ9qaESiRsLqjf/7ck8RC",
     "notificationPreferences": {
       "orderUpdates": false,
@@ -68,9 +68,57 @@
         "quantity": 2,
         "size": "xs",
         "color": "#1A1A1A"
+      },
+      {
+        "id": "39c3f2a7-5840-4f81-92a7-ab5be1fb4afc",
+        "product": {
+          "productId": 5,
+          "title": "Red Nail Polish",
+          "price": 8.99,
+          "brand": "Nail Couture",
+          "image": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/1.webp"
+        },
+        "quantity": 3,
+        "size": "xs",
+        "color": "#1A1A1A"
+      },
+      {
+        "id": "c53dc84c-2635-466a-bd03-a9d0f2be1b3b",
+        "product": {
+          "productId": 157,
+          "title": "Party Glasses",
+          "price": 19.99,
+          "brand": "Fashion Fun",
+          "image": "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/1.webp"
+        },
+        "quantity": 1,
+        "size": "xl",
+        "color": "#1A1A1A"
       }
     ],
-    "wishlist": [],
+    "wishlist": [
+      {
+        "productId": 183,
+        "title": "Green Oval Earring",
+        "price": 24.99,
+        "brand": "-",
+        "image": "https://cdn.dummyjson.com/product-images/womens-jewellery/green-oval-earring/1.webp"
+      },
+      {
+        "productId": 5,
+        "title": "Red Nail Polish",
+        "price": 8.99,
+        "brand": "Nail Couture",
+        "image": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/1.webp"
+      },
+      {
+        "productId": 157,
+        "title": "Party Glasses",
+        "price": 19.99,
+        "brand": "Fashion Fun",
+        "image": "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/1.webp"
+      }
+    ],
     "card": [
       {
         "id": "c1c034a6-cdd2-41fa-9ed3-4762e21ea185",
@@ -81,6 +129,70 @@
         "cvv": 123
       }
     ],
-    "lastPasswordChangeAt": "2026-07-20T16:29:01.691Z"
+    "lastPasswordChangeAt": "2026-07-20T16:29:01.691Z",
+    "lastUpdatedAt": "2026-07-25T14:19:28.506Z"
+  },
+  {
+    "id": "d541e797-2ee3-4ba5-9afb-a312d7cb8313",
+    "name": "aa",
+    "lastName": "as",
+    "email": "test1@example.com",
+    "phoneNumber": "+995598112222",
+    "password": "$2b$10$/LbPS8hO3kRLSCQTMV5OpukOTuEug820WpfYbJ9A9Wsdj2VNOqqni",
+    "notificationPreferences": {
+      "orderUpdates": true,
+      "promotions": true,
+      "wishlist": true,
+      "newsletter": true
+    },
+    "addresses": [],
+    "cart": [],
+    "card": [],
+    "wishlist": [],
+    "lastPasswordChangeAt": "2026-07-25T12:41:03.262Z",
+    "lastUpdatedAt": "2026-07-25T12:41:03.262Z",
+    "createdAt": "2026-07-25T12:41:03.262Z"
+  },
+  {
+    "id": "9b7cf2e0-7dc6-4667-9f5f-5c63c370816b",
+    "name": "aa",
+    "lastName": "qwrqw",
+    "email": "test2@example.com",
+    "phoneNumber": "+995555555555",
+    "password": "$2b$10$75dgZZmdFqiwrjmuNlkJJu4w/4x9Jm.r3Dy8la0IgpNN9wT0LaviG",
+    "notificationPreferences": {
+      "orderUpdates": true,
+      "promotions": true,
+      "wishlist": true,
+      "newsletter": true
+    },
+    "addresses": [],
+    "cart": [],
+    "card": [],
+    "wishlist": [],
+    "lastPasswordChangeAt": "2026-07-25T12:42:42.229Z",
+    "lastUpdatedAt": "2026-07-25T12:42:42.229Z",
+    "createdAt": "2026-07-25T12:42:42.229Z"
+  },
+  {
+    "id": "e2db7b2e-4900-4b52-af40-939716fd0e71",
+    "name": "Work",
+    "lastName": "qwe",
+    "email": "test4@example.com",
+    "phoneNumber": "+995555555555",
+    "password": "$2b$10$TjFBoFGBaHnn2ZgI3XHNWe6Vq2D8DFVBtv86jQJjT5MD5sIfQo8ly",
+    "notificationPreferences": {
+      "orderUpdates": true,
+      "promotions": true,
+      "wishlist": true,
+      "newsletter": true
+    },
+    "addresses": [],
+    "cart": [],
+    "card": [],
+    "wishlist": [],
+    "lastPasswordChangeAt": "2026-07-25T12:45:18.014Z",
+    "lastUpdatedAt": "2026-07-25T12:45:18.014Z",
+    "createdAt": "2026-07-25T12:45:18.014Z"
   }
 ]

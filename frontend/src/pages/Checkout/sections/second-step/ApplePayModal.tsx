@@ -35,7 +35,8 @@ export default function ApplePayModal({ref, onClose, isOpen}: Props) {
             deliveryMethod: shoppingStep.shippingMethod,
             items: shoppingBag,
             address: address,
-
+            saveAddress: !!shoppingStep.saveAddress,
+            saveCard: false,
         }
         createOrderHandler(order)
 

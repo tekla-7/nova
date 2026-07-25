@@ -3,10 +3,20 @@ import clsx from "clsx";
 import {useLoaderData} from "react-router-dom";
 import {RefreshCcw, MessageSquareText, Truck, ArrowDownToLine} from 'lucide-react';
 import FormatDate from "../../../components/ui/FormatDate.tsx";
+import ErrorMessage from "../../../components/ui/ErrorMessage.tsx";
 
 export default function Summary() {
-    const order = useLoaderData<Order>();
+    const { order, error } = useLoaderData() as {
+        order: Order | null;
+        error: { message: string } | null;
+    };
+    if (error) {
+        return <ErrorMessage message={error.message} />;
+    }
 
+    if (!order) {
+        return null;
+    }
     const subtotal = order.items.reduce((prev, cur) => prev + cur.product.price * cur.quantity, 0)
     const items = order.items.reduce((prev, cur) => cur.quantity + prev, 0)
     const shipping = order.deliveryMethod.price

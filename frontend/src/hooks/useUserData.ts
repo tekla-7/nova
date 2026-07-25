@@ -1,12 +1,18 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchUser, fetchUserCart, fetchUserWishlist} from "../utils/http.ts";
+import {fetchUser} from "../services/user.api.ts";
+import {isAuthenticated} from "../utils/auth.ts";
+import {fetchUserCart} from "../services/cart.api.ts";
+import {fetchUserWishlist} from "../services/wishlist.api.ts";
 
 export const useUserData = () => {
+    const authenticated = isAuthenticated();
+
     return useQuery({
         queryKey: ['userData'],
         queryFn: fetchUser,
         staleTime: 3600000,
-        retry: 2,
+        retry: false,
+        enabled: authenticated,
         refetchOnWindowFocus: false,
 
     })

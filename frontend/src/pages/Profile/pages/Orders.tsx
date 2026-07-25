@@ -2,10 +2,19 @@ import {Link, useLoaderData} from "react-router-dom";
 import type {Order} from "../../../types/Order.ts";
 import FormatDate from "../../../components/ui/FormatDate.tsx";
 import Status from "../sections/Status.tsx";
-
-
+import ErrorMessage from "../../../components/ui/ErrorMessage.tsx";
 export default function Orders() {
-    const {orders} = useLoaderData();
+    const { orders, error } = useLoaderData() as {
+        orders: Order[] | null;
+        error: { message: string } | null;
+    };
+    if (error) {
+        return <ErrorMessage message={error.message} />;
+    }
+
+    if (!orders) {
+        return null;
+    }
     const totalSpent = orders.reduce((prev: number, curr: Order) => prev + curr.paid, 0)
     const totalItems = orders.reduce(
         (sum: number, order: Order) =>
@@ -16,6 +25,7 @@ export default function Orders() {
             ),
         0
     );
+
     return <>
         <div className='grid grid-cols-3 gap-3 mb-5'>
             <div className='bg-[#fcfcfb] p-4 rounded-lg'>

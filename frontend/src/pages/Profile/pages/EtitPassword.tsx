@@ -5,11 +5,12 @@ import {useDispatch} from "react-redux";
 import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 import {useActionState} from "react";
 import type {NewPassword} from "../../../types/user.ts";
-import {updatePassword} from "../../../utils/http.ts";
+import {updatePassword} from "../../../services/user.api.ts";
 
 export default function EditPassword() {
     const dispatch = useDispatch();
-const navigate=useNavigate()
+    const navigate = useNavigate();
+
     async function passwordChangeAction(_: NewPassword | null, formData: FormData) {
         if (!formData) return null;
         const data = Object.fromEntries(formData.entries()) as NewPassword
@@ -23,7 +24,7 @@ const navigate=useNavigate()
             return data
         }
         try {
-            await updatePassword({newPassword:data.newPassword ,currentPassword:data.currentPassword})
+            await updatePassword({newPassword: data.newPassword, currentPassword: data.currentPassword})
             dispatch(notificationAction.showNotification({
                 status: 'success',
                 title: 'Success',

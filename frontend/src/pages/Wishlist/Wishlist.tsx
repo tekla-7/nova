@@ -4,28 +4,49 @@ import BaseButton from "../../components/ui/BaseButton.tsx";
 import WishlistItem from "./sections/WishlistItem.tsx";
 import type {Wishlist} from "../../types/user.ts";
 import {useMutation} from "@tanstack/react-query";
-import {removeProductFromWishlist} from "../../utils/http.ts";
+import {} from "../../utils/http.ts";
 import {queryClient} from "../../routes/router.tsx";
 import {useCartMutation} from "../../hooks/useCartMutation.ts";
+import {removeProductFromWishlist} from "../../services/wishlist.api.ts";
+import {uiAction as notificationAction} from "../../store/ui-slice.tsx";
+import {useDispatch} from "react-redux";
 
 export default function Wishlist() {
     const {data: wishlist = []} = useUserWishlist();
     const wishlistItemCount = wishlist.length;
     const {addToCartHandler, isPending} = useCartMutation()
-
+    const dispatch = useDispatch()
     const handleRemoveFromWishlist = useMutation({
         mutationFn: removeProductFromWishlist,
         onSuccess: async () => {
-             queryClient.invalidateQueries({queryKey: ['userWishlist'], refetchType: "all",}).then(()=>console.log('Invalidation complete'));
+            await queryClient.invalidateQueries({
+                queryKey: ['userWishlist'],
+                refetchType: "all",
+            }).then(() => console.log('Invalidation complete'));
+            dispatch(notificationAction.showNotification({
+                status: 'success',
+                title: 'Success',
+                message: 'Product removed successfully',
+            }))
+        },
+        onError(err) {
+            dispatch(notificationAction.showNotification({
+                status: 'error',
+                title: 'Error',
+                message: err?.message ?? 'An error occurred',
+            }))
         }
+
     })
 
     function onAdd(product: Wishlist) {
-       addToCartHandler([product])
+        addToCartHandler([product])
     }
-function onAddAll(){
+
+    function onAddAll() {
         addToCartHandler(wishlist)
-}
+    }
+
     function onRemove(id: number) {
         handleRemoveFromWishlist.mutate(id)
     }
@@ -40,9 +61,9 @@ function onAddAll(){
             <div className='flex items-center justify-between mb-4'>
                 <h1 className='text-xl tracking-tight flex items-center'>My Wishlist <span
                     className='text-sm text-[#898781] ml-1.5'>({wishlistItemCount} items)</span></h1>
-                <BaseButton  onClick={onAddAll} type='button' variant='transparent'>
+                <BaseButton onClick={onAddAll} type='button' variant='transparent'>
 
-                    {!isPending&&'add all to bag'}{isPending&&'Loading...'}</BaseButton>
+                    {!isPending && 'add all to bag'}{isPending && 'Loading...'}</BaseButton>
             </div>
             <div className='grid grid-cols-4 gap-4'>
                 {wishlist.map(cart =>

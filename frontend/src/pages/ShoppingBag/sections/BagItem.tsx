@@ -4,8 +4,10 @@ import {Check, Heart, Trash} from "lucide-react";
 import type {CartItem} from '../../../types/user.ts'
 import {queryClient} from "../../../routes/router.tsx";
 import {useMutation} from "@tanstack/react-query";
-import {addToWishlist} from "../../../utils/http.ts";
 import {useUserWishlist} from "../../../hooks/useUserData.ts";
+import {addToWishlist} from "../../../services/wishlist.api.ts";
+import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
+import {useDispatch} from "react-redux";
 
 type props = {
     cart: CartItem,
@@ -13,8 +15,9 @@ type props = {
     onDeleteCart: () => void
 }
 export default function BagItem({cart, onQuantityChange, onDeleteCart}: props) {
-    const {data: wishlist=[]} = useUserWishlist();
-    const isInWishlist = wishlist.some(el =>el.productId === cart.product.productId)
+    const {data: wishlist = []} = useUserWishlist();
+    const isInWishlist = wishlist.some(el => el.productId === cart.product.productId)
+    const dispatch = useDispatch()
 
     function handleAddToWishlist() {
         wishlistMutation.mutate({
@@ -24,8 +27,20 @@ export default function BagItem({cart, onQuantityChange, onDeleteCart}: props) {
             brand: cart.product.brand,
             image: cart.product.image,
         }, {
-            onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['userWishlist']}).then(() => console.log("invalidation completed"))
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({queryKey: ['userWishlist']}).then(() => console.log("invalidation completed"))
+                dispatch(notificationAction.showNotification({
+                    status: 'success',
+                    title: 'Success',
+                    message: 'Add successfully',
+                }))
+            },
+            onError(err) {
+                dispatch(notificationAction.showNotification({
+                    status: 'error',
+                    title: 'Error',
+                    message: err?.message ?? 'An error occurred',
+                }))
             }
         })
     }
@@ -64,10 +79,10 @@ export default function BagItem({cart, onQuantityChange, onDeleteCart}: props) {
                 <button
                     disabled={isInWishlist}
                     onClick={handleAddToWishlist}
-                    className={`${isInWishlist?'text-green-700 border-gray-700/20':'cursor-pointer border-[#0b0b0b]/20'}
+                    className={`${isInWishlist ? 'text-green-700 border-gray-700/20' : 'cursor-pointer border-[#0b0b0b]/20'}
                    w-auto  flex items-center justify-center px-4 py-2 text-[14px] bg-transparent border font-medium rounded-lg gap-1 `}>
-                    {!isInWishlist&&<> <Heart size={12}/>Save for later</>}
-                    {isInWishlist&&<><Check size={14}/>In your wishlist</>}
+                    {!isInWishlist && <> <Heart size={12}/>Save for later</>}
+                    {isInWishlist && <><Check size={14}/>In your wishlist</>}
                 </button>
             </div>
         </div>

@@ -1,14 +1,24 @@
 import {NavLink, useLoaderData} from "react-router-dom";
 import type {User} from "../../../types/user.ts";
 import {User as UserIcon ,MapPinHouse ,Package ,Bell ,WalletCards  } from 'lucide-react';
+import ErrorMessage from "../../../components/ui/ErrorMessage.tsx";
 
 export default function SideBar() {
-    const user = useLoaderData<User>();
+    const {user, error} = useLoaderData<{
+        user: User | null;
+        error: { message: string } | null;
+    }>();
+    if (error) {
+        return <ErrorMessage message={error.message}/>;
+    }
 
+    if (!user) {
+        return null;
+    }
     return <div className='h-full w-[200px] border-[#0b0b0b]/10 border-r px-3.5 py-5 flex flex-col gap-0.5'>
         <div
             className='w-[53px] h-[52px] uppercase rounded-full bg-[#0b0b0b] text-white flex items-center justify-center text-base font-medium mb-2.5'>
-            {user.name.slice(0, 1)}{user.lastName?.slice(0, 1)}
+            {(user.name??'').slice(0, 1)}{(user.lastName??'').slice(0, 1)}
         </div>
         <h1 className='text-sm font-medium mb-0.5'>{user.name} {user.lastName}</h1>
         <h2 className='text-xs text-[#898781] mb-4'>{user.email}</h2>

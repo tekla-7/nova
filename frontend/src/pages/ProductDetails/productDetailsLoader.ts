@@ -1,13 +1,35 @@
 import type {LoaderFunctionArgs} from "react-router-dom";
 import type {Product} from "../../types/product.ts";
+import {fetchProduct} from "../../utils/http.ts";
 
-export async function loader({params}: LoaderFunctionArgs) : Promise<Product> {
+export async function loader({params}: LoaderFunctionArgs): Promise<{
+    product: Product | null;
+    error: { message: string } | null;
+}> {
     const id = params.productId;
-    const response = await fetch(`https://dummyjson.com/products/${id}`)
-    const json = await response.json();
-    if (!response.ok) {
-        throw json({json}, {status: 404});
-    } else {
-        return json
+    if (!id) return {
+        product: null,
+        error: {
+            message: "Something went wrong",
+        },
+    };
+    ;
+    try {
+        const json = await fetchProduct(id);
+
+        return {
+            product: json,
+            error: null,
+        };
+
+    } catch (error) {
+        return {
+            product: null,
+            error: {
+                message: error instanceof Error
+                    ? error.message
+                    : "Something went wrong",
+            },
+        };
     }
 }

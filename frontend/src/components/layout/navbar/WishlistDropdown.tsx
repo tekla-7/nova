@@ -17,7 +17,7 @@ export default function WishlistDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
     } = useUserWishlist();
     const dispatch = useDispatch();
 
-    const {addToCartHandler, isPending} = useCartMutation()
+    const {addToCartHandler, isPending } = useCartMutation()
     const cartItems = data.slice(0, 3);
     const itemCount = data.length;
     const subTotal = data.reduce((prev, cur) => cur.price + prev, 0);

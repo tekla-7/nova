@@ -4,9 +4,9 @@ import clsx from "clsx";
 type Props = InputHTMLAttributes<HTMLInputElement> & {
     label: string,
     id: string,
-
+    inputSize?: 'small' | 'medium' | 'large',
 }
-export default function PasswordInput({label, id, ...prop}: Props) {
+export default function PasswordInput({label, id, inputSize='small', ...prop}: Props) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [complete, setComplete] = useState<{
         hasInputValue: boolean,
@@ -60,10 +60,13 @@ export default function PasswordInput({label, id, ...prop}: Props) {
             </label>
             <input
                 {...prop}
+
                 ref={inputRef}
                 onChange={e => onInputChange(e)}
-                id={id} type='text'
-                className='w-full h-9 px-3 py-2  text-base border border-[#0b0b0b]/10 rounded-[6px] outline-none'/>
+                id={id} type='password'
+                className={clsx('w-full  text-base border border-[#0b0b0b]/10  outline-none' ,
+                    inputSize==='small'?' h-9 px-3 py-2 rounded-[6px]':'rounded px-3.5 py-2.5 text-[13px]'
+                    )}/>
             <div className='flex gap-[3px] mt-1'>
                 <div className={clsx('h-[3px] rounded-sm flex-1',
                     step >= 1 && step < 5 && 'bg-[#fab219]',

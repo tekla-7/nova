@@ -1,10 +1,23 @@
-import {fetchOrders} from "../../../utils/http.ts";
+import {fetchOrders} from "../../../services/order.api.ts";
 
-export async function loader(){
+export async function loader() {
+
     try {
+        const orders = await fetchOrders();
+        return {
+            orders,
+            error: null,
+        };
 
-        return await fetchOrders()
-    } catch {
-        return {orders: null};
+    } catch (error) {
+        return {
+            orders: null,
+            error: {
+                message: error instanceof Error
+                    ? error.message
+                    : "Something went wrong",
+            },
+        };
     }
+
 }

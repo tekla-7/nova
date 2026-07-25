@@ -5,11 +5,11 @@ import CardForm from "../../Checkout/sections/second-step/CardForm.tsx";
 import {type SubmitEvent, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {addCard, deleteCard} from "../../../utils/http.ts";
 import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
+import {addCard, deleteCard} from "../../../services/user.api.ts";
 
 export default function Cards() {
-    const user = useRouteLoaderData("profile") as User;
+    const {user} = useRouteLoaderData("profile") as {user: User };
     const [showForm, setShowForm] = useState<boolean>(false);
     const dispatch = useDispatch();
     const {revalidate} = useRevalidator();

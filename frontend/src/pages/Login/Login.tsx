@@ -33,7 +33,7 @@ function LoginPage() {
                 )}
             </ul>
         )}
-        {data && data.message && <p>{data.message}</p>}
+        {data && data.message && <p className='text-xs text-red-800'>{data.message}</p>}
         <BaseButton type='submit' size='large'>{isSubmitting ? 'submitting' : 'Sign in'}</BaseButton>
     </Form>
 }

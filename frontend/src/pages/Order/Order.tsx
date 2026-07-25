@@ -6,11 +6,21 @@ import FormatDate from "../../components/ui/FormatDate.tsx";
 import OrderItems from "./sections/OrderItems.tsx";
 import OrderInformation from "./sections/OrderInformation.tsx";
 import Summary from "./sections/Summary.tsx";
+import ErrorMessage from "../../components/ui/ErrorMessage.tsx";
 
 
 export default function Order() {
-    const order = useLoaderData<Order>();
+    const { order, error } = useLoaderData() as {
+        order: Order | null;
+        error: { message: string } | null;
+    };
+    if (error) {
+        return <ErrorMessage message={error.message} />;
+    }
 
+    if (!order) {
+        return null;
+    }
     return <section className='flex flex-col w-full'>
         <div className='flex items-center gap-1 border-b border-[#E5E0D8] py-3 px-6'>
             <NavLink className='text-xs text-[#9A9A9A] cursor-pointer' to='/'>Home</NavLink>

@@ -14,7 +14,7 @@ import AuthLayout from "../components/layout/AuthLayout.tsx";
 import Register from "../pages/Register/Register.tsx";
 import {action as loginAction} from '../pages/Login/loginAction.ts'
 import signUpAction from '../pages/Register/registerAction.ts'
-import {QueryClient} from "@tanstack/react-query";
+import {QueryCache, QueryClient} from "@tanstack/react-query";
 import ShoppingBag from "../pages/ShoppingBag/ShoppingBag.tsx";
 import Wishlist from "../pages/Wishlist/Wishlist.tsx";
 import Checkout from "../pages/Checkout/Checkout.tsx";
@@ -30,6 +30,8 @@ import Orders from "../pages/Profile/pages/Orders.tsx";
 import EditPersonalInformation from "../pages/Profile/pages/EditPersonalInformation.tsx";
 import EditPassword from "../pages/Profile/pages/EtitPassword.tsx";
 import Cards from "../pages/Profile/pages/Cards.tsx";
+import {signOut} from "../services/auth.service.ts";
+import ApiError from "../models/error.ts";
 const router = createBrowserRouter([
     {
         path: '/',
@@ -155,6 +157,20 @@ const router = createBrowserRouter([
         element: <NotFoundPage/>
     },
 ])
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+        },
+    },
+    queryCache: new QueryCache({
+        onError: (error) => {
+            if (error instanceof ApiError && error.code === 401) {
+                signOut();
+            }
+        },
+    }),
+})
 
 export default router

@@ -1,5 +1,4 @@
 import {useUserData} from "../../../../hooks/useUserData.ts";
-import {useShoppingMethods} from "../../../../hooks/useCheckout.ts";
 import ShoppingMethodItem from "./ShoppingMethodItem.tsx";
 import type {ShoppingMethod} from "../../../../types/checkout.ts";
 import {useState, type SubmitEvent, useEffect, useRef} from "react";
@@ -10,10 +9,11 @@ import {ArrowRight} from "lucide-react";
 import {useDispatch, useSelector} from "react-redux";
 import {checkoutAction} from "../../../../store/checkout-slice.tsx";
 import type {RootState} from "../../../../store";
+import {SHOPPING_METHODS} from "../../../../constants/shoppingMethod.ts";
 
 export default function ShippingStep({onStepCompleted}: { onStepCompleted: () => void }) {
     const {data: user} = useUserData();
-    const {data: shoppingMethods = []} = useShoppingMethods();
+    const  shoppingMethods =SHOPPING_METHODS;
     const dispatch = useDispatch();
     const shoppingStep = useSelector((state: RootState) => state.checkout.shoppingStep);
     const [selectedInfo, setSelectedInfo] = useState<{
@@ -68,7 +68,7 @@ export default function ShippingStep({onStepCompleted}: { onStepCompleted: () =>
             onMethodChange(shoppingMethods[0]);
             methodSetRef.current = true;
         }
-    }, [user, shoppingStep, shoppingMethods]);
+    }, [user, shoppingStep]);
 
     function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();

@@ -1,5 +1,6 @@
 import {type ActionFunctionArgs, redirect} from "react-router-dom";
-import { fetchSignUp} from "../../utils/http.ts";
+import {fetchSignUp} from "../../services/auth.api.ts";
+import ApiError from "../../models/error.ts";
 
 export default async function action({request}: ActionFunctionArgs) {
     const form = await request.formData();
@@ -12,19 +13,30 @@ export default async function action({request}: ActionFunctionArgs) {
             },
         };
     }
+    const cleanPhone = String(form.get("phoneNumber")).replace(/\D/g, "");
+
     const registerData = {
         email: String(form.get("email") || ""),
         name: String(form.get("name") || ""),
         lastName: String(form.get("lastName") || ""),
-        phoneNumber: String(form.get("phoneNumber") || ""),
+        phoneNumber: '+'+cleanPhone,
         password: String(form.get("password") || ""),
     };
-    const result = await fetchSignUp(registerData);
-    if (!result.ok) {
-        return result.data;
-    }
-    localStorage.setItem('access_token',result.data.token);
+    try {
+        const result = await fetchSignUp(registerData);
+        localStorage.setItem('access_token',result.token);
+        return redirect("/");
+    } catch (error) {
+        if (error instanceof ApiError) {
+            console.log(error.errors)
+            return {
+                message: error.message,
+                status: error.code,
+                errors: error.errors,
+            };
+        }
 
-    return redirect('/')
+        throw error;
+    }
 
 }

@@ -3,9 +3,11 @@ import {useUserCartData} from "../../hooks/useUserData.ts";
 import BagItem from "./sections/BagItem.tsx";
 import BagSidebar from "./sections/BagSidebar.tsx";
 import {useMutation} from "@tanstack/react-query";
-import {ChangeCartQuantity, deleteCartItem} from "../../utils/http.ts";
 import {queryClient} from "../../routes/router.tsx";
 import type {CartItem} from '../../types/user.ts'
+import {ChangeCartQuantity, deleteCartItem} from "../../services/cart.api.ts";
+import {uiAction as notificationAction} from "../../store/ui-slice.tsx";
+import {useDispatch} from "react-redux";
 
 type Props = {
     id: string, quantity: number,
@@ -13,7 +15,7 @@ type Props = {
 export default function ShoppingBag() {
     const {data = []} = useUserCartData();
     const itemCount = (data ?? []).reduce((prev, cur) => prev + cur.quantity, 0);
-
+    const dispatch = useDispatch()
     const changeQuantity = useMutation({
         mutationFn: ({id, quantity}: Props) => ChangeCartQuantity(id, quantity),
         onMutate: async ({id, quantity}: Props) => {
@@ -25,17 +27,41 @@ export default function ShoppingBag() {
             return {prev}
         },
         onError: ({context}: { context: { prev: CartItem[] } }) => {
+            dispatch(notificationAction.showNotification({
+                status: 'error',
+                title: 'Error',
+                message: 'Cannot change quantity',
+            }))
             queryClient.setQueriesData({queryKey: ['userCartData']}, context.prev)
         },
-        onSettled: () => {
-            queryClient.invalidateQueries({queryKey: ['userCartData']})
+        onSuccess: (() => {
+            dispatch(notificationAction.showNotification({
+                status: 'success',
+                title: 'Success',
+                message: 'Add successfully',
+            }))
+        }),
+        onSettled: async () => {
+            await queryClient.invalidateQueries({queryKey: ['userCartData']})
         }
 
     })
     const deleteCart = useMutation({
         mutationFn: deleteCartItem,
         onSuccess: async () => {
+            dispatch(notificationAction.showNotification({
+                status: 'success',
+                title: 'Success',
+                message: 'Product deleted successfully',
+            }))
             await queryClient.invalidateQueries({queryKey: ['userCartData']})
+        },
+        onError(err) {
+            dispatch(notificationAction.showNotification({
+                status: 'error',
+                title: 'Error',
+                message: err?.message || 'Something went wrong',
+            }))
         }
 
     })

@@ -30,7 +30,7 @@ export const signup = async (req, res, next) => {
     if (!isValidText(data.lastName, 1)) {
         errors.lastName = 'Invalid last name.';
     }
-    if (!isValidPhoneNumber(data.phoneNumber)) {
+    if (!isValidPhoneNumber(data.phoneNumber , "GE")) {
         errors.phoneNumber = 'Invalid phone.';
     }
     if (Object.keys(errors).length > 0) {
