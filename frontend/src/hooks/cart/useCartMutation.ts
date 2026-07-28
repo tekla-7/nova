@@ -4,30 +4,26 @@ import {queryClient} from "../routes/router.tsx";
 import {useMutation} from "@tanstack/react-query";
 import {addToCart} from "../services/cart.api.ts";
 import {useDispatch} from "react-redux";
-import {uiAction as notificationAction} from "../store/ui-slice.tsx";
+import {QUERY_KEYS} from "../constants/queryKeys.ts";
+import type {AppDispatch} from "../store";
+import {showError, showSuccess} from "../utils/notification.ts";
 
 export const useCartMutation = () => {
-    const dispatch=useDispatch();
+    const dispatch=useDispatch<AppDispatch>();
     const mutation = useMutation({
         mutationFn: addToCart,
         onSuccess: async () => {
             await  queryClient.invalidateQueries({
-                queryKey: ["userCartData"],
+                queryKey: QUERY_KEYS.CART,
                 refetchType: "all",
             });
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Product add successfully',
-            }))
+            showSuccess(dispatch,'Product added successfully')
+
         },
 
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error?.message||'An error occurred',
-            }))
+            showError(dispatch, error.message);
+
         },
     })
     const addToCartHandler = (products: Wishlist[]) => {

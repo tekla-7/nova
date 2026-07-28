@@ -57,20 +57,7 @@
     ],
     "cart": [
       {
-        "id": "6582234f-1b65-47e3-80a9-ae910b440283",
-        "product": {
-          "productId": 156,
-          "title": "Green and Black Glasses",
-          "price": 34.99,
-          "brand": "Fashion Shades",
-          "image": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/1.webp"
-        },
-        "quantity": 2,
-        "size": "xs",
-        "color": "#1A1A1A"
-      },
-      {
-        "id": "39c3f2a7-5840-4f81-92a7-ab5be1fb4afc",
+        "id": "790d5190-877b-4549-bdb0-9a7f813058d2",
         "product": {
           "productId": 5,
           "title": "Red Nail Polish",
@@ -78,21 +65,8 @@
           "brand": "Nail Couture",
           "image": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/1.webp"
         },
-        "quantity": 3,
-        "size": "xs",
-        "color": "#1A1A1A"
-      },
-      {
-        "id": "c53dc84c-2635-466a-bd03-a9d0f2be1b3b",
-        "product": {
-          "productId": 157,
-          "title": "Party Glasses",
-          "price": 19.99,
-          "brand": "Fashion Fun",
-          "image": "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/1.webp"
-        },
         "quantity": 1,
-        "size": "xl",
+        "size": "xs",
         "color": "#1A1A1A"
       }
     ],

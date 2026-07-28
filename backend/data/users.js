@@ -3,6 +3,7 @@ import {NotFoundError} from "../utils/errors.js";
 import {v4 as uuidv4} from 'uuid';
 import {hash} from "bcryptjs";
 import {isValidEmail, isValidPassword} from "../utils/validation.js";
+import {createRefreshToken} from "../utils/auth.js";
 
 export async function getUser(email) {
     const storedData = await readUserData();
@@ -25,8 +26,9 @@ export async function addUser(data) {
         throw new Error("Password hashing failed");
     }
     const createdAt = new Date().toISOString();
+    const id = uuidv4();
     const newUser = {
-        id: uuidv4(),
+        id: id,
         name: data.name,
         lastName: data.lastName,
         email: data.email,
@@ -58,6 +60,22 @@ export async function addUser(data) {
 
 }
 
+export async function updateRefreshToken(userId, refreshToken) {
+    const users = await readUserData();
+
+    const userIndex = users.findIndex(user => user.id === userId);
+
+    if (userIndex === -1) {
+        throw new Error("User not found");
+    }
+
+    users[userIndex].refreshToken = refreshToken;
+
+    await writeUserData(users);
+
+    return users[userIndex];
+}
+
 export async function getUserById(id) {
     const storedData = await readUserData();
     if (!storedData || storedData.length === 0) {
@@ -67,7 +85,9 @@ export async function getUserById(id) {
     if (!user) {
         throw new NotFoundError('Could not find user for email ' + id);
     }
-    const {password, ...safeUser} = user;
+
+
+    const {password,refreshToken ,...safeUser} = user;
     return safeUser;
 
 }
@@ -363,6 +383,7 @@ export async function deleteAddressesItem(userId, id) {
         throw new Error(error)
     }
 }
+
 export async function deleteCard(userId, id) {
     const storedData = await readUserData();
     const userIndex = storedData.findIndex(ev => ev.id === userId);
