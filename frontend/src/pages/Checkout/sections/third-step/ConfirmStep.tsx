@@ -7,19 +7,20 @@ import {LockKeyhole} from 'lucide-react';
 import {PRODUCT_COLORS} from "../../../../constants/colors.ts";
 import {useOrderMutation} from "../../../../hooks/useOrderMutation.ts";
 import type {CreateOrder} from "../../../../types/Order.ts";
+import {getCartSummary} from "../../../../utils/cart.ts";
 
 export default function ConfirmStep({onStepCompleted}: { onStepCompleted: (id: number) => void }) {
     const {data: shoppingBag = []} = useUserCartData();
     const checkout = useSelector((state: RootState) => state.checkout);
-    const total = useMemo(() => {
-        if (!shoppingBag || !checkout.paymentStep || !checkout.shoppingStep) return 0;
-        const shipping = checkout.shoppingStep.shippingMethod.price;
-        const subtotal = shoppingBag.reduce((prev, cur) => prev + cur.quantity * cur.product.price, 0)
-
-        return (shipping + subtotal) * 108 / 100;
-    }, [shoppingBag, checkout])
+    const summary = useMemo(
+        () =>
+            getCartSummary(
+                shoppingBag,
+                checkout.shoppingStep?.shippingMethod.price
+            ),
+        [shoppingBag, checkout.shoppingStep]
+    );
     const {createOrderHandler, isPending} = useOrderMutation()
-    console.log(checkout)
 
     function createOrder() {
         if (!checkout.paymentStep || !checkout.shoppingStep || !shoppingBag.length) return null;
@@ -28,7 +29,7 @@ export default function ConfirmStep({onStepCompleted}: { onStepCompleted: (id: n
         const address = shoppingStep.addressFormIsActive ? shoppingStep.addressForm : shoppingStep.address
         if (!address) return null;
         const order: CreateOrder = {
-            paid: total,
+            paid: summary.total,
             email: shoppingStep.email,
             phone: shoppingStep.phone,
             payment: paymentStep.cardFormIsActive ? paymentStep.cardForm : paymentStep.card,
@@ -158,7 +159,7 @@ export default function ConfirmStep({onStepCompleted}: { onStepCompleted: (id: n
             onClick={createOrder} title='button'
             className='px-4 py-2 font-semibold flex items-center justify-center text-sm bg-transparent border border-[#0b0b0b] rounded-lg cursor-pointer'>
             {isPending && 'Loading ....'} {!isPending && <><LockKeyhole size={14} className='mr-1'/>
-            Place order · ${total.toFixed(2)}</>}
+            Place order · ${summary.total.toFixed(2)}</>}
         </button>
     </div>
 }

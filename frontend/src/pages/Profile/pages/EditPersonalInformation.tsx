@@ -7,6 +7,7 @@ import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
 import {updateUserInfo} from "../../../services/user.api.ts";
 import {FormatPhone} from "../../../components/ui/FormatPhone.tsx";
+import {showError, showSuccess} from "../../../utils/notification.ts";
 
 export default function EditPersonalInformation() {
     const user = useRouteLoaderData("profile") as User;
@@ -17,18 +18,11 @@ export default function EditPersonalInformation() {
         mutationFn: updateUserInfo,
         onSuccess: async () => {
             await revalidate().then(() => console.log('Successfully updated'));
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'User updated successfully',
-            }))
+            showSuccess(dispatch,'User updated successfully');
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error.message,
-            }))
+            showError(dispatch,error.message);
+
         }
     });
     const onSubmit = (e: SubmitEvent<HTMLFormElement>) => {

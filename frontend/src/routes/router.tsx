@@ -32,6 +32,7 @@ import EditPassword from "../pages/Profile/pages/EtitPassword.tsx";
 import Cards from "../pages/Profile/pages/Cards.tsx";
 import {signOut} from "../services/auth.service.ts";
 import ApiError from "../models/error.ts";
+import {isAuthenticated} from "../utils/auth.ts";
 const router = createBrowserRouter([
     {
         path: '/',
@@ -166,10 +167,10 @@ export const queryClient = new QueryClient({
     },
     queryCache: new QueryCache({
         onError: (error) => {
-            if (error instanceof ApiError && error.code === 401) {
-                signOut();
-            }
-        },
+                if (error instanceof ApiError && error.code === 401 && isAuthenticated()) {
+                    signOut();
+                }            }
+
     }),
 })
 

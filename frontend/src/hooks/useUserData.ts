@@ -1,34 +1,33 @@
 import {useQuery} from "@tanstack/react-query";
 import {fetchUser} from "../services/user.api.ts";
-import {isAuthenticated} from "../utils/auth.ts";
 import {fetchUserCart} from "../services/cart.api.ts";
 import {fetchUserWishlist} from "../services/wishlist.api.ts";
+import {CACHE_TIME, QUERY_KEYS} from "../constants/queryKeys.ts";
 
 export const useUserData = () => {
-    const authenticated = isAuthenticated();
 
     return useQuery({
-        queryKey: ['userData'],
+        queryKey: QUERY_KEYS.USER,
         queryFn: fetchUser,
-        staleTime: 3600000,
-        retry: false,
-        enabled: authenticated,
-        refetchOnWindowFocus: false,
+        staleTime: CACHE_TIME.ONE_HOUR,
 
     })
 }
 export const useUserCartData = () => {
+
     return useQuery({
-        queryKey: ['userCartData'],
+        queryKey: QUERY_KEYS.CART,
         queryFn:fetchUserCart,
-        staleTime: 3600000,
+        staleTime: CACHE_TIME.ONE_HOUR,
+
         // refetchOnWindowFocus: false,
     })
 }
 export const useUserWishlist = () => {
+
     return useQuery({
-        queryKey: ['userWishlist'],
+        queryKey: QUERY_KEYS.WISHLIST,
         queryFn: fetchUserWishlist,
-        staleTime: 3600000,
+        staleTime: CACHE_TIME.ONE_HOUR,
     })
 }

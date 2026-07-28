@@ -1,25 +1,41 @@
-import {isRouteErrorResponse, useRouteError} from "react-router-dom";
 
-function ErrorPage() {
+import {
+    isRouteErrorResponse,
+    useRouteError,
+    Link,
+} from "react-router-dom";
+
+export default function ErrorPage() {
     const error = useRouteError();
-
-    console.log(error);
 
     if (isRouteErrorResponse(error)) {
         return (
             <div>
-                <h1>Error {error.status}</h1>
+                <h1>{error.status}</h1>
                 <p>{error.statusText}</p>
-                <p>{error.data?.message}</p>
+                {error.data?.message && <p>{error.data.message}</p>}
+
+                <Link to="/">Go Home</Link>
+            </div>
+        );
+    }
+
+    if (error instanceof Error) {
+        return (
+            <div>
+                <h1>Something went wrong</h1>
+                <p>{error.message}</p>
+
+                <Link to="/">Go Home</Link>
             </div>
         );
     }
 
     return (
         <div>
-            <h1>Something went wrong</h1>
+            <h1>Unexpected error</h1>
+
+            <Link to="/">Go Home</Link>
         </div>
     );
 }
-
-export default ErrorPage;

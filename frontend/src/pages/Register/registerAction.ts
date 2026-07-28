@@ -28,7 +28,6 @@ export default async function action({request}: ActionFunctionArgs) {
         return redirect("/");
     } catch (error) {
         if (error instanceof ApiError) {
-            console.log(error.errors)
             return {
                 message: error.message,
                 status: error.code,

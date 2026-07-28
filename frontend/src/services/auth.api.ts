@@ -1,5 +1,7 @@
 import {queryClient} from "../routes/router.tsx";
-import {apiClient} from "../utils/apiClient.ts";
+import {apiClient, apiJson} from "../utils/apiClient.ts";
+import {signOut} from "./auth.service.ts";
+
 export async function fetchLogIn(authData: { email: string; password: string }) {
     const res = await apiClient("auth/login", {
         method: "POST",
@@ -13,12 +15,25 @@ export async function fetchLogIn(authData: { email: string; password: string }) 
     ]);
     return data
 }
-export async function fetchSignUp(signUpData: { email: string; password: string }) {
 
-    const res = await apiClient('auth/signup', {
+export async function fetchSignUp(signUpData: { email: string; password: string }):Promise<{token:string}> {
+    return apiJson('auth/signup', {
         method: "POST",
         body: JSON.stringify(signUpData),
-    });
+    })
 
-    return await res.json()
+}
+export async function signOutFn() {
+    try {
+        await apiJson(`auth/logout`, {
+            method: "POST",
+        });
+    } catch (error) {
+        console.error("Logout request failed:", error);
+    } finally {
+        await signOut();
+    }
+
+
+
 }

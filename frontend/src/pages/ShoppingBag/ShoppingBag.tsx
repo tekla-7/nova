@@ -2,78 +2,21 @@ import {NavLink} from "react-router-dom";
 import {useUserCartData} from "../../hooks/useUserData.ts";
 import BagItem from "./sections/BagItem.tsx";
 import BagSidebar from "./sections/BagSidebar.tsx";
-import {useMutation} from "@tanstack/react-query";
-import {queryClient} from "../../routes/router.tsx";
-import type {CartItem} from '../../types/user.ts'
-import {ChangeCartQuantity, deleteCartItem} from "../../services/cart.api.ts";
-import {uiAction as notificationAction} from "../../store/ui-slice.tsx";
-import {useDispatch} from "react-redux";
+import {getCartSummary} from "../../utils/cart.ts";
+import {useUpdateCartQuantity} from "../../hooks/cart/useUpdateCartQuantity.ts";
+import {useDeleteCartMutation} from "../../hooks/cart/useDeleteCartMutation.ts";
 
-type Props = {
-    id: string, quantity: number,
-}
 export default function ShoppingBag() {
     const {data = []} = useUserCartData();
-    const itemCount = (data ?? []).reduce((prev, cur) => prev + cur.quantity, 0);
-    const dispatch = useDispatch()
-    const changeQuantity = useMutation({
-        mutationFn: ({id, quantity}: Props) => ChangeCartQuantity(id, quantity),
-        onMutate: async ({id, quantity}: Props) => {
-            const cartIndex = data.findIndex(cart => cart.id === id);
-            await queryClient.cancelQueries({queryKey: ['userCartData']})
-            const prev = queryClient.getQueriesData({queryKey: ['userCartData']});
-            if (data[cartIndex]) data[cartIndex].quantity = quantity
-            queryClient.setQueriesData({queryKey: ['userCartData']}, data)
-            return {prev}
-        },
-        onError: ({context}: { context: { prev: CartItem[] } }) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: 'Cannot change quantity',
-            }))
-            queryClient.setQueriesData({queryKey: ['userCartData']}, context.prev)
-        },
-        onSuccess: (() => {
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Add successfully',
-            }))
-        }),
-        onSettled: async () => {
-            await queryClient.invalidateQueries({queryKey: ['userCartData']})
-        }
-
-    })
-    const deleteCart = useMutation({
-        mutationFn: deleteCartItem,
-        onSuccess: async () => {
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Product deleted successfully',
-            }))
-            await queryClient.invalidateQueries({queryKey: ['userCartData']})
-        },
-        onError(err) {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: err?.message || 'Something went wrong',
-            }))
-        }
-
-    })
-
+    const {itemCount} = getCartSummary(data ?? [])
+    const {updateCartQuantityHelper} = useUpdateCartQuantity(data)
+    const {deleteCartHandler} = useDeleteCartMutation()
     function onQuantityChange(id: string, quantity: number) {
-        changeQuantity.mutate({id, quantity})
+        updateCartQuantityHelper(id, quantity)
     }
-
     function onDeleteCart(id: string) {
-        deleteCart.mutate(id)
+        deleteCartHandler(id)
     }
-
     return <section className='flex flex-col w-full'>
         <div className='flex items-center gap-1 border-b border-[#E5E0D8] py-3 px-6'>
             <NavLink className='text-xs text-[#9A9A9A] cursor-pointer' to='/'>Home</NavLink>

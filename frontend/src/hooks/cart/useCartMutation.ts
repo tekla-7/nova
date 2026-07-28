@@ -1,12 +1,13 @@
-import type {Wishlist} from "../types/user.ts";
-import {PRODUCT_COLORS, PRODUCT_SIZE} from "../constants/colors.ts";
-import {queryClient} from "../routes/router.tsx";
+import type {Wishlist} from "../../types/user.ts";
+import {PRODUCT_COLORS, PRODUCT_SIZE} from "../../constants/colors.ts";
+import {queryClient} from "../../routes/router.tsx";
 import {useMutation} from "@tanstack/react-query";
-import {addToCart} from "../services/cart.api.ts";
+import {addToCart} from "../../services/cart.api.ts";
 import {useDispatch} from "react-redux";
-import {QUERY_KEYS} from "../constants/queryKeys.ts";
-import type {AppDispatch} from "../store";
-import {showError, showSuccess} from "../utils/notification.ts";
+import {QUERY_KEYS} from "../../constants/queryKeys.ts";
+import type {AppDispatch} from "../../store";
+import {showError, showSuccess} from "../../utils/notification.ts";
+import type {Cart} from "../../types/cart.ts";
 
 export const useCartMutation = () => {
     const dispatch=useDispatch<AppDispatch>();
@@ -26,7 +27,7 @@ export const useCartMutation = () => {
 
         },
     })
-    const addToCartHandler = (products: Wishlist[]) => {
+    const addWishlistToCartHandler = (products: Wishlist[]) => {
         const newProducts = products.map(product => ({
             product: {
                 productId: product.productId,
@@ -42,5 +43,9 @@ export const useCartMutation = () => {
 
         mutation.mutate(newProducts);
     };
-    return {...mutation, addToCartHandler};
+    const addProductToCart=(cart: Cart[]) => {
+        mutation.mutate(cart);
+
+    }
+    return {...mutation, addWishlistToCartHandler,addProductToCart};
 }

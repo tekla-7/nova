@@ -1,11 +1,12 @@
 import {useQuery} from '@tanstack/react-query';
-import {fetchCategories} from "../utils/http.ts";
+import {fetchCategories} from "../services/product.api.ts";
+import {CACHE_TIME, QUERY_KEYS} from "../constants/queryKeys.ts";
 
 export function useCategories() {
     return useQuery({
-        queryKey: ['categories'],
+        queryKey: QUERY_KEYS.CATEGORY,
         queryFn: fetchCategories,
-        staleTime: 3600000,
+        staleTime: CACHE_TIME.THREE_HOUR,
 
     });
 }

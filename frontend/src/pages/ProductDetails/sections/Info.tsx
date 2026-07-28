@@ -6,17 +6,13 @@ import {useState} from "react";
 import Size from "../../../components/ui/Size.tsx";
 import Quantity from "../../../components/ui/Quantity.tsx";
 import BaseButton from "../../../components/ui/BaseButton.tsx";
-import {useMutation} from "@tanstack/react-query";
 import type {Product} from "../../../types/product.ts";
-import {queryClient} from "../../../routes/router";
 import {useUserWishlist} from "../../../hooks/useUserData.ts";
-import {addToCart} from "../../../services/cart.api.ts";
-import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
-import {useDispatch} from "react-redux";
-import {addToWishlist} from "../../../services/wishlist.api.ts";
+import {useAddWishlistMutation} from "../../../hooks/wishlist/useAddWishlistMutation.ts";
+import {useCartMutation} from "../../../hooks/cart/useCartMutation.ts";
 
 
-export default function Info({productDetails}:{productDetails:Product}) {
+export default function Info({productDetails}: { productDetails: Product }) {
     const [selectedOptions, setSelectedOptions] = useState({
             color: '#1A1A1A',
             size: 'xs',
@@ -25,8 +21,8 @@ export default function Info({productDetails}:{productDetails:Product}) {
     );
     const {data: wishlist = []} = useUserWishlist();
     const isInWishlist = wishlist.some(el => el.productId === productDetails.id)
-    const dispatch = useDispatch()
-
+    const {addProductToWishlist} = useAddWishlistMutation();
+    const {addProductToCart , isPending}=useCartMutation()
     function onSelectedOptions(type: string, value: string | number) {
         setSelectedOptions(old => ({
             ...old,
@@ -34,23 +30,10 @@ export default function Info({productDetails}:{productDetails:Product}) {
         }))
     }
 
-    const cartMutation = useMutation({
-        mutationFn: addToCart,
-    });
 
-    const wishlistMutation = useMutation({
-        mutationFn: addToWishlist,
-        onError(err) {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: err?.message || 'An error occurred',
-            }))
-        }
-    });
 
     function handleAddToCart() {
-        cartMutation.mutate([{
+        addProductToCart([{
                 product: {
                     productId: productDetails.id,
                     title: productDetails.title,
@@ -61,52 +44,12 @@ export default function Info({productDetails}:{productDetails:Product}) {
                 quantity: selectedOptions.quantity,
                 size: selectedOptions.size,
                 color: selectedOptions.color,
-            }],
-            {
-                onSuccess: async () => {
-
-                    await queryClient.invalidateQueries({queryKey: ['userCartData'], refetchType: "all"})
-                        .then(() => console.log("invalidation completed"))
-                        .catch(err => console.log("invalidation error:", err));
-                    dispatch(notificationAction.showNotification({
-                        status: 'success',
-                        title: 'Success',
-                        message: 'Add successfully',
-                    }))
-                },
-                onError: (err) => {
-                    dispatch(notificationAction.showNotification({
-                        status: 'error',
-                        title: 'Error',
-                        message: err?.message || 'Can not add product',
-                    }))
-                    console.log("error", err);
-                },
-
-            })
+            }])
 
     }
 
     function handleAddToWishlist() {
-        wishlistMutation.mutate({
-            productId: productDetails.id,
-            title: productDetails.title,
-            price: productDetails.price,
-            brand: productDetails.brand || '-',
-            image: productDetails.images[0],
-        }, {
-            onSuccess: async () => {
-                await queryClient.invalidateQueries({
-                    queryKey: ['userWishlist'],
-                    refetchType: "all"
-                }).then(() => console.log("invalidation completed"));
-                dispatch(notificationAction.showNotification({
-                    status: 'success',
-                    title: 'Success',
-                    message: 'Add successfully',
-                }))
-            }
-        })
+        addProductToWishlist(productDetails)
     }
 
     return (<div className='w-full'>
@@ -137,7 +80,7 @@ export default function Info({productDetails}:{productDetails:Product}) {
                   onSelectedQuantityChange={(quantity: number) => onSelectedOptions('quantity', quantity)}/>
         <div className='flex flex-col gap-2.5 mt-3'>
             <BaseButton onClick={handleAddToCart} size='large' type='button'
-                        variant='dark'>{cartMutation.isPending ? "Adding..." : "Add to cart"}
+                        variant='dark'>{isPending? "Adding..." : "Add to cart"}
             </BaseButton>
             <BaseButton onClick={handleAddToWishlist} size='large' variant='transparent' disable={isInWishlist}>
                 {!isInWishlist && <>Save to wishlist</>}

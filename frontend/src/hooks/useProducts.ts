@@ -1,28 +1,17 @@
 import {useQuery} from "@tanstack/react-query";
-import { fetchProducts} from "../utils/http.ts";
-import {allowedCategories} from "../constants/allowedCategories.ts";
-import {shuffle} from "../utils/shuffle.ts";
+import {fetchProducts} from "../services/product.api.ts";
+import {CACHE_TIME, QUERY_KEYS} from "../constants/queryKeys.ts";
+import {getFeaturedReviews} from "../utils/product.ts";
 
 export function useProducts() {
     return useQuery({
-        queryKey: ['products'],
+        queryKey: QUERY_KEYS.PRODUCTS,
         queryFn: fetchProducts,
-        staleTime: 3600000,
+        staleTime: CACHE_TIME.ONE_HOUR,
         select: (data) => {
-            const allReviews = data.products
-                .filter((p) => allowedCategories.includes(p.category))
-                .flatMap((p) => p.reviews ?? [])
-                .filter(r=>r.rating>3)
-
-            const unique = Array.from(
-                new Map(
-                    allReviews.map((r) => [r.reviewerName, r])
-                ).values()
-            );
-
             return {
                 ...data,
-                featuredReviews: shuffle(unique).slice(0, 9),
+                featuredReviews: getFeaturedReviews(data.products),
             };
         },
     });

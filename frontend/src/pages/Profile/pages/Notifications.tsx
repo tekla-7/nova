@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
 import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 import {editNotification} from "../../../services/user.api.ts";
+import {showError, showSuccess} from "../../../utils/notification.ts";
 
 export default function Notifications() {
     const {user} = useRouteLoaderData("profile") as { user:User };
@@ -41,18 +42,11 @@ export default function Notifications() {
         mutationFn: editNotification,
         onSuccess: () => {
             revalidate().then(() => console.log('Successfully updated'));
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Notification was changed successfully',
-            }))
+            showSuccess(dispatch,'Notification was changed successfully')
+
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error.message,
-            }))
+            showError(dispatch, error.message);
         }
     });
     return <>

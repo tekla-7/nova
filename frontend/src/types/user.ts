@@ -26,13 +26,16 @@ export interface Addresses {
     isDefault: boolean,
     name: string,
     lastName: string,
-    city: { name: string, code: string },
+    city: LocationOption,
     zipCode: number,
-    country: { name: string, code: string },
+    country: LocationOption,
     streetAddress: string,
-    state: { name: string, code: string },
+    state: LocationOption,
 }
-
+export interface LocationOption {
+    name: string;
+    code: string;
+}
 export interface Wishlist {
     productId: number,
     title: string,

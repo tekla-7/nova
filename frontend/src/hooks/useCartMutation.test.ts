@@ -2,8 +2,9 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useMutation } from '@tanstack/react-query';
 
-import { useCartMutation } from './useCartMutation';
+import { useCartMutation } from './cart/useCartMutation.ts';
 import {queryClient} from "../routes/router.tsx";
+import {QUERY_KEYS} from "../constants/queryKeys.ts";
 vi.mock('@tanstack/react-query', async () => {
     const actual = await vi.importActual('@tanstack/react-query');
 
@@ -32,7 +33,7 @@ describe('useCartMutation', () => {
 
 
         act(() => {
-            result.current.addToCartHandler(products);
+            result.current.addWishlistToCartHandler(products);
         });
 
         expect(mutate).toHaveBeenCalledWith([
@@ -70,7 +71,7 @@ describe('useCartMutation', () => {
 
         await mutationOptions.onSuccess();
         expect(invalidateSpy).toHaveBeenCalledWith({
-            queryKey: ["userCartData"],
+            queryKey: QUERY_KEYS.CART,
             refetchType: "all",
         });
 

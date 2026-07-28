@@ -1,31 +1,45 @@
 import {BACKEND_API_URL} from "../config.ts";
-import {getAuthToken} from "./auth.ts";
+import {getAuthToken, setAuthToken} from "./auth.ts";
 import ApiError from "../models/error.ts";
-import {signOut} from "../services/auth.service.ts";
+import {signOutFn} from "../services/auth.api.ts";
 
-type ApiOptions = RequestInit;
+type ApiOptions = RequestInit  & {
+    baseUrl?: string;
+};
+let refreshPromise: Promise<string | null> | null = null;
 
 export async function apiClient(
     endpoint: string,
     options: ApiOptions = {},
-    api?: string
+    isRetry = false
 ) {
+    const {
+        baseUrl = BACKEND_API_URL,
+        ...fetchOptions
+    } = options;
+
     const token = getAuthToken();
-    const newApi = api ? api : BACKEND_API_URL;
-    const response = await fetch(`${newApi}${endpoint}`, {
-        ...options,
+    const response = await fetch(`${baseUrl}${endpoint}`, {
+        ...fetchOptions,
+        credentials: "include",
         headers: {
             "Content-Type": "application/json",
             ...(token && {
                 Authorization: `Bearer ${token}`,
             }),
-            ...options.headers,
+            ...fetchOptions.headers,
         },
     });
-    if (!response.ok) {
-        if (response.status === 401) {
-            await signOut();
+    if (response.status === 401 && !isRetry&&!endpoint.includes('login')&&!endpoint.includes('signup')) {
+        const newToken = await refreshAccessToken();
+
+        if (newToken) {
+            return apiClient(endpoint, options, true);
         }
+
+        await signOutFn();
+    }
+    if (!response.ok) {
         const error = await response.json().catch(() => null);
 
         throw new ApiError(
@@ -38,4 +52,38 @@ export async function apiClient(
     return response
 
 
+}
+export async function apiJson<T>(
+    endpoint: string,
+    options?: ApiOptions
+): Promise<T> {
+    const response = await apiClient(endpoint, options);
+
+    return response.json();
+}
+
+async function refreshAccessToken(): Promise<string | null> {
+    if (!refreshPromise) {
+        refreshPromise = (async () => {
+            try {
+                const res = await fetch(`${BACKEND_API_URL}auth/refresh`, {
+                    method: "POST",
+                    credentials: "include",
+                });
+
+                if (!res.ok) {
+                    return null;
+                }
+
+                const data = await res.json();
+                setAuthToken(data.token);
+                return data.token;
+            } catch (error) {
+                return null;
+            } finally {
+                refreshPromise = null;
+            }
+        })();
+    }
+    return refreshPromise;
 }

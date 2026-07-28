@@ -6,6 +6,7 @@ import {useMemo} from "react";
 import clsx from "clsx";
 import DeliveryCard from "./DeliveryCard.tsx";
 import {RefreshCcw} from "lucide-react";
+import {getCartSummary} from "../../../utils/cart.ts";
 
 type Prop = {
     activeStep: number,
@@ -13,15 +14,7 @@ type Prop = {
 export default function SideInfo({activeStep}: Prop) {
     const {data: shoppingBag = []} = useUserCartData();
     const checkout = useSelector((state: RootState) => state.checkout);
-    const subtotal = useMemo(() => shoppingBag.reduce((prev, cur) => prev + cur.product.price * cur.quantity, 0), [shoppingBag])
-    const shipping = checkout.shoppingStep?.shippingMethod?.price ?? 0
-    const tax = useMemo(() => {
-        const value = shipping + subtotal;
-        return (value * 8) / 100
-    }, [shipping, subtotal])
-    const total = useMemo(() => {
-        return subtotal + shipping + tax
-    }, [subtotal, shipping, tax])
+    const summary = useMemo(() => getCartSummary(shoppingBag), [shoppingBag]);
     return <div className='p-5 bg-[#fcfcfb]'>
         {activeStep!==3&&<> <h1 className='text-sm font-medium mb-3.5'>Order summary</h1>
         <ul className='mb-3.5'> {shoppingBag.map(cart => (
@@ -41,22 +34,22 @@ export default function SideInfo({activeStep}: Prop) {
         <div className='flex flex-col gap-1.5 pb-2.5 border-b border-[#0b0b0b]/10 mb-2.5'>
             <div className='flex items-center font-medium justify-between text-xs'>
                 <span className='text-[#52514e]'>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>${summary.subTotal.toFixed(2)}</span>
             </div>
             {activeStep!==1&& <div className='flex items-center font-medium justify-between text-xs'>
                 <span className='text-[#52514e]'>Shipping</span>
                 <span className={clsx(
-                    {'text-[#006300]': shipping === 0}
-                )}>{shipping === 0 ? 'Free' : `$${shipping}`}</span>
+                    {'text-[#006300]': summary.shipping === 0}
+                )}>{summary.shipping === 0 ? 'Free' : `$${summary.shipping}`}</span>
             </div>}
             <div className='flex items-center font-medium justify-between text-xs'>
                 <span className='text-[#52514e]'>Tax(8%)</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>${summary.tax.toFixed(2)}</span>
             </div>
         </div>
         <div className='flex items-center font-medium justify-between text-sm'>
             <span className='text-[#52514e]'>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <span>${summary.total.toFixed(2)}</span>
         </div>
         {activeStep === 2 && <div className='mt-3 p-2.5 bg-white rounded-lg border border-[#0b0b0b]/10'>
             <h2 className='text-[11px] font-medium mb-1'>Shipping to</h2>

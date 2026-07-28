@@ -3,52 +3,23 @@ import {useUserWishlist} from "../../hooks/useUserData";
 import BaseButton from "../../components/ui/BaseButton.tsx";
 import WishlistItem from "./sections/WishlistItem.tsx";
 import type {Wishlist} from "../../types/user.ts";
-import {useMutation} from "@tanstack/react-query";
-import {} from "../../utils/http.ts";
-import {queryClient} from "../../routes/router.tsx";
-import {useCartMutation} from "../../hooks/useCartMutation.ts";
-import {removeProductFromWishlist} from "../../services/wishlist.api.ts";
-import {uiAction as notificationAction} from "../../store/ui-slice.tsx";
-import {useDispatch} from "react-redux";
+import {useCartMutation} from "../../hooks/cart/useCartMutation.ts";
+import {useRemoveWishlistMutation} from "../../hooks/wishlist/useRemoveWishlistMutation.ts";
 
 export default function Wishlist() {
     const {data: wishlist = []} = useUserWishlist();
     const wishlistItemCount = wishlist.length;
-    const {addToCartHandler, isPending} = useCartMutation()
-    const dispatch = useDispatch()
-    const handleRemoveFromWishlist = useMutation({
-        mutationFn: removeProductFromWishlist,
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ['userWishlist'],
-                refetchType: "all",
-            }).then(() => console.log('Invalidation complete'));
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Product removed successfully',
-            }))
-        },
-        onError(err) {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: err?.message ?? 'An error occurred',
-            }))
-        }
-
-    })
-
+    const {addWishlistToCartHandler, isPending} = useCartMutation()
+    const {removeFromWishlistHelper}=useRemoveWishlistMutation()
     function onAdd(product: Wishlist) {
-        addToCartHandler([product])
+        addWishlistToCartHandler([product])
     }
-
     function onAddAll() {
-        addToCartHandler(wishlist)
+        addWishlistToCartHandler(wishlist)
     }
 
     function onRemove(id: number) {
-        handleRemoveFromWishlist.mutate(id)
+        removeFromWishlistHelper(id)
     }
 
     return <section className='flex flex-col w-full'>

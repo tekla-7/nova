@@ -1,6 +1,6 @@
 import type {LoaderFunctionArgs} from "react-router-dom";
 import type {Product} from "../../types/product.ts";
-import {fetchProduct} from "../../utils/http.ts";
+import {fetchProduct} from "../../services/product.api.ts";
 
 export async function loader({params}: LoaderFunctionArgs): Promise<{
     product: Product | null;
@@ -13,7 +13,6 @@ export async function loader({params}: LoaderFunctionArgs): Promise<{
             message: "Something went wrong",
         },
     };
-    ;
     try {
         const json = await fetchProduct(id);
 

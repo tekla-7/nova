@@ -1,10 +1,9 @@
 import {useMutation} from "@tanstack/react-query";
 import type {CreateOrder,} from "../types/Order.ts";
-import {} from "../utils/http.ts";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {addOrder} from "../services/order.api.ts";
-import {uiAction as notificationAction} from "../store/ui-slice.tsx";
+import {showError, showSuccess} from "../utils/notification.ts";
 
 type Resp = {
     ok: boolean;
@@ -18,18 +17,12 @@ export const useOrderMutation = () => {
         mutationFn: addOrder,
         onSuccess: async (response: Resp) => {
             await navigate(`/order/${response.data?.id}`, {state: 'success'});
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Order add successfully',
-            }))
+            showSuccess(dispatch,'Order added successfully')
+
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error?.message??'An error occurred',
-            }))
+            showError(dispatch, error.message);
+
         }
 
     })

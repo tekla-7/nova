@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {type Ref} from "react";
 import {useUserWishlist} from "../../../hooks/useUserData.ts";
 import WishlistItem from "./WishlistItem.tsx";
-import {useCartMutation} from "../../../hooks/useCartMutation.ts";
+import {useCartMutation} from "../../../hooks/cart/useCartMutation.ts";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../store";
 import {uiAction} from "../../../store/ui-slice.tsx";
@@ -17,7 +17,7 @@ export default function WishlistDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
     } = useUserWishlist();
     const dispatch = useDispatch();
 
-    const {addToCartHandler, isPending } = useCartMutation()
+    const {addWishlistToCartHandler, isPending } = useCartMutation()
     const cartItems = data.slice(0, 3);
     const itemCount = data.length;
     const subTotal = data.reduce((prev, cur) => cur.price + prev, 0);
@@ -29,7 +29,7 @@ export default function WishlistDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
     function onAddToBag(id: number) {
         const product = data.find((item) => item.productId === id);
         if (!product) return
-        addToCartHandler([{
+        addWishlistToCartHandler([{
             productId: product.productId,
             title: product.title,
             price: product.price,
@@ -40,7 +40,7 @@ export default function WishlistDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
     }
 
     function addAllToBag() {
-        addToCartHandler(data)
+        addWishlistToCartHandler(data)
     }
 
 

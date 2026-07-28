@@ -4,8 +4,8 @@ import {type SubmitEvent, useRef, useState} from "react";
 import AddressForm from "../../Checkout/sections/first-step/AddressForm.tsx";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {uiAction as notificationAction } from "../../../store/ui-slice.tsx";
 import {addAddresses, deleteAddress, editAddresses} from "../../../services/user.api.ts";
+import {showError, showSuccess} from "../../../utils/notification.ts";
 
 type State = {
     address: Addresses | null,
@@ -72,36 +72,21 @@ export default function Addresses() {
         onSuccess: () => {
             revalidate().then(() => console.log('Successfully updated'));
             toggle()
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Address was add successfully',
-            }))
+
+            showSuccess(dispatch,'Address was added successfully')
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error.message,
-            }))
+           showError(dispatch,error.message)
         }
     });
     const deleteNewAddresses = useMutation({
         mutationFn: deleteAddress,
         onSuccess: () => {
             revalidate().then(() => console.log('Successfully deleted'));
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Address was deleted successfully',
-            }))
+            showSuccess(dispatch,'Address was deleted successfully')
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error.message,
-            }))
+           showError(dispatch,error.message)
         }
     });
     const edit=useMutation({
@@ -109,18 +94,10 @@ export default function Addresses() {
         onSuccess: () => {
             revalidate().then(() => console.log('Successfully updated'));
             toggle()
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Address was updated successfully',
-            }))
+            showSuccess(dispatch,'Address was updated successfully')
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error.message,
-            }))
+            showError(dispatch,error.message)
         }
     })
     return <>

@@ -6,6 +6,7 @@ import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 import {useActionState} from "react";
 import type {NewPassword} from "../../../types/user.ts";
 import {updatePassword} from "../../../services/user.api.ts";
+import {showError, showSuccess} from "../../../utils/notification.ts";
 
 export default function EditPassword() {
     const dispatch = useDispatch();
@@ -16,20 +17,14 @@ export default function EditPassword() {
         const data = Object.fromEntries(formData.entries()) as NewPassword
 
         if (!isEqualsToOtherValue(data.newPassword, data.confirmPassword)) {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: 'Passwords do not match',
-            }))
+
+            showError(dispatch,'Passwords do not match');
             return data
         }
         try {
             await updatePassword({newPassword: data.newPassword, currentPassword: data.currentPassword})
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Password updated successfully',
-            }))
+
+            showSuccess(dispatch,'Password updated successfully');
             navigate('/profile')
             return null
         } catch (error:any) {

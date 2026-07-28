@@ -4,6 +4,7 @@ import {useLoaderData} from "react-router-dom";
 import {RefreshCcw, MessageSquareText, Truck, ArrowDownToLine} from 'lucide-react';
 import FormatDate from "../../../components/ui/FormatDate.tsx";
 import ErrorMessage from "../../../components/ui/ErrorMessage.tsx";
+import {getCartSummary} from "../../../utils/cart.ts";
 
 export default function Summary() {
     const { order, error } = useLoaderData() as {
@@ -17,10 +18,8 @@ export default function Summary() {
     if (!order) {
         return null;
     }
-    const subtotal = order.items.reduce((prev, cur) => prev + cur.product.price * cur.quantity, 0)
-    const items = order.items.reduce((prev, cur) => cur.quantity + prev, 0)
+    const {subTotal,itemCount,tax}=getCartSummary(order.items)
     const shipping = order.deliveryMethod.price
-    const tax = (subtotal + shipping) * 108 / 100
     const date = new Date(order.createdAt + 30).toDateString()
 
     return <div className='p-5 bg-[#fcfcfb]'>
@@ -28,8 +27,8 @@ export default function Summary() {
 
         <div className='flex flex-col gap-1.5 pb-2.5 border-b border-[#0b0b0b]/10 mb-2.5'>
             <div className='flex items-center font-medium justify-between text-xs'>
-                <span className='text-[#52514e]'>Subtotal ({items} items)</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span className='text-[#52514e]'>Subtotal ({itemCount} items)</span>
+                <span>${subTotal.toFixed(2)}</span>
             </div>
             <div className='flex items-center font-medium justify-between text-xs'>
                 <span className='text-[#52514e]'>Shipping</span>

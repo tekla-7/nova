@@ -5,8 +5,8 @@ import CardForm from "../../Checkout/sections/second-step/CardForm.tsx";
 import {type SubmitEvent, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
 import {addCard, deleteCard} from "../../../services/user.api.ts";
+import {showError, showSuccess} from "../../../utils/notification.ts";
 
 export default function Cards() {
     const {user} = useRouteLoaderData("profile") as {user: User };
@@ -45,36 +45,21 @@ export default function Cards() {
         onSuccess: () => {
             revalidate().then(() => console.log('Successfully updated'));
             toggle()
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Card was add successfully',
-            }))
+            showSuccess(dispatch,'Card was add successfully')
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error.message,
-            }))
+            showError(dispatch,error.message);
+
         }
     });
     const deleteMt = useMutation({
         mutationFn: deleteCard,
         onSuccess: () => {
             revalidate().then(() => console.log('Successfully deleted'));
-            dispatch(notificationAction.showNotification({
-                status: 'success',
-                title: 'Success',
-                message: 'Card was deleted successfully',
-            }))
+            showSuccess(dispatch,'Card was deleted successfully')
         },
         onError: (error) => {
-            dispatch(notificationAction.showNotification({
-                status: 'error',
-                title: 'Error',
-                message: error.message,
-            }))
+           showError(dispatch,error.message)
         }
     });
 

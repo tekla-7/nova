@@ -1,14 +1,11 @@
 import {LockKeyhole} from "lucide-react";
 import {useUserCartData} from "../../../hooks/useUserData.ts";
 import {Link} from "react-router-dom";
+import {getCartSummary} from "../../../utils/cart.ts";
 
 export default function BagSidebar() {
     const {data} = useUserCartData();
-    const itemCount = (data ?? []).reduce((prev, cur) => prev + cur.quantity, 0);
-    const subTotal = (data ?? []).reduce((prev, cur) => cur.product.price + prev, 0)
-    const tax = subTotal * 108 / 100;
-    const total = subTotal + tax
-
+    const {itemCount ,subTotal ,tax,total}=getCartSummary(data??[])
     return <div className='p-5 bg-[#fcfcfb]'>
         <h1 className='text-sm font-medium  mb-3.5 '>Order summary </h1>
         <div className='flex items-center justify-between mb-2 text-[13px]'>

@@ -4,18 +4,17 @@ import {LogOut} from 'lucide-react';
 import {Package} from 'lucide-react';
 import {Link} from "react-router-dom";
 import {useUserData} from "../../../hooks/useUserData.ts";
-import {isAuthenticated} from "../../../utils/auth.ts";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../store";
 import {uiAction} from "../../../store/ui-slice.tsx";
-import {signOut} from "../../../services/auth.service.ts";
+import {signOutFn} from "../../../services/auth.api.ts";
 
 export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
     const isOpen = useSelector(
         (state: RootState) => state.ui.isUserOpen
     );
-    const {data: user} = useUserData();
-    const isUserLogin: boolean = isAuthenticated();
+    const {data: user ,isSuccess} = useUserData();
+    const isUserLogin = isSuccess && !!user;
     const userName = isUserLogin && user ? user?.name + ' ' + user?.lastName : ''
     const dispatch = useDispatch();
 
@@ -25,7 +24,7 @@ export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
     }
 
     async function onSignOut() {
-       await signOut()
+       await signOutFn()
         toggleOpen()
     }
 
@@ -56,7 +55,7 @@ export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
                     <User size={13}/>
                     <p>My profile</p>
                 </Link>
-                <Link to='profile/order'
+                <Link to='profile/orders'
                       onClick={toggleOpen}
                       className='border-b w-full border-[#F0EDE8]  text-[13px] text-[#4A4A4A] cursor-pointer flex items-center gap-2.5 px-4 pt-1.5 pb-2.5'>
                     <Package size={13}/>
@@ -72,10 +71,14 @@ export default function UserDropdown({ref}: { ref: Ref<HTMLDivElement> }) {
             {!isUserLogin && <div className='p-4 flex items-center flex-col'>
                 <p className='text-[13px] pb-2.5'>Sign in for faster checkout</p>
                 <Link to="/authentication"
+                      onClick={toggleOpen}
+
                       className='text-sm px-4 text-center py-2 bg-transparent text-[#0b0b0b] border w-full border-[#0b0b0b33] rounded-lg cursor-pointer mb-2'>Sign
                     in
                 </Link>
                 <Link to='/authentication/sign-up'
+                      onClick={toggleOpen}
+
                       className='text-sm px-4 py-2 bg-transparent text-center text-[#0b0b0b] w-full border border-[#0b0b0b33] rounded-lg cursor-pointer mb-2'>
                     Create account
                 </Link>

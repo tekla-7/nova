@@ -2,12 +2,8 @@ import {PRODUCT_COLORS} from "../../../constants/colors.ts";
 import Quantity from "../../../components/ui/Quantity.tsx";
 import {Check, Heart, Trash} from "lucide-react";
 import type {CartItem} from '../../../types/user.ts'
-import {queryClient} from "../../../routes/router.tsx";
-import {useMutation} from "@tanstack/react-query";
 import {useUserWishlist} from "../../../hooks/useUserData.ts";
-import {addToWishlist} from "../../../services/wishlist.api.ts";
-import {uiAction as notificationAction} from "../../../store/ui-slice.tsx";
-import {useDispatch} from "react-redux";
+import {useAddWishlistMutation} from "../../../hooks/wishlist/useAddWishlistMutation.ts";
 
 type props = {
     cart: CartItem,
@@ -17,37 +13,11 @@ type props = {
 export default function BagItem({cart, onQuantityChange, onDeleteCart}: props) {
     const {data: wishlist = []} = useUserWishlist();
     const isInWishlist = wishlist.some(el => el.productId === cart.product.productId)
-    const dispatch = useDispatch()
-
+    const {addToWishlistHelper} = useAddWishlistMutation()
     function handleAddToWishlist() {
-        wishlistMutation.mutate({
-            productId: cart.product.productId,
-            title: cart.product.title,
-            price: cart.product.price,
-            brand: cart.product.brand,
-            image: cart.product.image,
-        }, {
-            onSuccess: async () => {
-                await queryClient.invalidateQueries({queryKey: ['userWishlist']}).then(() => console.log("invalidation completed"))
-                dispatch(notificationAction.showNotification({
-                    status: 'success',
-                    title: 'Success',
-                    message: 'Add successfully',
-                }))
-            },
-            onError(err) {
-                dispatch(notificationAction.showNotification({
-                    status: 'error',
-                    title: 'Error',
-                    message: err?.message ?? 'An error occurred',
-                }))
-            }
-        })
+        addToWishlistHelper(cart)
     }
 
-    const wishlistMutation = useMutation({
-        mutationFn: addToWishlist
-    })
     return <li className='py-3.5 flex items-center  gap-3 border-b border-b-[#F0EDE8] last:border-none'>
         <img
             className="w-[72px] h-[90px] rounded-[6px] object-cover shrink-0"

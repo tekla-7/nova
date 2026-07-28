@@ -12,8 +12,8 @@ export const isAuthenticated = () => {
     }
     const decoded = jwtDecode(token);
     if (Date.now() > Number(decoded.exp)* 1000) {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("expires_at");
+        // localStorage.removeItem("access_token");
+        // localStorage.removeItem("expires_at");
         return false;
     }
 

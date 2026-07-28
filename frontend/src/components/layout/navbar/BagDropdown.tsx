@@ -2,13 +2,12 @@ import {Handbag, LockKeyhole} from "lucide-react";
 import {Link} from "react-router-dom";
 import {useUserCartData} from "../../../hooks/useUserData.ts";
 import ProductCartItem from "./ProductCartItem.tsx";
-import {useMutation} from "@tanstack/react-query";
-import {queryClient} from "../../../routes/router.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../store";
-import {uiAction as notificationAction, uiAction} from "../../../store/ui-slice.tsx";
+import {uiAction} from "../../../store/ui-slice.tsx";
 import type {Ref} from "react";
-import {deleteCartItem} from "../../../services/cart.api.ts";
+import {getCartSummary} from "../../../utils/cart.ts";
+import {useDeleteCartMutation} from "../../../hooks/cart/useDeleteCartMutation.ts";
 
 export default function BagDropdown({ref}:{ref:Ref<HTMLDivElement>}) {
     const isOpen = useSelector(
@@ -17,43 +16,16 @@ export default function BagDropdown({ref}:{ref:Ref<HTMLDivElement>}) {
     const {
         data = [],
     } = useUserCartData();
+    const { deleteCartHandler } = useDeleteCartMutation();
     const dispatch = useDispatch();
+    const {itemCount ,subTotal}=getCartSummary(data??[])
     const cartItems = (data ?? []).slice(0, 3);
-    const itemCount = (data ?? []).reduce((prev, cur) => prev + cur.quantity, 0);
-    const subTotal = (data ?? []).reduce((prev, cur) => cur.product.price + prev, 0)
 
     function toggleOpen() {
         dispatch(uiAction.toggle('isCartOpen'))
     }
-
-    const {mutate} = useMutation({
-        mutationFn: deleteCartItem,
-
-    });
-
     function onDeleteCart(id: string) {
-        mutate(id, {
-            onSuccess: () => {
-                dispatch(notificationAction.showNotification({
-                    status: 'success',
-                    title: 'Success',
-                    message: 'Product removed successfully',
-                }))
-                queryClient.invalidateQueries({queryKey: ['userCartData']})
-                    .then(() => console.log("invalidation completed"))
-                    .catch(err => console.log("invalidation error:", err));
-            },
-            onError: (err) => {
-                dispatch(notificationAction.showNotification({
-                    status: 'error',
-                    title: 'Error',
-                    message: err?.message??'Product remove failed',
-                }))
-
-            },
-            onSettled: () => {
-            },
-        })
+        deleteCartHandler(id);
     }
 
     return <div className='relative' ref={ref}>

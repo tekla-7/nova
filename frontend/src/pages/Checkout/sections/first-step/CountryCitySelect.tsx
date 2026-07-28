@@ -1,6 +1,6 @@
 import type {Addresses} from "../../../../types/user.ts";
 import {type ChangeEvent, useEffect, useState} from "react";
-import {fetchCity, fetchCountries, fetchState} from "../../../../utils/http.ts";
+import {fetchCity, fetchCountries, fetchState} from "../../../../services/referenceData.api.ts";
 
 type Data = { name: string, code: string }
 export default function CountryCitySelect({address}: { address: Addresses | null}) {

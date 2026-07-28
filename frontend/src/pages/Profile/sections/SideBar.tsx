@@ -1,18 +1,14 @@
 import {NavLink, useLoaderData} from "react-router-dom";
 import type {User} from "../../../types/user.ts";
 import {User as UserIcon ,MapPinHouse ,Package ,Bell ,WalletCards  } from 'lucide-react';
-import ErrorMessage from "../../../components/ui/ErrorMessage.tsx";
 
 export default function SideBar() {
     const {user, error} = useLoaderData<{
         user: User | null;
         error: { message: string } | null;
     }>();
-    if (error) {
-        return <ErrorMessage message={error.message}/>;
-    }
 
-    if (!user) {
+    if (!user||error) {
         return null;
     }
     return <div className='h-full w-[200px] border-[#0b0b0b]/10 border-r px-3.5 py-5 flex flex-col gap-0.5'>
