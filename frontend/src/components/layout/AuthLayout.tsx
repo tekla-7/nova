@@ -5,6 +5,8 @@ import {Link, Outlet, useLocation} from "react-router-dom";
 export default function AuthLayout() {
     const location = useLocation();
     const isSignup = location.pathname.includes("sign-up");
+    const isReset = location.pathname.includes("reset-password");
+    const isLogIn = !isSignup && !isReset;
     return <div className='w-full h-dvh grid grid-cols-[1.5fr_1fr]'>
         <div className='bg-[#0D0D0D]  flex flex-col items-start  py-12 px-8'>
             <div className='pb-9.5 w-full mb-6 border-b border-[#ffffff26] text-center'>
@@ -60,9 +62,11 @@ export default function AuthLayout() {
         {/*////*/}
         <div className='py-10 px-8 flex flex-col '>
             <h1 className=' text-2xl mb-1.5 font-medium'>
-                {isSignup ? 'Create your account' : 'Welcome back'}
+                {isSignup && 'Create your account'}
+                {isLogIn && 'Welcome back'}
+                {isReset && 'Reset password'}
             </h1>
-            {!isSignup && <p className='pb-8 text-[#4A4A4A] text-xs'>
+            {isLogIn && <p className='pb-8 text-[#4A4A4A] text-xs'>
                 Sign in to your NOVA account</p>}
             {isSignup &&
                 <p className='pb-8 text-[#4A4A4A] text-xs'>
@@ -73,28 +77,48 @@ export default function AuthLayout() {
                     >
                         sign in
                     </Link></p>}
+            {isReset &&
+                <p className='pb-8 text-[#4A4A4A] text-xs'>
+                    Verify your identity with your email and recovery phrase to reset your password.</p>
+
+            }
             <div className='flex flex-col justify-center gap-3'>
                 <Outlet/>
-                <div className='flex items-center gap-2.5 '>
-                    <div className='h-[1px] flex-1 bg-[#E5E0D8]'></div>
-                    <span
-                        className='text-[11px] text-[#9A9A9A] pb-1'>{isSignup ? 'or sign up with' : 'or'}</span>
-                    <div className='h-[1px] flex-1 bg-[#E5E0D8]'></div>
-                </div>
-                <div className='flex flex-col gap-2 mb-2'>
-                    <BaseButton type='button' size='large' variant='transparent'>Continue with
-                        Google</BaseButton>
-                    <BaseButton type='button' size='large' variant='transparent'>Continue with
-                        Apple</BaseButton>
+                {!isReset && (
+                    <>
+                        <div className='flex items-center gap-2.5 '>
+                            <div className='h-[1px] flex-1 bg-[#E5E0D8]'></div>
+                            <span
+                                className='text-[11px] text-[#9A9A9A] pb-1'>{isSignup ? 'or sign up with' : 'or'}</span>
+                            <div className='h-[1px] flex-1 bg-[#E5E0D8]'></div>
+                        </div>
+                        <div className='flex flex-col gap-2 mb-2'>
+                            <BaseButton type='button' size='large' variant='transparent'>Continue with
+                                Google</BaseButton>
+                            <BaseButton type='button' size='large' variant='transparent'>Continue with
+                                Apple</BaseButton>
 
-                </div>
-                {!isSignup && <div className='text-xs text-[#4A4A4A] w-full text-center '>
+                        </div>
+                    </>
+                )}
+
+                {isLogIn && <div className='text-xs text-[#4A4A4A] w-full text-center '>
                     Don't have an account? <Link
                     to="/authentication/sign-up"
                     className="ml-1 cursor-pointer text-[#0D0D0D] underline-offset-2 underline font-medium"
                 >
                     Create one
                 </Link>
+
+                </div>}
+                {isReset && <div className='text-xs text-[#4A4A4A] w-full text-center '>
+                    Remember it? <Link
+                    to="/authentication"
+                    className="ml-1 cursor-pointer text-[#0D0D0D] underline-offset-2 underline font-medium"
+                >
+                    Sign in
+                </Link>
+
                 </div>}
             </div>
 

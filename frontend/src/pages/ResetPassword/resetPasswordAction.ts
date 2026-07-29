@@ -1,9 +1,9 @@
 import {type ActionFunctionArgs, redirect} from "react-router-dom";
-import {fetchSignUp} from "../../services/auth.api.ts";
+import { resetPassword} from "../../services/auth.api.ts";
 import ApiError from "../../models/error.ts";
-import type {Registration} from "../../types/auth.ts";
+import type {ResetPasswordReq} from "../../types/auth.ts";
 
-export default async function action({request}: ActionFunctionArgs) {
+export async function action({request}: ActionFunctionArgs) {
     const form = await request.formData();
     const password = String(form.get("password") || "")
     const confirmPassword = String(form.get("confirmPassword") || "")
@@ -14,30 +14,22 @@ export default async function action({request}: ActionFunctionArgs) {
             },
         };
     }
-    const cleanPhone = String(form.get("phoneNumber")).replace(/\D/g, "");
-
-    const registerData:Registration = {
+    const reset: ResetPasswordReq = {
+        password: password,
         email: String(form.get("email") || ""),
-        name: String(form.get("name") || ""),
-        lastName: String(form.get("lastName") || ""),
-        phoneNumber: '+'+cleanPhone,
-        password: String(form.get("password") || ""),
         recoveryPhrase: String(form.get("recoveryPhrase") || ""),
-    };
+    }
     try {
-        const result = await fetchSignUp(registerData);
-        localStorage.setItem('access_token',result.token);
-        return redirect("/");
+        await resetPassword(reset);
+        return redirect("/authentication");
     } catch (error) {
         if (error instanceof ApiError) {
             return {
                 message: error.message,
                 status: error.code,
-                errors: error.errors,
             };
         }
 
         throw error;
     }
-
 }

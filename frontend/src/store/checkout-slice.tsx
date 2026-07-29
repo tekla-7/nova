@@ -2,7 +2,7 @@ import type {ShoppingMethod} from "../types/checkout.ts";
 import type {Addresses, Card} from "../types/user.ts";
 import {createSlice} from "@reduxjs/toolkit";
 
-const initialFiltersState: {
+const initialState: {
     shoppingStep:{
         email: string;
         phone: string;
@@ -25,13 +25,16 @@ const initialFiltersState: {
 }
 const checkoutSlice=createSlice({
     name: 'checkout',
-    initialState: initialFiltersState,
+    initialState: initialState,
     reducers: {
         addFirstStep: (state, action) => {
             return {...state,shoppingStep: action.payload};
         },
         addLastStep: (state, action) => {
             return {...state,paymentStep: action.payload};
+        },
+        reset:() => {
+           return {...initialState}
         }
     }
 })

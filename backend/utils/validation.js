@@ -14,3 +14,6 @@ export function isValidText(value, minLength = 1) {
 export function isValidPassword(password, storedPassword) {
     return compare(password, storedPassword)
 }
+export function isValidRecoveryPhrase(phrase,storedPhrase) {
+    return phrase===storedPhrase;
+}

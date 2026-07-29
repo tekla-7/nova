@@ -55,7 +55,7 @@ export default function PasswordInput({label, id, inputSize='small', ...prop}: P
     }
     return <>
         <div className='flex flex-col gap-1 col-span-2'>
-            <label htmlFor={id} className='block text-[11px] font-medium '>
+            <label htmlFor={id} className={clsx('block  font-medium ',inputSize==='large'?'text-[13px]':'text-[11px]')}>
                 {label}
             </label>
             <input
@@ -86,7 +86,7 @@ export default function PasswordInput({label, id, inputSize='small', ...prop}: P
             </div>
             <span className={clsx('text-[10px] ',
                 step > 0 && step < 5 && 'text-[#fab219]',
-                step === 5 ? 'text-[#009300]' : 'text-[#0b0b0b]/10'
+                step === 5 ? 'text-[#009300]' : 'text-[#0b0b0b]/20'
             )}>
                 {text()}
             </span>

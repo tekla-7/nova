@@ -1,14 +1,19 @@
-import {isValidEmail, isValidPassword, isValidText} from "../utils/validation.js";
+import {isValidEmail, isValidPassword, isValidRecoveryPhrase, isValidText} from "../utils/validation.js";
 import {addUser, getUser} from "../data/users.js";
 import {isValidPhoneNumber} from "libphonenumber-js";
 import {createJSONToken, createRefreshToken, validateJSONRefreshToken, validateJSONToken} from "../utils/auth.js";
-import jwt from "jsonwebtoken";
-import {deleteRefreshToken, findRefreshToken, saveRefreshToken} from "../data/refreshToken.js";
+import {
+    deleteRefreshToken,
+    findRefreshToken,
+    resetPasswordByRecoveryPhrase,
+    saveRefreshToken
+} from "../data/refreshToken.js";
+
 const REFRESH_COOKIE_OPTIONS = {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
-    path: '/api/auth/refresh',
+    path: '/api/auth',
     maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 export const REFRESH_TOKEN = 'refreshToken';
@@ -135,7 +140,6 @@ export const login = async (req, res, next) => {
 ///@route POST /api/auth/refresh
 export const refresh = async (req, res, next) => {
     const refreshToken = req.cookies[REFRESH_TOKEN];
-    console.log({refreshToken})
     if (!refreshToken) {
         const error = new Error('Refresh token not found.User is unauthorized');
         error.status = 401;
@@ -143,7 +147,7 @@ export const refresh = async (req, res, next) => {
     }
     try {
         const {id} = validateJSONRefreshToken(refreshToken);
-        const storedToken=await findRefreshToken(refreshToken)
+        const storedToken = await findRefreshToken(refreshToken)
         if (!storedToken) {
             const error = new Error('Refresh token has been revoked.');
             error.status = 401;
@@ -151,19 +155,18 @@ export const refresh = async (req, res, next) => {
         }
 
         const newAccessToken = createJSONToken(id);
-console.log('storitoken,',id)
         return res.status(200).json({
             message: "New access token generated",
             token: newAccessToken,
         });
     } catch (err) {
-        res.clearCookie(REFRESH_TOKEN, {path: '/api/auth/refresh'});
+        res.clearCookie(REFRESH_TOKEN, {path: '/api/auth'});
         const error = new Error('Invalid or expired refresh token.');
         error.status = 401;
         return next(error);
     }
 }
-///@desc log out user (clears refresh token cookie + DB record)
+///@desc log out user (clears refresh token )
 ///@route POST /api/auth/logout
 export const logout = async (req, res, next) => {
     const refreshToken = req.cookies[REFRESH_TOKEN];
@@ -171,11 +174,51 @@ export const logout = async (req, res, next) => {
     if (refreshToken) {
         try {
             await deleteRefreshToken(refreshToken);
-
         } catch (error) {
         }
     }
 
-    res.clearCookie(REFRESH_TOKEN, {path: '/api/auth/refresh'});
-    return res.status(200).json({ message: "Logged out successfully." });
+    res.clearCookie(REFRESH_TOKEN, {path: '/api/auth'});
+    return res.status(200).json({message: "Logged out successfully."});
 };
+///@desc reset password
+///@route POST /api/auth/resetPassword
+export const resetPassword = async (req, res, next) => {
+    const {email, password, recoveryPhrase} = req.body;
+    if (!email || !password || !recoveryPhrase) {
+        const error = new Error('Please entered all required information.');
+        error.status = 400;
+        return next(error);
+    }
+    if (!isValidEmail(email)) {
+        const error = new Error('Invalid email format.');
+        error.status = 400;
+        return next(error);
+    }
+    let existingUser = null
+    try {
+        existingUser = await getUser(email);
+
+    } catch (error) {
+        error.status = 401;
+        error.message = "Invalid email or password.";
+        return next(error);
+    }
+    if (!isValidRecoveryPhrase(recoveryPhrase, existingUser.recoveryPhrase)) {
+        const error = new Error('Invalid recovery phrase.');
+        error.status = 400;
+        return next(error);
+    }
+    try {
+
+        await resetPasswordByRecoveryPhrase(existingUser.id, {newPassword:password})
+        return res.status(200).json({
+            message: "Password reset successfully",
+        });
+    } catch (err) {
+        const error = new Error('Failed to change password.');
+        error.status = 400;
+        return next(error);
+    }
+
+}

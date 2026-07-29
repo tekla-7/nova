@@ -3,11 +3,7 @@ import {apiJson} from "../utils/apiClient.ts";
 type OrdersResponse = {
     orders: Order[];
 };
-export const addOrder = async (order: CreateOrder): Promise<{
-    ok: boolean;
-    status: number;
-    data: { id: string | null, message: string };
-}> => {
+export const addOrder = async (order: CreateOrder) => {
     return apiJson(`order`,
         {
             method: 'POST',

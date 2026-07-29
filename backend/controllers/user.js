@@ -89,14 +89,13 @@ export const updateUserPassword = async (req, res, next) => {
         error.status = 400;
         return next(error);
     }
-    if(req.body.currentPassword === req.body.newPassword) {
+    if (req.body.currentPassword === req.body.newPassword) {
         const error = new Error('New password need to be different.');
         error.status = 400;
         return next(error);
     }
     try {
-      await updatePassword(userId, req.body);
-
+        await updatePassword(userId, req.body);
         return res.status(200).json({message: "Password updated successfully"});
     } catch (error) {
         error.status = 404;
@@ -162,7 +161,7 @@ export const addUserAddresses = async (req, res, next) => {
 
 ///@desc add   user card
 ///@route POST /api/user/me/card
-export const  addUserCard = async (req, res, next) => {
+export const addUserCard = async (req, res, next) => {
     const userId = req.user.id;
     if (!Object.keys(req.body).length) {
         const error = new Error('Card is required.');
@@ -195,7 +194,7 @@ export const updateUserAddresses = async (req, res, next) => {
         return next(error);
     }
     try {
-        await updateAddresses(userId,addressesId, req.body);
+        await updateAddresses(userId, addressesId, req.body);
         return res.status(200).json({message: 'Update address'});
     } catch (error) {
         error.status = 404;

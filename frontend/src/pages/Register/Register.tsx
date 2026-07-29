@@ -2,11 +2,9 @@ import {Form, useActionData, useNavigation} from "react-router-dom";
 import BaseButton from "../../components/ui/BaseButton.tsx";
 import PasswordInput from "../../components/ui/PasswordInput.tsx";
 import {FormatPhone} from "../../components/ui/FormatPhone.tsx";
+import type {ActionData} from "../../types/auth.ts";
 
-type ActionData = {
-    message?: string;
-    errors?: Record<string, string>;
-};
+
 export default function Register() {
     const data = useActionData<ActionData>()
     const navigation = useNavigation();
@@ -35,21 +33,32 @@ export default function Register() {
                 className='w-full border border-[#E5E0D8] rounded px-3.5 py-2.5 text-[13px] bg-white text-[#0D0D0D]'
                 id='email' type='email' placeholder='your@example.com' required/>
         </div>
-        <div>
-       <FormatPhone name="phoneNumber" />
-        </div>
-        <div>
-            <PasswordInput inputSize='large' label={'Password'} id={'password'} type='password' required name='password' placeholder='enter your password'/>
-        </div>
-        <div>
-            <label className='text-[13px] font-medium mb-1' htmlFor='confirmPassword'>Confirm password</label>
-            <input name='confirmPassword' autoComplete="confirmPassword"
+        <div className='grid grid-cols-2 gap-2.5'>
+            <div>
+                <FormatPhone name="phoneNumber"/>
+            </div>
+            <div>
+                <label className='text-[13px] font-medium mb-1' htmlFor='recoveryPhrase'> Recovery Phrase</label>
+                <input name='recoveryPhrase' autoComplete="recoveryPhrase"
+                       minLength={3}
+                       className='w-full border border-[#E5E0D8] rounded px-3.5 py-2.5 text-[13px] bg-white text-[#0D0D0D]'
+                       id='recoveryPhrase' type='text' required placeholder='.......'/>
+            </div></div>
+            <div>
+                <PasswordInput inputSize='large' label={'Password'} id={'password'} type='password' required
+                               name='password'
+                               placeholder='enter your password'/>
+            </div>
+            <div>
+                <label className='text-[13px] font-medium mb-1' htmlFor='confirmPassword'>Confirm password</label>
+                <input name='confirmPassword' autoComplete="confirmPassword"
 
-                   className='w-full border border-[#E5E0D8] rounded px-3.5 py-2.5 text-[13px] bg-white text-[#0D0D0D]'
-                   id='confirmPassword' type='password' required placeholder='.......'/>
-        </div>
-        <div className='flex items-center gap-2'>
-            <input className="
+                       className='w-full border border-[#E5E0D8] rounded px-3.5 py-2.5 text-[13px] bg-white text-[#0D0D0D]'
+                       id='confirmPassword' type='password' required placeholder='.......'/>
+            </div>
+
+            <div className='flex items-center gap-2'>
+                <input className="
     appearance-none
     w-3.5 h-3.5
     border border-[#E5E0D8]
@@ -59,22 +68,22 @@ export default function Register() {
     cursor-pointer
   " type='checkbox' required name='privacyPolicy' id='privacyPolicy'
 
-            />
-            <label className='cursor-pointer text-[#898781] text-xs' htmlFor='privacyPolicy'>I agree to the <span
-                className='text-[#0b0b0b
+                />
+                <label className='cursor-pointer text-[#898781] text-xs' htmlFor='privacyPolicy'>I agree to the <span
+                    className='text-[#0b0b0b
 ] underline-offset-2 underline'>Terms of
                 Service </span>and <span className='text-[#0b0b0b
 ] underline-offset-2 underline'>Privacy Policy</span></label>
-        </div>
-        {data && data.message && <p className='text-xs'>{data.message}</p>}
-        {data && data.errors && (
-            <ul className='text-[10px] text-red-700'>
-                {Object.values(data.errors).map((err, index) =>
-                    (<li key={index}>{err}</li>)
-                )}
-            </ul>
-        )}
+            </div>
+            {data && data.message && <p className='text-xs'>{data.message}</p>}
+            {data && data.errors && (
+                <ul className='text-[10px] text-red-700'>
+                    {Object.values(data.errors).map((err, index) =>
+                        (<li key={index}>{err}</li>)
+                    )}
+                </ul>
+            )}
 
-        <BaseButton type='submit' size='large'>{isSubmitting ? 'submitting' : 'Sign in'}</BaseButton>
+            <BaseButton type='submit' size='large'>{isSubmitting ? 'submitting' : 'Sign in'}</BaseButton>
     </Form>
 }

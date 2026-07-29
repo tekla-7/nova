@@ -33,6 +33,8 @@ import Cards from "../pages/Profile/pages/Cards.tsx";
 import {signOut} from "../services/auth.service.ts";
 import ApiError from "../models/error.ts";
 import {isAuthenticated} from "../utils/auth.ts";
+import ResetPassword from "../pages/ResetPassword/ResetPassword.tsx";
+import {action as resetPasswordAction} from '../pages/ResetPassword/resetPasswordAction.ts'
 const router = createBrowserRouter([
     {
         path: '/',
@@ -149,6 +151,11 @@ const router = createBrowserRouter([
                 path: 'sign-up',
                 element: <Register/>,
                 action: signUpAction
+            },
+            {
+                path: 'reset-password',
+                element: <ResetPassword/>,
+                action: resetPasswordAction
             },
         ]
     },

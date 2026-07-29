@@ -2,6 +2,7 @@ import {queryClient} from "../routes/router.tsx";
 import {apiClient, apiJson} from "../utils/apiClient.ts";
 import {signOut} from "./auth.service.ts";
 import {BACKEND_API_URL} from "../config.ts";
+import type {Registration, ResetPasswordReq} from "../types/auth.ts";
 
 export async function fetchLogIn(authData: { email: string; password: string }) {
     const res = await apiClient("auth/login", {
@@ -17,7 +18,7 @@ export async function fetchLogIn(authData: { email: string; password: string }) 
     return data
 }
 
-export async function fetchSignUp(signUpData: { email: string; password: string }): Promise<{ token: string }> {
+export async function fetchSignUp(signUpData: Registration): Promise<{ token: string }> {
     return apiJson('auth/signup', {
         method: "POST",
         body: JSON.stringify(signUpData),
@@ -38,4 +39,10 @@ export async function signOutFn() {
     }
 
 
+}
+export async function resetPassword(reset:ResetPasswordReq){
+    return apiJson('auth/resetPassword', {
+        method:'POST',
+        body: JSON.stringify(reset),
+    })
 }

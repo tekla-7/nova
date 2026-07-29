@@ -3,7 +3,7 @@ import {NotFoundError} from "../utils/errors.js";
 import {v4 as uuidv4} from 'uuid';
 import {hash} from "bcryptjs";
 import {isValidEmail, isValidPassword} from "../utils/validation.js";
-import {createRefreshToken} from "../utils/auth.js";
+import {passwordHelper} from "../utils/passwordChange.js";
 
 export async function getUser(email) {
     const storedData = await readUserData();
@@ -125,38 +125,7 @@ export async function updateUser(userId, data) {
 }
 
 export async function updatePassword(userId, data) {
-    const storedData = await readUserData();
-    const userIndex = storedData.findIndex(ev => ev.id === userId);
-    if (userIndex === -1) {
-        throw new Error('User not found');
-    }
-    if (data.currentPassword) {
-        const pwIsValid = await isValidPassword(data.currentPassword, storedData[userIndex].password);
-        if (!pwIsValid) {
-            throw new Error('Current password is not correct')
-        }
-    }
-    let hashedPassword = '';
-    try {
-        hashedPassword = await hash(data.newPassword, 10);
-    } catch (err) {
-        throw new Error("Password hashing failed");
-    }
-    try {
-        storedData[userIndex] = {
-            ...storedData[userIndex],
-            password: hashedPassword,
-            lastPasswordChangeAt: new Date().toISOString(),
-        };
-
-        await writeUserData(storedData);
-        return storedData[userIndex];
-
-    } catch (error) {
-        throw new Error(error?.message || 'Could not update user password');
-    }
-
-
+    await passwordHelper(userId,data,true)
 }
 
 export async function addWishlist(userId, product) {

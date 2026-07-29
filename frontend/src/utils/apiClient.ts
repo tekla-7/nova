@@ -30,7 +30,7 @@ export async function apiClient(
             ...fetchOptions.headers,
         },
     });
-    if (
+    if (  token &&
         response.status === 401 &&
         !isRetry &&
         !endpoint.includes("login") &&
@@ -70,6 +70,7 @@ export async function apiJson<T>(
 }
 
 async function refreshAccessToken(): Promise<string | null> {
+
     if (!refreshPromise) {
         refreshPromise = (async () => {
             try {
