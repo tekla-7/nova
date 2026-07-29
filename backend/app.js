@@ -7,6 +7,7 @@ import orderRoutes from "./routes/order.js";
 import referenceRoutes from "./routes/referenceData.js";
 import {logger} from "./middleware/logger.js";
 import {checkAuth} from "./middleware/checkAuth.js";
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 import cors from "cors";
@@ -38,8 +39,8 @@ app.use(errorHandler);
 app.use(notFoundHandler)
 
 try {
-    app.listen(8000, () => {
-        console.log("Server started on port 8000");
+    app.listen(PORT, () => {
+        console.log(`server running on ${PORT}`);
     });
 } catch (err) {
     console.log("SERVER CRASH:", err);
