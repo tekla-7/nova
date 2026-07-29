@@ -8,20 +8,27 @@ import referenceRoutes from "./routes/referenceData.js";
 import {logger} from "./middleware/logger.js";
 import {checkAuth} from "./middleware/checkAuth.js";
 const PORT = process.env.PORT || 8000;
+const allowedOrigins = [
+    "https://nova-store-8p6q2jfjx-tekla-7s-projects.vercel.app",
+    "https://nova-store-ptr8wmcxz-tekla-7s-projects.vercel.app",
+    "https://nova-store-fzh6wam2m-tekla-7s-projects.vercel.app/",
+    "http://localhost:5173"
+];
 
 const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
-app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://nova-store-ptr8wmcxz-tekla-7s-projects.vercel.app"
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-}));
 
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}));
 app.use(logger);
 app.use(express.json())
 app.use(cookieParser())
