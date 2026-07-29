@@ -21,9 +21,12 @@ export async function getUserOrder(userId, orderId) {
         return new Error('Could not find any orders');
     }
     const order = orders.find((ev) => ev.userId === userId && ev.id === orderId);
-    if (!order) {
-        return new Error('Could not find any order');
-    }
+    if (!order ) {
+
+            const error = new Error("Could not find any order");
+            error.status = 404;
+            throw error;
+        }
 
     return {
         ...order,

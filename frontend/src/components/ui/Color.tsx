@@ -13,6 +13,8 @@ export default function Color({selectedColor, onSelectedColorChange}: {
         <div className='flex items-center gap-2 mb-4 transition-all duration-300 ease-in-out'>
             {PRODUCT_COLORS.map((item) => (
                 <button key={item.value}
+                        type="button"
+                        aria-label={'color-' + item.value}
                         onClick={() => onSelectedColorChange(item.value)}
                         style={{
                             backgroundColor: item.value,

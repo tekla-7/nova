@@ -17,7 +17,8 @@ export default function Quantity({selectedQuantity, onSelectedQuantityChange, si
                 if (selectedQuantity > 1) {
                     onSelectedQuantityChange(selectedQuantity - 1);
                 }
-            }}
+            }}     type="button"
+                    aria-label="minus"
                     className={`${size==='large'?'w-14 border-r border-[#E5E0D8]':'w-9 bg-[#F5F3EE]  border-none '}  h-9 flex items-center justify-center cursor-pointer `}>
                 <Minus className='text-[#4A4A4A]' size={12}/>
             </button>
@@ -27,6 +28,8 @@ export default function Quantity({selectedQuantity, onSelectedQuantityChange, si
             }} type='number'
                    className={`${size==='large'?'w-full':'w-11'} h-9  text-[14px] bg-white border-none focus:border-none outline-none text-center`}/>
             <button
+                type="button"
+                aria-label="Plus"
                 onClick={() => onSelectedQuantityChange(selectedQuantity + 1)}
                 className={`${size==='large'?'w-14 border-l border-[#E5E0D8]':'w-9  bg-[#F5F3EE] border-none '}  h-9 flex items-center justify-center cursor-pointer `}>
 

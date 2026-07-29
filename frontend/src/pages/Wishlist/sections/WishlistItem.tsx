@@ -15,6 +15,7 @@ export default function WishlistItem({item, onRemove, onAdd}: Props) {
         <div className='bg-[#fcfcfb] relative w-full items-center justify-center flex'>
             <img src={item.image} alt={item.title} className='aspect-[3/4]  max-h-[170px] object-cover'/>
             <button onClick={onRemove} type='button'
+                    aria-label="delete "
                     className='bg-transparent text-[#0b0b0b] border border-[#0b0b0b]/20 rounded-lg cursor-pointer flex items-center justify-center z-[2] w-8 h-6 absolute top-2 right-2'>
                 <X size={14}/></button>
         </div>

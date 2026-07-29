@@ -168,5 +168,61 @@
     "lastPasswordChangeAt": "2026-07-25T12:45:18.014Z",
     "lastUpdatedAt": "2026-07-25T12:45:18.014Z",
     "createdAt": "2026-07-25T12:45:18.014Z"
+  },
+  {
+    "id": "4c914c0c-d740-4d84-bcd7-130561c9e2fd",
+    "name": "test",
+    "lastName": "tests",
+    "email": "test2@gmail.com",
+    "phoneNumber": "+995555555555",
+    "password": "$2b$10$0XhglMouI2IaY/uQNTCsc.9rzmaCA3xQX9Cs05OwdBu1tJC/c502u",
+    "notificationPreferences": {
+      "orderUpdates": true,
+      "promotions": true,
+      "wishlist": true,
+      "newsletter": true
+    },
+    "addresses": [
+      {
+        "id": "1785263573999",
+        "isDefault": true,
+        "name": "test",
+        "lastName": "testt",
+        "city": {
+          "code": "",
+          "name": "Qobustan"
+        },
+        "zipCode": "121",
+        "country": {
+          "code": "AZ",
+          "name": "Azerbaijan"
+        },
+        "streetAddress": "123 Main Street, Apt 4B",
+        "state": {
+          "code": "QOB",
+          "name": "Gobustan District"
+        }
+      }
+    ],
+    "cart": [
+      {
+        "id": "94c44482-cff7-4f5a-b405-b0bec64a7798",
+        "product": {
+          "productId": 157,
+          "title": "Party Glasses",
+          "price": 19.99,
+          "brand": "Fashion Fun",
+          "image": "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/1.webp"
+        },
+        "quantity": 1,
+        "size": "2xl",
+        "color": "#1A1A1A"
+      }
+    ],
+    "card": [],
+    "wishlist": [],
+    "lastPasswordChangeAt": "2026-07-28T18:31:50.294Z",
+    "lastUpdatedAt": "2026-07-28T18:31:50.294Z",
+    "createdAt": "2026-07-28T18:31:50.294Z"
   }
 ]

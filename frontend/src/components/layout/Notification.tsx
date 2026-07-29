@@ -32,7 +32,8 @@ export default function Notification() {
                 notification?.status === 'warning' && 'text-yellow-800',
                 notification?.status === 'info' && 'text-gray-800',
             )}>{notification?.title}</h1>
-            <button className='p-2 rounded-full absolute -right-3 cursor-pointer -top-2 flex items-center justify-center shrink-0 border-none outline-none'
+            <button
+                        aria-label="close" className='p-2 rounded-full absolute -right-3 cursor-pointer -top-2 flex items-center justify-center shrink-0 border-none outline-none'
                     onClick={close} type='button'>
                 <X size={15}/>
             </button>

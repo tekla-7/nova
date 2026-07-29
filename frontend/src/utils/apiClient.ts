@@ -3,7 +3,7 @@ import {getAuthToken, setAuthToken} from "./auth.ts";
 import ApiError from "../models/error.ts";
 import {signOutFn} from "../services/auth.api.ts";
 
-type ApiOptions = RequestInit  & {
+type ApiOptions = RequestInit & {
     baseUrl?: string;
 };
 let refreshPromise: Promise<string | null> | null = null;
@@ -30,7 +30,13 @@ export async function apiClient(
             ...fetchOptions.headers,
         },
     });
-    if (response.status === 401 && !isRetry&&!endpoint.includes('login')&&!endpoint.includes('signup')) {
+    if (
+        response.status === 401 &&
+        !isRetry &&
+        !endpoint.includes("login") &&
+        !endpoint.includes("signup") &&
+        !endpoint.includes("refresh")&&!endpoint.includes("logout")
+    ) {
         const newToken = await refreshAccessToken();
 
         if (newToken) {
@@ -53,6 +59,7 @@ export async function apiClient(
 
 
 }
+
 export async function apiJson<T>(
     endpoint: string,
     options?: ApiOptions
@@ -79,6 +86,7 @@ async function refreshAccessToken(): Promise<string | null> {
                 setAuthToken(data.token);
                 return data.token;
             } catch (error) {
+                console.error(error)
                 return null;
             } finally {
                 refreshPromise = null;

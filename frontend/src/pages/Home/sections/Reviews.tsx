@@ -1,6 +1,5 @@
 import {useProducts} from "../../../hooks/useProducts.ts";
 import ErrorBlock from "../../../components/ui/ErrorBlock.tsx";
-import FeaturedProductItem from "./FeaturedProductItem.tsx";
 import ReviewCarousel from "./ReviewCarousel.tsx";
 
 export default function Reviews() {

@@ -4,7 +4,12 @@ import {fetchOrder} from "../../services/order.api.ts";
 
 export async function loader({params}: LoaderFunctionArgs) {
     const id = params.orderId
-    if (!id) return null;
+    if (!id) {
+        return {
+            order: null,
+            error: "Order not found",
+        };
+    }
     try {
         const order = await fetchOrder(id);
         return {

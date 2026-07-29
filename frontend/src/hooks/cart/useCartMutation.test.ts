@@ -2,9 +2,9 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useMutation } from '@tanstack/react-query';
 
-import { useCartMutation } from './cart/useCartMutation.ts';
-import {queryClient} from "../routes/router.tsx";
-import {QUERY_KEYS} from "../constants/queryKeys.ts";
+import { useCartMutation } from './useCartMutation.ts';
+import {queryClient} from "../../routes/router.tsx";
+import {QUERY_KEYS} from "../../constants/queryKeys.ts";
 vi.mock('@tanstack/react-query', async () => {
     const actual = await vi.importActual('@tanstack/react-query');
 
@@ -13,6 +13,9 @@ vi.mock('@tanstack/react-query', async () => {
         useMutation: vi.fn(),
     };
 });
+vi.mock("react-redux", () => ({
+    useDispatch: () => vi.fn(),
+}))
 describe('useCartMutation', () => {
     it('converts wishlist products and calls mutate',()=>{
         const mutate = vi.fn();

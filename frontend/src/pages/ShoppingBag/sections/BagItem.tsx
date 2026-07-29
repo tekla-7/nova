@@ -13,9 +13,9 @@ type props = {
 export default function BagItem({cart, onQuantityChange, onDeleteCart}: props) {
     const {data: wishlist = []} = useUserWishlist();
     const isInWishlist = wishlist.some(el => el.productId === cart.product.productId)
-    const {addToWishlistHelper} = useAddWishlistMutation()
+    const {addCartToWishlistHelper} = useAddWishlistMutation()
     function handleAddToWishlist() {
-        addToWishlistHelper(cart)
+        addCartToWishlistHelper(cart)
     }
 
     return <li className='py-3.5 flex items-center  gap-3 border-b border-b-[#F0EDE8] last:border-none'>

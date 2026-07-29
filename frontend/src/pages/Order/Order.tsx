@@ -21,6 +21,7 @@ export default function Order() {
     if (!order) {
         return null;
     }
+
     return <section className='flex flex-col w-full'>
         <div className='flex items-center gap-1 border-b border-[#E5E0D8] py-3 px-6'>
             <NavLink className='text-xs text-[#9A9A9A] cursor-pointer' to='/'>Home</NavLink>

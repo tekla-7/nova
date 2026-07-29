@@ -16,8 +16,12 @@ export const useOrderMutation = () => {
     const mutation = useMutation({
         mutationFn: addOrder,
         onSuccess: async (response: Resp) => {
+            if (!response.data?.id) {
+                await navigate(`/profile/orders`, {state: 'success'});
+                return showSuccess(dispatch, 'Order added successfully')
+            }
             await navigate(`/order/${response.data?.id}`, {state: 'success'});
-            showSuccess(dispatch,'Order added successfully')
+            showSuccess(dispatch, 'Order added successfully')
 
         },
         onError: (error) => {

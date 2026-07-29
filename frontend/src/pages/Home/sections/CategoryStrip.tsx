@@ -38,8 +38,7 @@ export default function CategoryStrip() {
     return <div className='pt-1 mb-8'>
         <div className='flex items-center justify-between mb-5'>
             <p className='text-lg tracking-tight'>Shop by category</p>
-            <a href='/' className='text-xs text-[#9A9A9A] cursor-pointer tracking-widest border-b border-[9A9A9A]'>All
-                categories</a>
+
         </div>
         {content}
     </div>

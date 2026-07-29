@@ -25,6 +25,8 @@ export default function ReviewCarousel({reviews}: { reviews: Review[] }) {
 
     return <section className='w-full relative'>
         <button
+            type="button"
+            aria-label="left"
             className="absolute top-1/2 left-0 -translate-y-1/2 z-10 cursor-pointer"
             onClick={scrollPrev}
         >
@@ -54,6 +56,8 @@ export default function ReviewCarousel({reviews}: { reviews: Review[] }) {
             ))}
         </div>
         <button
+            type="button"
+            aria-label="right arrow"
             className="absolute top-1/2 right-0 -translate-y-1/2 z-10 cursor-pointer"
             onClick={scrollNext}
         >
