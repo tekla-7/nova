@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 8000;
 const allowedOrigins = [
     "https://nova-store-8p6q2jfjx-tekla-7s-projects.vercel.app",
     "https://nova-store-ptr8wmcxz-tekla-7s-projects.vercel.app",
-    "https://nova-store-fzh6wam2m-tekla-7s-projects.vercel.app/",
+    "https://nova-store-fzh6wam2m-tekla-7s-projects.vercel.app",
     "http://localhost:5173"
 ];
 
