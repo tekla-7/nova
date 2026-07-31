@@ -1,40 +1,42 @@
 import {createBrowserRouter} from "react-router-dom";
 import RootRedirect from "./RootRedirect.tsx";
 import RootLayout from "../components/layout/Root.tsx";
-import ErrorPage from "../pages/Error.tsx";
-import HomePage from "../pages/Home/Home.tsx";
-import LoginPage from "../pages/Login/Login.tsx";
-import NotFoundPage from "../pages/NotFound/NotFound.tsx";
 import PublicRoute from "./PublicRoute.tsx";
 import ProtectedRoute from "./ProtectedRoute.tsx";
-import CollectionPage from "../pages/Woman/Collection.tsx";
-import ProductDetails from "../pages/ProductDetails/ProductDetails.tsx";
 import {loader as productDetailsLoader} from "../pages/ProductDetails/productDetailsLoader.ts";
 import AuthLayout from "../components/layout/AuthLayout.tsx";
-import Register from "../pages/Register/Register.tsx";
 import {action as loginAction} from '../pages/Login/loginAction.ts'
 import signUpAction from '../pages/Register/registerAction.ts'
-import {QueryCache, QueryClient} from "@tanstack/react-query";
-import ShoppingBag from "../pages/ShoppingBag/ShoppingBag.tsx";
-import Wishlist from "../pages/Wishlist/Wishlist.tsx";
-import Checkout from "../pages/Checkout/Checkout.tsx";
-import Order from "../pages/Order/Order.tsx";
 import {loader as orderLoader} from '../pages/Order/order.loader.ts'
-import Profile from "../pages/Profile/Profile.tsx";
 import {loader as profileLoader} from '../pages/Profile/action/Profile.ts'
 import {loader as ordersLoader} from '../pages/Profile/action/orders.ts'
-import ProfileInfo from "../pages/Profile/pages/ProfileInfo.tsx";
-import Addresses from "../pages/Profile/pages/Addresses.tsx";
-import Notifications from "../pages/Profile/pages/Notifications.tsx";
-import Orders from "../pages/Profile/pages/Orders.tsx";
-import EditPersonalInformation from "../pages/Profile/pages/EditPersonalInformation.tsx";
-import EditPassword from "../pages/Profile/pages/EtitPassword.tsx";
-import Cards from "../pages/Profile/pages/Cards.tsx";
-import {signOut} from "../services/auth.service.ts";
+import {action as resetPasswordAction} from '../pages/ResetPassword/resetPasswordAction.ts'
+import { lazy } from "react";
+import {QueryCache, QueryClient} from "@tanstack/react-query";
 import ApiError from "../models/error.ts";
 import {isAuthenticated} from "../utils/auth.ts";
-import ResetPassword from "../pages/ResetPassword/ResetPassword.tsx";
-import {action as resetPasswordAction} from '../pages/ResetPassword/resetPasswordAction.ts'
+import {signOut} from "../services/auth.service.ts";
+const HomePage = lazy(() => import("../pages/Home/Home.tsx"));
+const LoginPage = lazy(() => import("../pages/Login/Login.tsx"));
+const CollectionPage = lazy(() => import("../pages/Woman/Collection.tsx"));
+const ProductDetails = lazy(() => import("../pages/ProductDetails/ProductDetails.tsx"));
+const ShoppingBag = lazy(() => import("../pages/ShoppingBag/ShoppingBag.tsx"));
+const Wishlist = lazy(() => import("../pages/Wishlist/Wishlist.tsx"));
+const Checkout = lazy(() => import("../pages/Checkout/Checkout.tsx"));
+const Order = lazy(() => import("../pages/Order/Order.tsx"));
+const Profile = lazy(() => import("../pages/Profile/Profile.tsx"));
+const ProfileInfo = lazy(() => import("../pages/Profile/pages/ProfileInfo.tsx"));
+const Addresses = lazy(() => import("../pages/Profile/pages/Addresses.tsx"));
+const Notifications = lazy(() => import("../pages/Profile/pages/Notifications.tsx"));
+const Orders = lazy(() => import("../pages/Profile/pages/Orders.tsx"));
+const EditPersonalInformation = lazy(() => import("../pages/Profile/pages/EditPersonalInformation.tsx"));
+const EditPassword = lazy(() => import("../pages/Profile/pages/EtitPassword.tsx"));
+const Cards = lazy(() => import("../pages/Profile/pages/Cards.tsx"));
+const Register = lazy(() => import("../pages/Register/Register.tsx"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword/ResetPassword.tsx"));
+const NotFoundPage = lazy(() => import("../pages/NotFound/NotFound.tsx"));
+const ErrorPage = lazy(() => import("../pages/Error.tsx"));
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -174,11 +176,10 @@ export const queryClient = new QueryClient({
     },
     queryCache: new QueryCache({
         onError: (error) => {
-                if (error instanceof ApiError && error.code === 401 && isAuthenticated()) {
-                    signOut();
-                }            }
+            if (error instanceof ApiError && error.code === 401 && isAuthenticated()) {
+                signOut();
+            }            }
 
     }),
 })
-
 export default router

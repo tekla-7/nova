@@ -1,6 +1,7 @@
 import {CheckCheck} from "lucide-react";
 import BaseButton from "../ui/BaseButton.tsx";
 import {Link, Outlet, useLocation} from "react-router-dom";
+import {Suspense} from "react";
 
 export default function AuthLayout() {
     const location = useLocation();
@@ -83,7 +84,11 @@ export default function AuthLayout() {
 
             }
             <div className='flex flex-col justify-center gap-3'>
+                <Suspense fallback={<div>Loading...</div>}>
+
                 <Outlet/>
+                </Suspense>
+
                 {!isReset && (
                     <>
                         <div className='flex items-center gap-2.5 '>
